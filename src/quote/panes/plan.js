@@ -23,14 +23,6 @@ class Plan extends Component {
         this.setState({termLength: event.target.value});
     };
 
-    componentDidMount = () => {
-        if(this.props.store) {
-            if(this.props.store.state.started === false) {
-                //this.props.history.push("/quote/begin");
-            }
-        }
-    };
-
     formatCovAmount = (x) => {
         if(x === undefined) return '';
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
