@@ -16,7 +16,7 @@ const styles = {
     },
     topNav: {
         width: '100%',
-        height: '70px'
+        height: '70px',
     },
     mainLogo: {
         float: 'left',

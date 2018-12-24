@@ -11,5 +11,7 @@ export default createConnectedStore({
     birthdate: '',
     sex: '',
     tobacco: false,
-    cannabis: false
+    cannabis: false,
+    covAmount: 0,
+    termLength: 0
 });

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Store from '../ApplicationStore';
 import Begin from './panes/begin';
 import Personal from './panes/personal';
+import Plan from './panes/plan';
 import {Box} from "grommet";
 import {Redirect, Route, Switch} from "react-router-dom";
 
@@ -12,6 +13,7 @@ class Quote extends Component {
                     <Switch>
                         <Route path={this.props.match.path + "/begin"} component={Begin}/>
                         <Route path={this.props.match.path + "/personal"} component={Personal}/>
+                        <Route path={this.props.match.path + "/plan"} component={Plan}/>
                         <Redirect to="/quote/begin"/>
                     </Switch>
                 </Box>
