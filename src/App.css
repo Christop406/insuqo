@@ -1,3 +1,5 @@
+@import '~antd/dist/antd.css';
+
 .App {
   text-align: center;
 }
@@ -29,4 +31,25 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.ant-steps-item-process .ant-steps-item-icon {
+    background-color: #9c37f2 !important;
+    border-color: #9c37f2 !important;
+}
+
+.ant-steps-item-finish .ant-steps-item-icon {
+    border-color: #9c37f2 !important;
+}
+
+.ant-steps-item-finish .ant-steps-item-icon > .ant-steps-icon {
+    color: #9c37f2 !important;
+}
+
+.ant-steps-item-finish > .ant-steps-item-tail:after {
+    background-color: #9c37f2 !important;
+}
+
+.sexButton {
+    margin-left: 10px;
 }
