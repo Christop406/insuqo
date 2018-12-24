@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { Component } from 'react';
 import Store from '../../ApplicationStore';
-import {Box, Button, FormField, Heading, Keyboard, MaskedInput, Paragraph} from "grommet";
+import {Box, Button, Heading, MaskedInput, Paragraph} from "grommet";
 import {localizeZip} from "../../api";
 
 const styles = {
@@ -33,7 +33,6 @@ class Begin extends Component {
         this.setState({loading: true});
         localizeZip(zipCode).then(res => {
             if(res.data) {
-                console.log(res.data);
                 store.set('started')(true);
                 store.set('zipCode')(zipCode);
                 store.set('stateName')(res.data.state);

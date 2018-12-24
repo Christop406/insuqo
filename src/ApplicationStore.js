@@ -7,5 +7,9 @@ export default createConnectedStore({
     zipCode: '',
     stateName: '',
     stateCode: '',
-    city: ''
+    city: '',
+    birthdate: '',
+    sex: '',
+    tobacco: false,
+    cannabis: false
 });
