@@ -13,5 +13,6 @@ export default createConnectedStore({
     tobacco: false,
     cannabis: false,
     covAmount: 0,
-    termLength: 0
+    termLength: 0,
+    rider: 'none'
 });

@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import Store from '../ApplicationStore';
-import Begin from './panes/begin';
-import Personal from './panes/personal';
-import Plan from './panes/plan';
-import Confirm from './panes/confirm';
+import Begin from './panes/begin/begin';
+import Personal from './panes/personal/personal';
+import Plan from './panes/plan/plan';
+import Results from './panes/results';
 import {Box} from "grommet";
 import {Redirect, Route, Switch} from "react-router-dom";
 
@@ -19,12 +19,12 @@ class Quote extends Component {
 
     render = () => (
             <Box align="center">
-                <Box /*elevation="xlarge"*/ round={true} pad="large" truncate={true}>
+                <Box /*elevation="xlarge"*/ round={true} pad="large" truncate={false}>
                     <Switch>
                         <Route path={this.props.match.path + "/begin"} component={Begin}/>
                         <Route path={this.props.match.path + "/personal"} component={Personal}/>
                         <Route path={this.props.match.path + "/plan"} component={Plan}/>
-                        <Route path={this.props.match.path + "/confirm"} component={Confirm}/>
+                        <Route path={this.props.match.path + "/results"} component={Results}/>
                         <Redirect to="/quote/begin"/>
                     </Switch>
                 </Box>

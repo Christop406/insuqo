@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Store from '../../ApplicationStore';
+import Store from '../../../ApplicationStore';
 import {Anchor, Box, Button, CheckBox, Heading, MaskedInput, Paragraph, RadioButton} from "grommet";
 
 const styles = {
@@ -128,7 +128,7 @@ class Personal extends Component {
                     <span style={{height: '10px'}}/>
                     <CheckBox onChange={this.updateCannabis} checked={cannabis} name="cannabis" label="I regularly use cannabis products/marijuana."/>
                 </Box>
-                <Button onClick={this.submitPersonalInfo} color="#9c37f2" fill label="Continue" primary disabled={birthday.length < 8 || sex === 'none'} />
+                <Button onClick={this.submitPersonalInfo} color="#9c37f2" label="Continue" primary disabled={birthday.length < 8 || sex === 'none'} />
             </Box>
         );
     };
