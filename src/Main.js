@@ -1,7 +1,6 @@
 import React, { Component }  from 'react';
 import Store from './ApplicationStore';
 import Quote  from './quote/quote';
-import QuoteHelp from './quote/quote-help';
 import Application from './application/application';
 import { fadeInUpBig } from 'react-animations';
 import Radium, {StyleRoot} from 'radium';
