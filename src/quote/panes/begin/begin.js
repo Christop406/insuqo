@@ -39,7 +39,7 @@ class Begin extends Component {
                 store.set('stateCode')(res.data.stateCode);
                 store.set('city')(res.data.city);
 
-                this.props.history.push('/iq/quote/personal');
+                this.props.history.push('/quote/personal');
             }
         });
     };

@@ -12,7 +12,7 @@ class Quote extends Component {
 
     componentDidMount = () => {
         if(this.props.store) {
-            if(this.props.match.path !== '/iq/quote/begin' && this.props.store.state.started === false) {
+            if(this.props.match.path !== '/quote/begin' && this.props.store.state.started === false) {
                 //this.props.history.push("/iq/quote/begin");
             }
         }
@@ -20,8 +20,8 @@ class Quote extends Component {
 
     getAlignment = () => {
         console.log(this.props.location.pathname);
-        console.log(this.props.location.pathname === "/iq/quote/results");
-        if(this.props.location.pathname === "/iq/quote/results") return 'start';
+        console.log(this.props.location.pathname === "/quote/results");
+        if(this.props.location.pathname === "/quote/results") return 'start';
         return 'start';
     };
 
@@ -38,14 +38,14 @@ class Quote extends Component {
                                 <Route path={this.props.match.path + "/personal"} component={Personal}/>
                                 <Route path={this.props.match.path + "/plan"} component={Plan}/>
                                 <Route path={this.props.match.path + "/results"} component={Results}/>
-                                <Redirect to="/iq/quote/begin"/>
+                                <Redirect to="/quote/begin"/>
                             </Switch>
                         </Box>
                     </Box>
                 </Box>
                 <Box className="hideOnSmallScreens" alignSelf="stretch" fill={true}>
                     <Switch>
-                        <Route path="/iq/quote" component={QuoteHelp}/>
+                        <Route path="/quote" component={QuoteHelp}/>
                     </Switch>
                 </Box>
             </Box>

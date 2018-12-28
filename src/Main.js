@@ -44,10 +44,10 @@ class Main extends Component {
                         </nav>
                         <Box direction="row" fill="horizontal">
                             <Switch>
-                                <Route path="/iq/app" component={Application}/>
-                                <Route path="/iq/application" component={Application}/>
-                                <Route path="/iq/quote" component={Quote}/>
-                                <Redirect to="/iq/quote"/>
+                                <Route path="/app" component={Application}/>
+                                <Route path="/application" component={Application}/>
+                                <Route path="/quote" component={Quote}/>
+                                <Redirect to="/quote"/>
                             </Switch>
                         </Box>
                     </Box>

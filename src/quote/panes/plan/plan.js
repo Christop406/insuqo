@@ -43,7 +43,7 @@ class Plan extends Component {
         store.set('covAmount')(covAmount);
         store.set('termLength')(Number(this.formatTermLength(termLength)));
         store.set('rider')(rider);
-        this.props.history.push('/iq/quote/results');
+        this.props.history.push('/quote/results');
     };
 
     render = () => {
