@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import Store from '../../ApplicationStore';
+import Store from '../../../ApplicationStore';
 import {Accordion, AccordionPanel, Anchor, Box, Button, Heading, Paragraph} from "grommet";
-import {getQuote} from "../../api";
+import {getQuote} from "../../../api";
 import moment from 'moment';
-import {formatCovAmount, logoImageForCompanyID} from "../../func";
+import {formatCovAmount, logoImageForCompanyID} from "../../../func";
 
 const styles = {
     quoteSubtitle: {
@@ -117,6 +117,7 @@ class Results extends Component {
                         <Box fill="horizontal" align="center" style={{minWidth: 150}}>
                             <img
                                 style={{marginTop: 10}}
+                                alt={"logo-" + quote.companyID}
                                 height={60}
                                 src={logoImageForCompanyID(quote.companyID)}
                             />
@@ -145,8 +146,8 @@ class Results extends Component {
             <Box>
                 <Heading margin="xsmall" level={1} color="#9c37f2">Here are your quotes</Heading>
                 <Heading margin="xsmall" style={styles.quoteSubtitle} color="dark-4" level={3}>Click on each for more info.</Heading>
-                <Box margin="small">
-                    <Accordion activeIndex={0} style={{overflow: 'hidden'}}>
+                <Box style={{paddingLeft: 10, paddingRight: 10}}>
+                    <Accordion activeIndex={0} style={{overflowY: 'scroll'}}>
                         {this.formatQuotes()}
                     </Accordion>
                 </Box>

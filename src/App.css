@@ -59,3 +59,16 @@
         font-size: 22px !important;
     }
 }
+
+@media screen and (max-width: 810px) {
+    .hideOnSmallScreens {
+        display: none;
+    }
+}
+
+@media screen and (min-width: 810px) {
+    .form-content {
+        min-width: 820px
+    }
+}
+

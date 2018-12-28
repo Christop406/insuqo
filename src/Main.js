@@ -37,8 +37,8 @@ class Main extends Component {
 
     getAlignment = () => {
         console.log(this.props.location.pathname);
-        console.log(this.props.location.pathname === "/quote/results");
-        if(this.props.location.pathname === "/quote/results") return 'start';
+        console.log(this.props.location.pathname === "/iq/quote/results");
+        if(this.props.location.pathname === "/iq/quote/results") return 'start';
         return 'start';
     };
 
@@ -46,22 +46,22 @@ class Main extends Component {
         return(
             <StyleRoot>
                 <Grommet full theme={grommet}>
-                    <Box animation="fadeIn">
+                    <Box fill={true} animation="fadeIn">
                         <nav style={styles.topNav}>
                             <img src={img} alt="iq-logo" style={styles.mainLogo}/>
                         </nav>
-                        <Box direction="row">
-                            <Box alignSelf="stretch" align={this.getAlignment()}>
+                        <Box direction="row" fill={true}>
+                            <Box className="form-content" alignSelf="stretch" fill={true} align={this.getAlignment()}>
                                 <Switch>
-                                    <Route path="/app" component={Application}/>
-                                    <Route path="/application" component={Application}/>
-                                    <Route path="/quote" component={Quote}/>
-                                    <Redirect to="/quote"/>
+                                    <Route path="/iq/app" component={Application}/>
+                                    <Route path="/iq/application" component={Application}/>
+                                    <Route path="/iq/quote" component={Quote}/>
+                                    <Redirect to="/iq/quote"/>
                                 </Switch>
                             </Box>
-                            <Box alignSelf="stretch">
+                            <Box className="hideOnSmallScreens" alignSelf="stretch" fill={true}>
                                 <Switch>
-                                    <Route path="/quote" component={QuoteHelp}/>
+                                    <Route path="/iq/quote" component={QuoteHelp}/>
                                 </Switch>
                             </Box>
                         </Box>

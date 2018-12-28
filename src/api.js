@@ -1,10 +1,10 @@
 import axios from 'axios';
 import querystring from "querystring";
-//let apiUrl = "https://viscosity-api.herokuapp.com";
-let apiUrl = "http://localhost:4567";
+let apiUrl = "https://viscosity-api.herokuapp.com";
+//let apiUrl = "http://localhost:4567";
 
 export function getQuote(state, actualAge, nearestAge, amount, termLength, healthType, sex, rider, showTop) {
-    return axios.post(apiUrl + "/test", querystring.stringify({
+    return axios.post(apiUrl + "/quote", querystring.stringify({
         state: state,
         actualAge: actualAge,
         nearestAge: nearestAge,
