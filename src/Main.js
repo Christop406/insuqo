@@ -8,6 +8,7 @@ import {Box, Grommet} from 'grommet';
 import { grommet } from 'grommet/themes';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import img from './img/insuqo-logo.png';
+import {fillStoreFromLocalStorage} from "./func";
 
 const styles = {
     fadeInUpBig: {
@@ -29,9 +30,19 @@ const styles = {
 class Main extends Component {
 
     componentDidMount = () => {
-        let store = this.props.store;
-        store.set('fname')('Chris');
-        store.set('lname')('Gilardi');
+        var store = this.props.store;
+        fillStoreFromLocalStorage(store).then(value => {
+            this.forceUpdate();
+        }, rejected => {
+            this.props.history.push("/quote");
+        });
+
+        store.onAll().subscribe(({key, value}) => {
+            localStorage.setItem("store_persisted", "true");
+            console.log('persisting', key, value);
+            localStorage.setItem(key, value);
+        });
+
     };
 
     render = () => {

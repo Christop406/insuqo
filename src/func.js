@@ -10,7 +10,7 @@ export function reduceQuote(quote) {
 export function formatCovAmount(x) {
     if(x === undefined) return '';
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-};
+}
 
 export function logoImageForCompanyID(id) {
     switch(id) {
@@ -20,4 +20,14 @@ export function logoImageForCompanyID(id) {
         default:
             return undefined;
     }
+}
+
+export function fillStoreFromLocalStorage(store) {
+    return new Promise(function(resolve, reject) {
+        if(localStorage.getItem("store_persisted") === "true") {
+            Object.assign(store.state, localStorage);
+            resolve(store);
+        }
+        reject(store);
+    });
 }
