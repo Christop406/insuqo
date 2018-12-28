@@ -19,7 +19,7 @@ class Quote extends Component {
 
     render = () => (
             <Box align="center">
-                <Box /*elevation="xlarge"*/ round={true} pad="large" truncate={false}>
+                <Box /*elevation="xlarge"*/ round={false} style={{overflowY: 'scroll', "-webkit-overflow-scrolling": 'touch'}} pad="large" truncate={false}>
                     <Switch>
                         <Route path={this.props.match.path + "/begin"} component={Begin}/>
                         <Route path={this.props.match.path + "/personal"} component={Personal}/>

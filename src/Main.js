@@ -50,7 +50,7 @@ class Main extends Component {
                         <nav style={styles.topNav}>
                             <img src={img} alt="iq-logo" style={styles.mainLogo}/>
                         </nav>
-                        <Box direction="row" fill={true}>
+                        <Box direction="row" fill="horizontal">
                             <Box className="form-content" alignSelf="stretch" fill={true} align={this.getAlignment()}>
                                 <Switch>
                                     <Route path="/iq/app" component={Application}/>

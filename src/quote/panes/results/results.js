@@ -23,7 +23,9 @@ class Results extends Component {
 
     state = {
         loading: true,
-        quotes: []
+        quotes: [],
+        active: 0,
+        freq: 'month'
     };
 
     getQuotes = () => {
@@ -71,7 +73,6 @@ class Results extends Component {
         }
 
         return splitString;
-
     };
 
     formatQuotes = () => {
@@ -81,7 +82,7 @@ class Results extends Component {
         }
         return quotes.map((quote, index) => {
             return(
-                <AccordionPanel key={index} activeIndex={0} label={this.formatQuoteHeading(quote)}>
+                <AccordionPanel key={index} activeIndex={0} label={this.formatQuoteHeading(quote, index)}>
                     {this.formatQuoteBody(quote)}
                 </AccordionPanel>
             );
@@ -106,8 +107,10 @@ class Results extends Component {
         );
     };
 
-    formatQuoteHeading = (quote) => {
+    formatQuoteHeading = (quote, index) => {
         let splitPremium = this.splitPrice(quote.monthlyTotalPremium);
+        const { active } = this.state;
+        console.log('re-render', index, active);
         return (
             <Box direction="row-responsive" fill="horizontal" align="stretch" margin="small" alignSelf="stretch">
                 <Heading
@@ -135,19 +138,28 @@ class Results extends Component {
                     </Box>
                 </Box>
                 <Box fill="horizontal" justify="center" align="center">
-                    <Button fill={false} hoverIndicator="#EAC4FF" label="APPLY"/>
+                    <Button primary={active === index} fill={false} hoverIndicator="#EAC4FF" label="APPLY"/>
                 </Box>
             </Box>
         );
     };
 
+    updateActiveIndex = (active) => {
+        this.setState({active: active[0]});
+    };
+
+    updateFreq = (newFreq) => {
+        this.setState({freq: newFreq});
+    };
+
     render = () => {
+        const { active } = this.state;
         return (
             <Box>
                 <Heading margin="xsmall" level={1} color="#9c37f2">Here are your quotes</Heading>
                 <Heading margin="xsmall" style={styles.quoteSubtitle} color="dark-4" level={3}>Click on each for more info.</Heading>
                 <Box style={{paddingLeft: 10, paddingRight: 10}}>
-                    <Accordion activeIndex={0} style={{overflowY: 'scroll'}}>
+                    <Accordion onActive={this.updateActiveIndex} activeIndex={active}>
                         {this.formatQuotes()}
                     </Accordion>
                 </Box>
