@@ -62,7 +62,7 @@
 
 @media screen and (max-width: 810px) {
     .hideOnSmallScreens {
-        display: none;
+        display: none !important;
     }
 }
 
