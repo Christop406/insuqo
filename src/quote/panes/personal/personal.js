@@ -54,7 +54,7 @@ class Personal extends Component {
             store.set('sex')(sex);
             store.set('tobacco')(tobacco);
             store.set('cannabis')(cannabis);
-            this.props.history.push("/iqz/quote/plan");
+            this.props.history.push("/iq/quote/plan");
         }
     };
 

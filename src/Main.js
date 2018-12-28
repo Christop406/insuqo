@@ -35,13 +35,6 @@ class Main extends Component {
         store.set('lname')('Gilardi');
     };
 
-    getAlignment = () => {
-        console.log(this.props.location.pathname);
-        console.log(this.props.location.pathname === "/iq/quote/results");
-        if(this.props.location.pathname === "/iq/quote/results") return 'start';
-        return 'start';
-    };
-
     render = () => {
         return(
             <StyleRoot>
@@ -51,19 +44,12 @@ class Main extends Component {
                             <img src={img} alt="iq-logo" style={styles.mainLogo}/>
                         </nav>
                         <Box direction="row" fill="horizontal">
-                            <Box className="form-content" alignSelf="stretch" fill={true} align={this.getAlignment()}>
-                                <Switch>
-                                    <Route path="/iq/app" component={Application}/>
-                                    <Route path="/iq/application" component={Application}/>
-                                    <Route path="/iq/quote" component={Quote}/>
-                                    <Redirect to="/iq/quote"/>
-                                </Switch>
-                            </Box>
-                            <Box className="hideOnSmallScreens" alignSelf="stretch" fill={true}>
-                                <Switch>
-                                    <Route path="/iq/quote" component={QuoteHelp}/>
-                                </Switch>
-                            </Box>
+                            <Switch>
+                                <Route path="/iq/app" component={Application}/>
+                                <Route path="/iq/application" component={Application}/>
+                                <Route path="/iq/quote" component={Quote}/>
+                                <Redirect to="/iq/quote"/>
+                            </Switch>
                         </Box>
                     </Box>
                 </Grommet>
