@@ -26,8 +26,8 @@ export function fillStoreFromLocalStorage(store) {
     return new Promise(function(resolve, reject) {
         if(localStorage.getItem("store_persisted") === "true") {
             Object.assign(store.state, localStorage);
-            resolve(store);
+            resolve(store.state);
         }
-        reject(store);
+        reject(store.state);
     });
 }

@@ -4,6 +4,13 @@ let apiUrl = "https://viscosity-api.herokuapp.com";
 //let apiUrl = "http://localhost:4567";
 
 export function getQuote(state, actualAge, nearestAge, amount, termLength, healthType, sex, rider, showTop) {
+
+    let array = [state, actualAge, nearestAge, amount, termLength, healthType, sex, rider, showTop];
+
+    if(array.some(el => el === undefined)) {
+        return Promise.reject("undfined_data");
+    }
+
     return axios.post(apiUrl + "/quote", querystring.stringify({
         state: state,
         actualAge: actualAge,
