@@ -45,6 +45,7 @@ class Main extends Component {
 
         store.onAll().subscribe(({key, value}) => {
             localStorage.setItem("store_persisted", "true");
+            localStorage.setItem("quotes_ran", "false");
             console.log('persisting', key, value);
             localStorage.setItem(key, value);
         });

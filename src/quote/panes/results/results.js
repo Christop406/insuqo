@@ -50,11 +50,17 @@ class Results extends Component {
     };
 
     componentDidMount = () => {
-        this.getQuotes().then(res => {
-            // todo - handle errors
-            let data = res.data;
-            this.setState({quotes: data});
-        });
+        if(localStorage.getItem("quotes_ran") === "true") {
+            this.setState({quotes: JSON.parse(localStorage.getItem("quotes"))});
+        } else {
+            this.getQuotes().then(res => {
+                localStorage.setItem("quotes_ran", "true");
+                // todo - handle errors
+                let data = res.data;
+                this.setState({quotes: data});
+                localStorage.setItem("quotes", JSON.stringify(data));
+            });
+        }
     };
 
     splitPrice = (price) => {
@@ -73,6 +79,18 @@ class Results extends Component {
         }
 
         return splitString;
+    };
+
+    formatRider = quote => {
+        if(quote.annualADBPremium !== 0) {
+            return "Accidental Death Rider";
+        } else if(quote.annualChildRiderPremium !== 0) {
+            return "Child Rider";
+        } else if(quote.annualReturnOfPremiumPremium !== 0) {
+            return "Return of Premium";
+        } else if(quote.annualWaiverOfPremiumPremium !== 0) {
+            return "Waiver of Premium";
+        }
     };
 
     formatQuotes = () => {
@@ -98,9 +116,10 @@ class Results extends Component {
                         <Heading level={3}>Coverage<Paragraph style={{color: '#9c37f2'}}>$ {formatCovAmount(quote.faceAmount)}</Paragraph></Heading>
                         <Heading level={3}>Product Name<Paragraph style={{color: '#9c37f2'}}>{quote.productName}</Paragraph></Heading>
                     </Box>
-                    <Box border="left" style={{width: '50%', marginTop: 10, marginBottom: 10, paddingLeft: 10, paddingRight: 10}}>
+                    <Box style={{width: '50%', marginTop: 10, marginBottom: 10, paddingLeft: 10, paddingRight: 10}}>
                         <Heading level={3}>Term Length<Paragraph style={{color: '#9c37f2'}}>{quote.term} Years</Paragraph></Heading>
                         <Heading level={3}>AMBest Rating <Anchor label="(?)"/><Paragraph style={{color: '#9c37f2'}}>{quote.amBest}</Paragraph></Heading>
+                        <Heading level={3}>Features<Paragraph style={{color: '#9c37f2'}}>{this.formatRider(quote)}</Paragraph></Heading>
                     </Box>
                 </Box>
             </Box>
@@ -110,13 +129,12 @@ class Results extends Component {
     formatQuoteHeading = (quote, index) => {
         let splitPremium = this.splitPrice(quote.monthlyTotalPremium);
         const { active } = this.state;
-        console.log('re-render', index, active);
         return (
             <Box direction="row-responsive" fill="horizontal" align="stretch" margin="small" alignSelf="stretch">
                 <Heading
                     style={{maxWidth: 'none'}}
                     level={3}>
-                    <Box direction="horizontal" alignSelf="stretch">
+                    <Box direction="row" alignSelf="stretch">
                         <Box fill="horizontal" align="center" style={{minWidth: 150}}>
                             <img
                                 style={{marginTop: 10}}
@@ -138,7 +156,7 @@ class Results extends Component {
                     </Box>
                 </Box>
                 <Box fill="horizontal" justify="center" align="center">
-                    <Button primary={active === index} fill={false} hoverIndicator="#EAC4FF" label="APPLY"/>
+                    <Button primary={active === index} onClick={() => {console.log(quote)}} fill={false} hoverIndicator="#EAC4FF" label="APPLY"/>
                 </Box>
             </Box>
         );
