@@ -12,7 +12,7 @@ const styles = {
 class Plan extends Component {
 
     state = {
-        covAmount: 10000,
+        covAmount: 500000,
         termLength: '75',
         rider: 'none'
     };
@@ -44,6 +44,24 @@ class Plan extends Component {
         store.set('termLength')(Number(this.formatTermLength(termLength)));
         store.set('rider')(rider);
         this.props.history.push('/quote/results');
+    };
+
+    componentDidMount = () => {
+        let cA = localStorage.getItem('covAmount');
+        let tL = localStorage.getItem('termLength');
+        let rd = localStorage.getItem('rider');
+        if(cA == null) {
+            cA = 500000;
+        }
+        if(tL === null || tL === undefined || tL.length === 0) {
+           // todo: implement
+        }
+
+        if(rd == null || rd === undefined || rd.length === 0) {
+            rd = 'none';
+        }
+
+        this.setState({covAmount: cA, rider: rd});
     };
 
     render = () => {

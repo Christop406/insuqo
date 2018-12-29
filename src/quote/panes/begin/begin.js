@@ -50,6 +50,13 @@ class Begin extends Component {
         }
     };
 
+    componentDidMount = () => {
+        const zip = localStorage.getItem("zipCode");
+        if(zip != null && zip !== undefined && zip !== '') {
+            this.setState({zipCode: zip, readyToContinue: zip.length === 5});
+        }
+    };
+
     render = () => {
         const { zipCode, readyToContinue, loading } = this.state;
         return(

@@ -58,6 +58,31 @@ class Personal extends Component {
         }
     };
 
+    componentDidMount = () => {
+        let bd = localStorage.getItem('birthdate');
+        let sex = localStorage.getItem('sex');
+        let tob = localStorage.getItem('tobacco');
+        let can = localStorage.getItem('cannabis');
+        if(bd == null || bd.length < 4) {
+            bd = '';
+        }
+        if(sex == null || sex.length < 4) {
+            sex = 'none';
+        }
+        if(tob == null || tob === undefined) {
+            tob = 'false';
+        }
+        if(can == null || can === undefined) {
+            can = 'false';
+        }
+
+        tob = tob === 'true';
+        can = can === 'true';
+
+        this.setState({birthday: bd, sex: sex, tobacco: tob, cannabis: can});
+
+    };
+
     render = () => {
         const store = this.props.store;
         const { birthday, sex, tobacco, cannabis } = this.state;
