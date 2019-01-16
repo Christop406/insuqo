@@ -84,25 +84,22 @@ class Plan extends Component {
                     <Heading margin="xsmall" level={2} color="#9c37f2">{this.formatTermLength(termLength)} Years</Heading>
                 </Box>
                 <Box margin="small">
-                    <Accordion style={{overflowY: 'hidden'}}>
-                        <AccordionPanel label={<Heading margin="xsmall" level={2} color="#9c37f2">Other Options</Heading>}>
-                            <Heading level={3} color="#9c37f2">Riders</Heading>
-                            <Anchor style={{marginTop: -10}} color="dark-4" label="What are these?"/>
-                            <span style={{height: '10px'}}/>
-                            <Box style={styles.sexButtons}>
-                                <RadioButton checked={rider === 'accidental_death'} name="accidental_death" onChange={this.updateRider} label="Accidental Death"/>
-                                <span style={{height: '10px'}}/>
-                                <RadioButton checked={rider === 'waiver_premium'} name="waiver_premium" onChange={this.updateRider} label="Waiver of Premium"/>
-                                <span style={{height: '10px'}}/>
-                                <RadioButton checked={rider === 'return_premium'} name="return_premium" onChange={this.updateRider} label="Return of Premium"/>
-                                <span style={{height: '10px'}}/>
-                                <RadioButton checked={rider === 'child'} name="child" onChange={this.updateRider} label="Child Rider"/>
-                                <span style={{height: '10px'}}/>
-                                <RadioButton checked={rider === 'none'} name="none" onChange={this.updateRider} label="None"/>
-                                <span style={{height: '10px'}}/>
-                            </Box>
-                        </AccordionPanel>
-                    </Accordion>
+                    <Heading margin="xsmall" level={2} color="#9c37f2">Other Options</Heading>
+                    <Heading margin="small" level={3} color="#9c37f2">Riders</Heading>
+                    <Anchor margin="small" style={{marginTop: -10}} color="dark-4" label="What are these?"/>
+                    <span style={{height: '10px'}}/>
+                    <Box margin="small" style={styles.sexButtons}>
+                        <RadioButton checked={rider === 'accidental_death'} name="accidental_death" onChange={this.updateRider} label="Accidental Death"/>
+                        <span style={{display: 'block', height: 30}}/>
+                        <RadioButton checked={rider === 'waiver_premium'} name="waiver_premium" onChange={this.updateRider} label="Waiver of Premium"/>
+                        <span style={{height: 30}}/>
+                        <RadioButton checked={rider === 'return_premium'} name="return_premium" onChange={this.updateRider} label="Return of Premium"/>
+                        <span style={{height: 30}}/>
+                        <RadioButton checked={rider === 'child'} name="child" onChange={this.updateRider} label="Child Rider"/>
+                        <span style={{height: 30}}/>
+                        <RadioButton checked={rider === 'none'} name="none" onChange={this.updateRider} label="None"/>
+                        <span style={{height: 30}}/>
+                    </Box>
                 </Box>
                 <Button onClick={this.submitPlanInfo} color="#9c37f2" label="Get Quotes" primary />
             </Box>

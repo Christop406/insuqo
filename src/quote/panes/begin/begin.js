@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import Store from '../../../ApplicationStore';
 import {Box, Button, Heading, MaskedInput, Paragraph} from "grommet";
 import {localizeZip} from "../../../api";
+import Spinner from 'react-spinkit';
 
 const styles = {
     quoteSubtitle: {
@@ -81,7 +82,7 @@ class Begin extends Component {
                         ]} />
                 </Box>
 
-                <Button onClick={this.submitZip} color="#9c37f2" fill style={{maxHeight: 40}} label="Let's Get Started!" primary disabled={!readyToContinue || (readyToContinue && loading)} />
+                <Button onClick={this.submitZip} color="#9c37f2" fill style={{maxHeight: 40}} label={loading ? "Loading..." : "Let's Get Started!"} primary disabled={!readyToContinue || (readyToContinue && loading)} />
             </div>
         );
     };

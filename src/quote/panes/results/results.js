@@ -4,6 +4,7 @@ import {Accordion, AccordionPanel, Anchor, Box, Button, Heading, Paragraph} from
 import {getQuote} from "../../../api";
 import moment from 'moment';
 import {formatCovAmount, logoImageForCompanyID} from "../../../func";
+import Spinner from 'react-spinkit';
 
 const styles = {
     quoteSubtitle: {
@@ -51,13 +52,13 @@ class Results extends Component {
 
     componentDidMount = () => {
         if(localStorage.getItem("quotes_ran") === "true") {
-            this.setState({quotes: JSON.parse(localStorage.getItem("quotes"))});
+            this.setState({loading: false, quotes: JSON.parse(localStorage.getItem("quotes"))});
         } else {
             this.getQuotes().then(res => {
                 localStorage.setItem("quotes_ran", "true");
                 // todo - handle errors
                 let data = res.data;
-                this.setState({quotes: data});
+                this.setState({loading: false, quotes: data});
                 localStorage.setItem("quotes", JSON.stringify(data));
             });
         }
@@ -91,6 +92,7 @@ class Results extends Component {
         } else if(quote.annualWaiverOfPremiumPremium !== 0) {
             return "Waiver of Premium";
         }
+        return "None";
     };
 
     formatQuotes = () => {
@@ -171,16 +173,23 @@ class Results extends Component {
     };
 
     render = () => {
-        const { active } = this.state;
+        const { active, loading } = this.state;
         return (
             <Box>
-                <Heading margin="xsmall" level={1} color="#9c37f2">Here are your quotes</Heading>
-                <Heading margin="xsmall" style={styles.quoteSubtitle} color="dark-4" level={3}>Click on each for more info.</Heading>
-                <Box style={{paddingLeft: 5, paddingRight: 5}}>
-                    <Accordion onActive={this.updateActiveIndex} activeIndex={active}>
-                        {this.formatQuotes()}
-                    </Accordion>
-                </Box>
+                {loading ?
+                    <Box style={{visibility: loading ? 'visible' : 'hidden'}}>
+                        <Spinner name='folding-cube' color="#9c37f2"/>
+                    </Box> :
+                    <Box>
+                        <Heading margin="xsmall" level={1} color="#9c37f2">Here are your quotes</Heading>
+                        <Heading margin="xsmall" style={styles.quoteSubtitle} color="dark-4" level={3}>Click on each for more info.</Heading>
+                        <Box style={{paddingLeft: 5, paddingRight: 5}}>
+                            <Accordion onActive={this.updateActiveIndex} activeIndex={loading ? undefined : active}>
+                                {this.formatQuotes()}
+                            </Accordion>
+                        </Box>
+                    </Box>
+                }
             </Box>
         );
     };
