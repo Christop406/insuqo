@@ -176,7 +176,7 @@ class Results extends Component {
             <Box>
                 <Heading margin="xsmall" level={1} color="#9c37f2">Here are your quotes</Heading>
                 <Heading margin="xsmall" style={styles.quoteSubtitle} color="dark-4" level={3}>Click on each for more info.</Heading>
-                <Box style={{paddingLeft: 5, paddingRight: 5}}>
+                <Box style={{paddingLeft: 5, paddingRight: 5, overflowY: 'scroll', WebkitOverflowScrolling: 'touch'}}>
                     <Accordion onActive={this.updateActiveIndex} activeIndex={active}>
                         {this.formatQuotes()}
                     </Accordion>
