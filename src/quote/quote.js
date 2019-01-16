@@ -29,7 +29,7 @@ class Quote extends Component {
                 <Box className="form-content" alignSelf="stretch" fill={true} align={this.getAlignment()}>
                     <Box align="center">
                         <Box /*elevation="xlarge"*/ round={false}
-                                                    style={{overflowY: 'scroll', WebkitOverflowScrolling: 'touch'}}
+                                                    style={{WebkitOverflowScrolling: 'touch'}}
                                                     pad="large" truncate={false}>
                             <Switch>
                                 <Route path={this.props.match.path + "/begin"} component={Begin}/>
