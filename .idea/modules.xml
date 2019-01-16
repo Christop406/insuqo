@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/viscosity-apply.iml" filepath="$PROJECT_DIR$/.idea/viscosity-apply.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/insuqo.iml" filepath="$PROJECT_DIR$/.idea/insuqo.iml" />
     </modules>
   </component>
 </project>
