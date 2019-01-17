@@ -25,9 +25,20 @@ class Application extends Component {
         this.setState({hasDl: event.target.checked})
     };
 
+    updateDlNum = event => {
+        let v = event.target.value;
+        if(v === undefined) v = '';
+        else v = v.toUpperCase()
+        this.setState({dlNum: v});
+    };
+
+    componentDidMount = () => {
+        document.title = "Application | INSUQO";
+    };
+
     render = () => {
         // noinspection ConstantConditionalExpressionJS
-        const { ssn, hasDl } = this.state;
+        const { ssn, hasDl, dlNum } = this.state;
         return(
             <Box style={{height: 'auto !important'}} justify="start" margin="small">
                 {true ? "" : JSON.stringify(qs.parse(this.props.location.search, {ignoreQueryPrefix: true}))}
@@ -82,7 +93,14 @@ class Application extends Component {
                                     <Select placeholder="California" options={states} children={(option) => {return <div style={{height: 40}}>{option.name}</div>}}/>
                                 </FormField>
                                 <FormField label="License Number">
-
+                                    <MaskedInput mask={[
+                                        {
+                                        length: 8,
+                                        regexp: /^[a-zA-Z0-9]{1,8}$/}
+                                    ]}
+                                    value={dlNum}
+                                    onChange={this.updateDlNum}
+                                    placeholder="F870684"/>
                                 </FormField>
                             </Box>
                         }
