@@ -55,8 +55,8 @@ class Main extends Component {
     render = () => {
         return(
             <StyleRoot>
-                <Grommet full theme={grommet}>
-                    <Box fill={true} animation="fadeIn">
+                <Grommet theme={grommet}>
+                    <Box fill={true} /*animation="fadeIn"*/>
                         <nav style={styles.topNav}>
                             <img src={img} alt="iq-logo" style={styles.mainLogo}/>
                         </nav>

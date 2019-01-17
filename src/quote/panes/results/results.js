@@ -158,7 +158,7 @@ class Results extends Component {
                     </Box>
                 </Box>
                 <Box fill="horizontal" justify="center" align="center">
-                    <Button primary={active === index} onClick={() => {console.log(quote)}} fill={false} hoverIndicator="#EAC4FF" label="APPLY"/>
+                    <Button primary={active === index} onClick={() => {this.apply()}} fill={false} hoverIndicator="#EAC4FF" label="APPLY"/>
                 </Box>
             </Box>
         );
@@ -166,6 +166,13 @@ class Results extends Component {
 
     updateActiveIndex = (active) => {
         this.setState({active: active[0]});
+    };
+
+    apply = () => {
+        let that = this;
+        setTimeout(function (){
+            that.props.history.push('/application');
+        }, 1000);
     };
 
     updateFreq = (newFreq) => {
