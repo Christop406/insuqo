@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import Store from '../../../ApplicationStore';
 import {Box, Button, Heading, MaskedInput, Paragraph} from "grommet";
 import {localizeZip} from "../../../api";
-import Spinner from 'react-spinkit';
 
 const styles = {
     quoteSubtitle: {

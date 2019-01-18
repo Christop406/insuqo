@@ -9,6 +9,10 @@
   height: 40vmin;
 }
 
+.StyledCheckBox-sc-1dbk5ju-6 {
+    min-width: auto !important;
+}
+
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
