@@ -208,7 +208,7 @@ class Application extends Component {
                                     <RadioButton label="Semi-Annually"/>
                                     <RadioButton label="Annually"/>
                                 </Box>
-                                <Box align="center" justify="center" fill style={{backgroundColor: '#efecff'}}>
+                                <Box align="center" justify="center" fill style={{backgroundColor: '#efecff', height: 'auto'}}>
                                     <Heading color="#9c37f2">32.50/mo</Heading>
                                 </Box>
                             </Box>

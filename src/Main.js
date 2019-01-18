@@ -18,6 +18,8 @@ const styles = {
     topNav: {
         width: '100%',
         height: '70px',
+        position: 'fixed',
+        zIndex: 100
     },
     mainLogo: {
         float: 'left',
@@ -58,9 +60,11 @@ class Main extends Component {
                 <Grommet theme={grommet}>
                     <Box fill={true} /*animation="fadeIn"*/>
                         <nav style={styles.topNav}>
-                            <img src={img} alt="iq-logo" style={styles.mainLogo}/>
+                            <Box elevation="xsmall" fill style={{backgroundColor: 'white'}}>
+                                <img src={img} alt="iq-logo" style={styles.mainLogo}/>
+                            </Box>
                         </nav>
-                        <Box direction="row" fill="horizontal">
+                        <Box style={{marginTop: 70}} direction="row" fill="horizontal">
                             <Switch>
                                 <Route path="/app" component={Application}/>
                                 <Route path="/application" component={Application}/>
