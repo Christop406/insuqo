@@ -2,7 +2,19 @@
 import React, { Component } from 'react';
 import Store from '../ApplicationStore';
 import * as qs from 'query-string';
-import {Anchor, Box, CheckBox, FormField, Heading, MaskedInput, RadioButton, Select, Text, TextInput} from "grommet";
+import {
+    Anchor,
+    Box,
+    Button,
+    CheckBox,
+    FormField,
+    Heading,
+    MaskedInput,
+    RadioButton,
+    Select,
+    Text,
+    TextInput
+} from "grommet";
 import countries from './country-by-abbreviation';
 import states from './states.json';
 
@@ -16,7 +28,8 @@ class Application extends Component {
         hasDl: true,
         dlNum: '',
         email: '',
-        pPhoneNum: ''
+        pPhoneNum: '',
+        freq: 'month'
     };
 
     updateSsn = event => {
@@ -42,12 +55,20 @@ class Application extends Component {
         this.setState({pPhoneNum: event.target.value});
     };
 
+    updateFreq = event => {
+        this.setState({freq: event.target.name});
+    };
+
+    submitApplication = () => {
+        console.log('submitted (jk not yet - 1/18/19)');
+    };
+
     componentDidMount = () => {
         document.title = "Application | INSUQO";
     };
 
     render = () => {
-        const { ssn, hasDl, dlNum, email, pPhoneNum } = this.state;
+        const { ssn, hasDl, dlNum, email, pPhoneNum, freq } = this.state;
         // noinspection ConstantConditionalExpressionJS
         return(
             <Box fill align="center">
@@ -203,10 +224,10 @@ class Application extends Component {
                             <Heading margin="none" level={4}><Anchor href="#">Help me choose!</Anchor></Heading>
                             <Box direction="row">
                                 <Box fill margin="small" gap="small">
-                                    <RadioButton label="Monthly"/>
-                                    <RadioButton label="Quarterly"/>
-                                    <RadioButton label="Semi-Annually"/>
-                                    <RadioButton label="Annually"/>
+                                    <RadioButton checked={freq === 'month'} onChange={this.updateFreq} name="month" label="Monthly"/>
+                                    <RadioButton checked={freq === 'quarter'} onChange={this.updateFreq} name="quarter" label="Quarterly"/>
+                                    <RadioButton checked={freq === 'semiannual'} onChange={this.updateFreq} name="semiannual" label="Semi-Annually"/>
+                                    <RadioButton checked={freq === 'annual'} onChange={this.updateFreq} name="annual" label="Annually"/>
                                 </Box>
                                 <Box align="center" justify="center" fill style={{backgroundColor: '#efecff', height: 'auto'}}>
                                     <Heading color="#9c37f2">32.50/mo</Heading>
@@ -225,6 +246,7 @@ class Application extends Component {
                             </Box>
                         </Box>
                     </Box>
+                    <Button primary label="Submit Application" onClick={this.submitApplication}/>
                 </Box>
             </Box>
         );
