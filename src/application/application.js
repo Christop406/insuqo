@@ -14,7 +14,9 @@ class Application extends Component {
         birthCountry: '',
         ssn: '',
         hasDl: true,
-        dlNum: ''
+        dlNum: '',
+        email: '',
+        pPhoneNum: ''
     };
 
     updateSsn = event => {
@@ -28,8 +30,16 @@ class Application extends Component {
     updateDlNum = event => {
         let v = event.target.value;
         if(v === undefined) v = '';
-        else v = v.toUpperCase()
+        else v = v.toUpperCase();
         this.setState({dlNum: v});
+    };
+
+    updateEmail = event => {
+        this.setState({email: event.target.value});
+    };
+
+    updatePPhoneNum = event => {
+        this.setState({pPhoneNum: event.target.value});
     };
 
     componentDidMount = () => {
@@ -37,15 +47,15 @@ class Application extends Component {
     };
 
     render = () => {
+        const { ssn, hasDl, dlNum, email, pPhoneNum } = this.state;
         // noinspection ConstantConditionalExpressionJS
-        const { ssn, hasDl, dlNum } = this.state;
         return(
             <Box style={{height: 'auto !important'}} justify="start" margin="small">
-                {true ? "" : JSON.stringify(qs.parse(this.props.location.search, {ignoreQueryPrefix: true}))}
+                {false ? JSON.stringify(qs.parse(this.props.location.search, {ignoreQueryPrefix: true})) : ""}
                 <Heading margin="xsmall" color="black">We're Almost There.</Heading>
                 <Heading margin="xsmall" color="gray" level={2}>We just need a few more things to get you covered.</Heading>
                 <Box justify="start" className="formContent" gap="xsmall">
-                    <Heading margin="xsmall" color="black" level={2}>Personal Info</Heading>
+                    <Heading margin="xsmall" color="black" level={3}>Personal Info</Heading>
                     <Box className="nameSection"  gap="small">
                         <FormField label="First Name">
                             <TextInput placeholder="John"/>
@@ -86,24 +96,96 @@ class Application extends Component {
                             value={ssn}
                             onChange={this.updateSsn}/>
                         </FormField>
-                        <CheckBox onChange={this.updateHasDl} checked={hasDl} label={<Box>I have a valid driver's license.</Box>}/>
-                        {!hasDl ? "" :
-                            <Box>
-                                <FormField label="Registered State">
-                                    <Select placeholder="California" options={states} children={(option) => {return <div style={{height: 40}}>{option.name}</div>}}/>
-                                </FormField>
-                                <FormField label="License Number">
-                                    <MaskedInput mask={[
-                                        {
-                                        length: 8,
-                                        regexp: /^[a-zA-Z0-9]{1,8}$/}
-                                    ]}
-                                    value={dlNum}
-                                    onChange={this.updateDlNum}
-                                    placeholder="F870684"/>
-                                </FormField>
-                            </Box>
-                        }
+                        <Box style={{backgroundColor: '#efecff', padding: 20}}>
+                            <CheckBox onChange={this.updateHasDl} checked={hasDl} label={<Box>I have a valid driver's license.</Box>}/>
+                            {!hasDl ? "" :
+                                <Box margin="small">
+                                    <Heading margin="xsmall" color="black" level={3}>Driver's License</Heading>
+                                    <FormField label="Registered State">
+                                        <Select placeholder="California" options={states} children={(option) => {return <div style={{height: 40}}>{option.name}</div>}}/>
+                                    </FormField>
+                                    <FormField label="License Number">
+                                        <MaskedInput mask={[
+                                            {
+                                            length: 8,
+                                            regexp: /^[a-zA-Z0-9]{1,8}$/}
+                                        ]}
+                                        value={dlNum}
+                                        onChange={this.updateDlNum}
+                                        placeholder="F870684"/>
+                                    </FormField>
+                                </Box>
+                            }
+                        </Box>
+                    </Box>
+                    <Box>
+                        <Heading margin="xsmall" color="black" level={3}>Address</Heading>
+                        <Box>
+                            <FormField label="Street Address">
+                                <TextInput placeholder="123 Mulberry Lane"/>
+                            </FormField>
+                            <FormField label="Apartment/Unit (Address Line 2)">
+                                <TextInput placeholder="10B"/>
+                            </FormField>
+                            <FormField label="City">
+                                <TextInput disabled value="Redwood City"/>
+                            </FormField>
+                            <FormField label="State">
+                                <TextInput disabled value="California"/>
+                            </FormField>
+                            <FormField label="Zip Code">
+                                <TextInput disabled value="94061"/>
+                            </FormField>
+                        </Box>
+                    </Box>
+                    <Box>
+                        <Heading margin="xsmall" color="black" level={3}>Contact Info</Heading>
+                        <FormField label="Email Address">
+                            <MaskedInput
+                                mask={[
+                                    {
+                                        regexp: /^[\w-.]*$/,
+                                        placeholder: "person"
+                                    },
+                                    { fixed: "@" },
+                                    {
+                                        regexp: /^[\w-]*$/,
+                                        placeholder: "example"
+                                    },
+                                    { fixed: "." },
+                                    {
+                                        regexp: /^[\w-]{1,4}$/,
+                                        placeholder: "com"
+                                    }
+                                ]}
+                                value={email}
+                                onChange={this.updateEmail}
+                            />
+                        </FormField>
+                        <FormField label="Primary Phone Number">
+                            <MaskedInput
+                                mask={[
+                                    { fixed: '('},
+                                    {
+                                        regexp: /^[0-9]{1,3}$/,
+                                        placeholder: "123"
+                                    },
+                                    { fixed: ')'},
+                                    { fixed: ' '},
+                                    {
+                                        regexp: /^[0-9]{1,3}$/,
+                                        placeholder: "456"
+                                    },
+                                    { fixed: '-'},
+                                    {
+                                        regexp: /^[0-9]{1,4}$/,
+                                        placeholder: '7890'
+                                    }
+                                ]}
+                                value={pPhoneNum}
+                                onChange={this.updatePPhoneNum}
+                            />
+                        </FormField>
                     </Box>
                 </Box>
             </Box>
