@@ -149,16 +149,14 @@ class Application extends Component {
                                 <FormField label="Apartment/Unit (Address Line 2)">
                                     <TextInput placeholder="10B"/>
                                 </FormField>
-                                <Box direction="row" gap="xsmall">
-                                    <FormField label="City">
-                                        <TextInput disabled value="Redwood City"/>
-                                    </FormField>
-                                    <FormField label="State">
-                                        <TextInput disabled value="California"/>
-                                    </FormField>
-                                    <FormField label="Zip Code">
-                                        <TextInput disabled value="94061"/>
-                                    </FormField>
+                                <Box align="left">
+                                    <Box wrap justify="left" align="center" margin="none" direction="row" gap="small">
+                                        <Text color="#999" size="large" weight="bold">Redwood City,</Text>
+                                        <Text color="#999" size="large" weight="bold">California</Text>
+                                        <Text color="#999" size="large" weight="bold">94061</Text>
+                                        <Anchor size="small">Why can't I change my city?</Anchor>
+                                    </Box>
+
                                 </Box>
                             </Box>
                         </Box>
