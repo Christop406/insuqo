@@ -14,5 +14,6 @@ export default createConnectedStore({
     cannabis: false,
     covAmount: 0,
     termLength: 0,
-    rider: 'none'
+    rider: 'none',
+    quote: undefined
 });
