@@ -158,7 +158,7 @@ class Results extends Component {
                     </Box>
                 </Box>
                 <Box fill="horizontal" justify="center" align="center">
-                    <Button primary={active === index} onClick={() => {this.apply()}} fill={false} hoverIndicator="#EAC4FF" label="APPLY"/>
+                    <Button primary={active === index} onClick={() => {this.apply(quote)}} fill={false} hoverIndicator="#EAC4FF" label="APPLY"/>
                 </Box>
             </Box>
         );
@@ -168,8 +168,10 @@ class Results extends Component {
         this.setState({active: active[0]});
     };
 
-    apply = () => {
+    apply = quote => {
         let that = this;
+        this.props.store.set('quote')(quote);
+        localStorage.setItem('quote', JSON.stringify(quote));
         setTimeout(function (){
             that.props.history.push('/application');
         }, 1000);
