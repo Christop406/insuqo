@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { Component } from 'react';
 import Store from '../../../ApplicationStore';
-import {Box, Button, Heading, MaskedInput, Paragraph} from "grommet";
+import {Box, Button, Heading, MaskedInput, Paragraph, Text} from "grommet";
 import {localizeZip} from "../../../api";
 
 const styles = {
@@ -15,14 +15,15 @@ class Begin extends Component {
     state = {
         zipCode: '',
         readyToContinue: false,
-        loading: false
+        loading: false,
+        zipInvalid: false
     };
 
     updateZipCode = event => {
         if(event.target.value.length < 5) {
-            this.setState({readyToContinue: false, zipCode: event.target.value})
+            this.setState({readyToContinue: false, zipCode: event.target.value, zipInvalid: false})
         } else {
-            this.setState({readyToContinue: true, zipCode: event.target.value})
+            this.setState({readyToContinue: true, zipCode: event.target.value, zipInvalid: false})
         }
     };
 
@@ -41,6 +42,10 @@ class Begin extends Component {
 
                 this.props.history.push('/quote/personal');
             }
+        }).catch((err) => {
+            if(err.response.status === 400 && err.response.data === "invalid_zip") {
+                this.setState({loading: false, zipInvalid: true});
+            }
         });
     };
 
@@ -58,7 +63,7 @@ class Begin extends Component {
     };
 
     render = () => {
-        const { zipCode, readyToContinue, loading } = this.state;
+        const { zipCode, readyToContinue, loading, zipInvalid } = this.state;
         return(
             <div>
                 <Heading margin="xsmall" color="#9c37f2" level={1} >Looking for life insurance?</Heading>
@@ -79,6 +84,7 @@ class Begin extends Component {
                                 placeholder: "94041"
                             }
                         ]} />
+                    {zipInvalid ? <Text color="red">ZIP code invalid, please try again.</Text> : ""}
                 </Box>
 
                 <Button onClick={this.submitZip} color="#9c37f2" fill style={{maxHeight: 40}} label={loading ? "Loading..." : "Let's Get Started!"} primary disabled={!readyToContinue || (readyToContinue && loading)} />

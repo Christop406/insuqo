@@ -66,17 +66,18 @@ class Application extends Component {
         let { freq } = this.state;
         let quote = this.props.store.get('quote');
         if(quote === undefined) return '';
+        if(typeof quote === 'string') quote = JSON.parse(quote);
+
         switch (freq) {
             case "quarter":
-                return quote.quarterlyTotalPremium;
+                return quote.quarterlyTotalPremium + "/QTR";
             case "semiannual":
-                return quote.semiAnnualTotalPremium;
+                return quote.semiAnnualTotalPremium + "/SA";
             case "annual":
-
-                return quote.annualTotalPremium;
+                return quote.annualTotalPremium + "/YR";
             case "month":
             default:
-                return quote.monthlyTotalPremium;
+                return quote.monthlyTotalPremium + "/MO";
         }
     };
 
@@ -245,7 +246,7 @@ class Application extends Component {
                                     <RadioButton checked={freq === 'annual'} onChange={this.updateFreq} name="annual" label="Annually"/>
                                 </Box>
                                 <Box align="center" justify="center" fill style={{backgroundColor: '#efecff', height: 'auto'}}>
-                                    <Heading color="#9c37f2">{this.getPaymentByTerm()}</Heading>
+                                    <Heading color="#9c37f2">${this.getPaymentByTerm()}</Heading>
                                 </Box>
                             </Box>
                         </Box>
