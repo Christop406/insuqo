@@ -23,24 +23,41 @@ class Application extends Component {
         fname: '',
         lname: '',
         birthCountry: '',
+        birthCountryCode: '',
         ssn: '',
         hasDl: true,
         dlNum: '',
+        dlState: '',
+        dlStateCode: '',
+        streetAddress: '',
+        addrLine2: '',
         email: '',
         pPhoneNum: '',
-        freq: 'month'
+        freq: 'month',
+        otherLifeInsurance: false,
+        oiWillReplace: false,
+        oiPending: false,
+        oiModified: false,
+        intendedParty: false,
+        willFinance: false,
+        willLiquidate: false,
+    };
+
+    updateOtherLifeInsurance = event => {
+        this.setState({[event.target.name]: !this.state[event.target.name]});
     };
 
     updateFname = event => {
-
+        this.setState({fname: event.target.value});
     };
 
     updateLname = event => {
-
+        this.setState({lname: event.target.value});
     };
 
     updateBirthCountry = event => {
-
+        console.log(event);
+        this.setState({birthCountry: event.value.country, birthCountryCode: event.value.abbreviation});
     };
 
     updateSsn = event => {
@@ -56,6 +73,18 @@ class Application extends Component {
         if(v === undefined) v = '';
         else v = v.toUpperCase();
         this.setState({dlNum: v});
+    };
+
+    updateDlState = event => {
+        this.setState({dlState: event.value.name, dlStateCode: event.value.abbreviation});
+    };
+
+    updateStreetAddress = event => {
+        this.setState({streetAddress: event.target.value})
+    };
+
+    updateAddrLine2 = event => {
+        this.setState({addrLine2: event.target.value})
     };
 
     updateEmail = event => {
@@ -82,14 +111,14 @@ class Application extends Component {
 
         switch (freq) {
             case "quarter":
-                return quote.quarterlyTotalPremium + "/QTR";
+                return parseFloat(quote.quarterlyTotalPremium).toFixed(2) + "/QTR";
             case "semiannual":
-                return quote.semiAnnualTotalPremium + "/SA";
+                return parseFloat(quote.semiAnnualTotalPremium).toFixed(2) + "/SA";
             case "annual":
-                return quote.annualTotalPremium + "/YR";
+                return parseFloat(quote.annualTotalPremium).toFixed(2) + "/YR";
             case "month":
             default:
-                return quote.monthlyTotalPremium + "/MO";
+                return parseFloat(quote.monthlyTotalPremium).toFixed(2) + "/MO";
         }
     };
 
@@ -98,7 +127,27 @@ class Application extends Component {
     };
 
     render = () => {
-        const { ssn, hasDl, dlNum, email, pPhoneNum, freq } = this.state;
+        const {
+            fname,
+            lname,
+            ssn,
+            hasDl,
+            dlNum,
+            dlState,
+            email,
+            pPhoneNum,
+            freq,
+            otherLifeInsurance,
+            oiPending,
+            oiModified,
+            oiWillReplace,
+            willFinance,
+            willLiquidate,
+            intendedParty,
+            birthCountry,
+            streetAddress,
+            addrLine2
+        } = this.state;
         // noinspection ConstantConditionalExpressionJS
         return(
             <Box fill align="center">
@@ -110,16 +159,16 @@ class Application extends Component {
                         <Heading margin="xsmall" color="black" level={3}>Personal Info</Heading>
                         <Box className="nameSection"  gap="small">
                             <FormField label="First Name">
-                                <TextInput placeholder="John"/>
+                                <TextInput value={fname} onChange={this.updateFname} placeholder="John"/>
                             </FormField>
                             <FormField label="Last Name">
-                                <TextInput placeholder="Smith"/>
+                                <TextInput value={lname} onChange={this.updateLname} placeholder="Smith"/>
                             </FormField>
                         </Box>
                         <Heading margin="xsmall" color="black" level={3}>Citizenship</Heading>
                         <Box gap="small" className="citizenshipSection">
                             <FormField label="Country of Birth">
-                                <Select placeholder="United States" options={countries} children={(option) => {return <Box margin="small">{option.country}</Box>}}/>
+                                <Select onChange={this.updateBirthCountry} value={birthCountry} placeholder="United States" options={countries} children={(option) => {return <Box margin="small">{option.country}</Box>}}/>
                             </FormField>
                             <FormField label="Social Security Number" help="We are required to use this for validation purposes.">
                                 <MaskedInput mask={[
@@ -154,7 +203,7 @@ class Application extends Component {
                                     <Box margin="small">
                                         <Heading margin="xsmall" color="black" level={3}>Driver's License</Heading>
                                         <FormField label="Registered State">
-                                            <Select placeholder="California" options={states} children={(option) => {return <div style={{height: 40}}>{option.name}</div>}}/>
+                                            <Select value={dlState} onChange={this.updateDlState} placeholder="California" options={states} children={(option) => {return <div style={{height: 40}}>{option.name}</div>}}/>
                                         </FormField>
                                         <FormField label="License Number">
                                             <MaskedInput mask={[
@@ -174,10 +223,10 @@ class Application extends Component {
                             <Heading margin="xsmall" color="black" level={3}>Address</Heading>
                             <Box>
                                 <FormField label="Street Address">
-                                    <TextInput placeholder="123 Mulberry Lane"/>
+                                    <TextInput value={streetAddress} onChange={this.updateStreetAddress} placeholder="123 Mulberry Lane"/>
                                 </FormField>
                                 <FormField label="Apartment/Unit (Address Line 2)">
-                                    <TextInput placeholder="10B"/>
+                                    <TextInput value={addrLine2} onChange={this.updateAddrLine2} placeholder="10B"/>
                                 </FormField>
                                 <Box align="left">
                                     <Box wrap justify="left" align="center" margin="none" direction="row" gap="small">
@@ -266,13 +315,13 @@ class Application extends Component {
                             <Heading margin="none" level={3}>Other Information</Heading>
                             <Text>Please select any of the following options <b>only</b> if they apply to you.</Text>
                             <Box margin="xsmall" fill gap="small">
-                                <CheckBox label={<Box>I currently have another life insurance plan.</Box>}/>
-                                <CheckBox label={<Box>This policy will replace or change my other policy.</Box>}/>
-                                <CheckBox label={<Box>I currently have another application pending with another insurance company.</Box>}/>
-                                <CheckBox label={<Box>A previous application has been declined, postponed, or modified after applying.</Box>}/>
-                                <CheckBox label={<Box>Another party, besides me, will obtain a right, title, or interest in any policy issued on the life of the proposed insured as a result of this application.</Box>}/>
-                                <CheckBox label={<Box>I will be taking out a loan or financing my premiums for this plan.</Box>}/>
-                                <CheckBox label={<Box>This policy will be replaced through a 1035 exchange or liquidation.</Box>}/>
+                                <CheckBox name="otherLifeInsurance" checked={otherLifeInsurance} onChange={this.updateOtherLifeInsurance} label={<Box>I currently have another life insurance plan.</Box>}/>
+                                <CheckBox name="oiWillReplace" checked={oiWillReplace} onChange={this.updateOtherLifeInsurance} label={<Box>This policy will replace or change my other policy.</Box>}/>
+                                <CheckBox name="oiPending" checked={oiPending} onChange={this.updateOtherLifeInsurance} label={<Box>I currently have another application pending with another insurance company.</Box>}/>
+                                <CheckBox name="oiModified" checked={oiModified} onChange={this.updateOtherLifeInsurance} label={<Box>A previous application has been declined, postponed, or modified after applying.</Box>}/>
+                                <CheckBox name="intendedParty" checked={intendedParty} onChange={this.updateOtherLifeInsurance} label={<Box>Another party, besides me, will obtain a right, title, or interest in any policy issued on the life of the proposed insured as a result of this application.</Box>}/>
+                                <CheckBox name="willFinance" checked={willFinance} onChange={this.updateOtherLifeInsurance} label={<Box>I will be taking out a loan or financing my premiums for this plan.</Box>}/>
+                                <CheckBox name="willLiquidate" checked={willLiquidate} onChange={this.updateOtherLifeInsurance} label={<Box>This policy will be replaced through a 1035 exchange or liquidation.</Box>}/>
                             </Box>
                         </Box>
                     </Box>
