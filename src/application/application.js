@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-no-comment-textnodes */
 import React, { Component } from 'react';
 import Store from '../ApplicationStore';
 import * as qs from 'query-string';
@@ -63,6 +62,25 @@ class Application extends Component {
         console.log('submitted (jk not yet - 1/18/19)');
     };
 
+    getPaymentByTerm = () => {
+        let { freq } = this.state;
+        let quote = this.props.store.get('quote');
+        if(quote === undefined) return '';
+        if(typeof quote === 'string') quote = JSON.parse(quote);
+
+        switch (freq) {
+            case "quarter":
+                return quote.quarterlyTotalPremium + "/QTR";
+            case "semiannual":
+                return quote.semiAnnualTotalPremium + "/SA";
+            case "annual":
+                return quote.annualTotalPremium + "/YR";
+            case "month":
+            default:
+                return quote.monthlyTotalPremium + "/MO";
+        }
+    };
+
     componentDidMount = () => {
         document.title = "Application | INSUQO";
     };
@@ -89,7 +107,7 @@ class Application extends Component {
                         <Heading margin="xsmall" color="black" level={3}>Citizenship</Heading>
                         <Box gap="small" className="citizenshipSection">
                             <FormField label="Country of Birth">
-                                <Select placeholder="United States" options={countries} children={(option) => {return <div style={{height: 40}}>{option.country}</div>}}/>
+                                <Select placeholder="United States" options={countries} children={(option) => {return <Box margin="small">{option.country}</Box>}}/>
                             </FormField>
                             <FormField label="Social Security Number" help="We are required to use this for validation purposes.">
                                 <MaskedInput mask={[
@@ -228,7 +246,7 @@ class Application extends Component {
                                     <RadioButton checked={freq === 'annual'} onChange={this.updateFreq} name="annual" label="Annually"/>
                                 </Box>
                                 <Box align="center" justify="center" fill style={{backgroundColor: '#efecff', height: 'auto'}}>
-                                    <Heading color="#9c37f2">32.50/mo</Heading>
+                                    <Heading color="#9c37f2">${this.getPaymentByTerm()}</Heading>
                                 </Box>
                             </Box>
                         </Box>

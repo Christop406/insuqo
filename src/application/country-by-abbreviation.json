@@ -1,5 +1,9 @@
 [
     {
+        "country": "United States",
+        "abbreviation": "US"
+    },
+    {
         "country": "Afghanistan",
         "abbreviation": "AF"
     },
@@ -906,10 +910,6 @@
     {
         "country": "United Kingdom",
         "abbreviation": "GB"
-    },
-    {
-        "country": "United States",
-        "abbreviation": "US"
     },
     {
         "country": "United States Minor Outlying Islands",

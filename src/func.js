@@ -22,6 +22,24 @@ export function logoImageForCompanyID(id) {
     }
 }
 
+export function splitPrice(price) {
+    if(price == null) {
+        return ['0', '00'];
+    }
+
+    let splitString = String(price).split('.');
+    if(splitString[0] === undefined) {
+        splitString[0] = '0';
+    }
+    if(splitString[1] === undefined) {
+        splitString[1] = '00';
+    } else {
+        splitString[1] = splitString[1].substring(0, 2);
+    }
+
+    return splitString;
+}
+
 export function fillStoreFromLocalStorage(store) {
     return new Promise(function(resolve, reject) {
         if(localStorage.getItem("store_persisted") === "true") {

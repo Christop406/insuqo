@@ -3,7 +3,7 @@ import Store from '../../../ApplicationStore';
 import {Accordion, AccordionPanel, Anchor, Box, Button, Heading, Paragraph} from "grommet";
 import {getQuote} from "../../../api";
 import moment from 'moment';
-import {formatCovAmount, logoImageForCompanyID} from "../../../func";
+import {formatCovAmount, logoImageForCompanyID, splitPrice} from "../../../func";
 import Spinner from 'react-spinkit';
 
 const styles = {
@@ -64,24 +64,6 @@ class Results extends Component {
         }
     };
 
-    splitPrice = (price) => {
-        if(price == null || price === undefined) {
-            return ['0', '00'];
-        }
-
-        let splitString = String(price).split('.');
-        if(splitString[0] === undefined) {
-            splitString[0] = '0';
-        }
-        if(splitString[1] === undefined) {
-            splitString[1] = '00';
-        } else {
-            splitString[1] = splitString[1].substring(0, 2);
-        }
-
-        return splitString;
-    };
-
     formatRider = quote => {
         if(quote.annualADBPremium !== 0) {
             return "Accidental Death Rider";
@@ -129,7 +111,7 @@ class Results extends Component {
     };
 
     formatQuoteHeading = (quote, index) => {
-        let splitPremium = this.splitPrice(quote.monthlyTotalPremium);
+        let splitPremium = splitPrice(quote.monthlyTotalPremium);
         const { active } = this.state;
         return (
             <Box direction="row-responsive" fill="horizontal" align="stretch" margin="small" alignSelf="stretch">
@@ -158,7 +140,7 @@ class Results extends Component {
                     </Box>
                 </Box>
                 <Box fill="horizontal" justify="center" align="center">
-                    <Button primary={active === index} onClick={() => {this.apply()}} fill={false} hoverIndicator="#EAC4FF" label="APPLY"/>
+                    <Button primary={active === index} onClick={() => {this.apply(quote)}} fill={false} hoverIndicator="#EAC4FF" label="APPLY"/>
                 </Box>
             </Box>
         );
@@ -168,8 +150,10 @@ class Results extends Component {
         this.setState({active: active[0]});
     };
 
-    apply = () => {
+    apply = quote => {
         let that = this;
+        this.props.store.set('quote')(quote);
+        //localStorage.setItem('quote', JSON.stringify(quote));
         setTimeout(function (){
             that.props.history.push('/application');
         }, 1000);
