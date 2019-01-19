@@ -60,7 +60,7 @@ class Main extends Component {
                 <Grommet theme={grommet}>
                     <Box fill={true} /*animation="fadeIn"*/>
                         <nav style={styles.topNav}>
-                            <Box elevation="xsmall" fill style={{backgroundColor: 'white'}}>
+                            <Box fill style={{backgroundColor: 'white'}}>
                                 <img src={img} alt="iq-logo" style={styles.mainLogo}/>
                             </Box>
                         </nav>

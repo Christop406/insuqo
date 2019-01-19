@@ -107,7 +107,7 @@ class Application extends Component {
         let { freq } = this.state;
         let quote = this.props.store.get('quote');
         if(quote === undefined) return '';
-        if(typeof quote === 'string') quote = JSON.parse(quote);
+        if(typeof quote === 'string') {quote = JSON.parse(quote);}
 
         switch (freq) {
             case "quarter":
