@@ -257,7 +257,7 @@
     },
     {
         "country": "England",
-        "abbreviation": null
+        "abbreviation": "01"
     },
     {
         "country": "Equatorial Guinea",
@@ -441,7 +441,7 @@
     },
     {
         "country": "Kazakstan",
-        "abbreviation": null
+        "abbreviation": "02"
     },
     {
         "country": "Kenya",
@@ -553,7 +553,7 @@
     },
     {
         "country": "Micronesia, Federated States of",
-        "abbreviation": null
+        "abbreviation": "08"
     },
     {
         "country": "Moldova",
@@ -637,7 +637,7 @@
     },
     {
         "country": "Northern Ireland",
-        "abbreviation": null
+        "abbreviation": "03"
     },
     {
         "country": "Northern Mariana Islands",
@@ -757,7 +757,7 @@
     },
     {
         "country": "Scotland",
-        "abbreviation": null
+        "abbreviation": "04"
     },
     {
         "country": "Senegal",
@@ -805,7 +805,7 @@
     },
     {
         "country": "South Sudan",
-        "abbreviation": null
+        "abbreviation": "05"
     },
     {
         "country": "Spain",
@@ -813,7 +813,7 @@
     },
     {
         "country": "SriLanka",
-        "abbreviation": null
+        "abbreviation": "06"
     },
     {
         "country": "Sudan",
@@ -857,7 +857,7 @@
     },
     {
         "country": "The Democratic Republic of Congo",
-        "abbreviation": null
+        "abbreviation": "07"
     },
     {
         "country": "Togo",
@@ -937,15 +937,15 @@
     },
     {
         "country": "Virgin Islands, British",
-        "abbreviation": null
+        "abbreviation": "10"
     },
     {
         "country": "Virgin Islands, U.S.",
-        "abbreviation": null
+        "abbreviation": "11"
     },
     {
         "country": "Wales",
-        "abbreviation": null
+        "abbreviation": "12"
     },
     {
         "country": "Wallis and Futuna",

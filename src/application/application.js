@@ -31,6 +31,18 @@ class Application extends Component {
         freq: 'month'
     };
 
+    updateFname = event => {
+
+    };
+
+    updateLname = event => {
+
+    };
+
+    updateBirthCountry = event => {
+
+    };
+
     updateSsn = event => {
         this.setState({ssn: event.target.value});
     };
@@ -250,15 +262,17 @@ class Application extends Component {
                                 </Box>
                             </Box>
                         </Box>
-                        <Box margin="xsmall">
+                        <Box style={{backgroundColor: '#FAFAFA', marginBottom: 20, padding: 20}} margin="xsmall">
                             <Heading margin="none" level={3}>Other Information</Heading>
-                            <Text>Please check any of the following, if they apply to you.</Text>
+                            <Text>Please select any of the following options <b>only</b> if they apply to you.</Text>
                             <Box margin="xsmall" fill gap="small">
                                 <CheckBox label={<Box>I currently have another life insurance plan.</Box>}/>
                                 <CheckBox label={<Box>This policy will replace or change my other policy.</Box>}/>
                                 <CheckBox label={<Box>I currently have another application pending with another insurance company.</Box>}/>
                                 <CheckBox label={<Box>A previous application has been declined, postponed, or modified after applying.</Box>}/>
                                 <CheckBox label={<Box>Another party, besides me, will obtain a right, title, or interest in any policy issued on the life of the proposed insured as a result of this application.</Box>}/>
+                                <CheckBox label={<Box>I will be taking out a loan or financing my premiums for this plan.</Box>}/>
+                                <CheckBox label={<Box>This policy will be replaced through a 1035 exchange or liquidation.</Box>}/>
                             </Box>
                         </Box>
                     </Box>
