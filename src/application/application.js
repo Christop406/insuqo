@@ -230,9 +230,9 @@ class Application extends Component {
                                 </FormField>
                                 <Box align="left">
                                     <Box wrap justify="left" align="center" margin="none" direction="row" gap="small">
-                                        <Text color="#999" size="large" weight="bold">Redwood City,</Text>
-                                        <Text color="#999" size="large" weight="bold">California</Text>
-                                        <Text color="#999" size="large" weight="bold">94061</Text>
+                                        <Text color="#999" size="large" weight="bold">{this.props.store.get('city')},</Text>
+                                        <Text color="#999" size="large" weight="bold">{this.props.store.get('stateName')}</Text>
+                                        <Text color="#999" size="large" weight="bold">{this.props.store.get('zipCode')}</Text>
                                         <Anchor size="small">Why can't I change my city?</Anchor>
                                     </Box>
 
