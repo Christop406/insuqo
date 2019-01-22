@@ -58,13 +58,13 @@ class Main extends Component {
         return(
             <StyleRoot>
                 <Grommet theme={grommet}>
-                    <Box fill={true} /*animation="fadeIn"*/>
+                    <Box style={{height: '100%'}} fill={true} /*animation="fadeIn"*/>
                         <nav style={styles.topNav}>
                             <Box fill style={{backgroundColor: 'white'}}>
                                 <img src={img} alt="iq-logo" style={styles.mainLogo}/>
                             </Box>
                         </nav>
-                        <Box style={{marginTop: 70}} direction="row" fill="horizontal">
+                        <Box style={{marginTop: 70, height: '100%'}} direction="row" fill="horizontal">
                             <Switch>
                                 <Route path="/app" component={Application}/>
                                 <Route path="/application" component={Application}/>

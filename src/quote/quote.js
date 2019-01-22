@@ -25,7 +25,7 @@ class Quote extends Component {
 
     render = () => {
         return (
-            <Box direction="row" fill="horizontal">
+            <Box direction="row" style={{height: "100%"}} fill="horizontal">
                 <Box className="form-content" alignSelf="stretch" fill={true} align={this.getAlignment()}>
                     <Box align="center">
                         <Box /*elevation="xlarge"*/ round={false}
@@ -41,7 +41,7 @@ class Quote extends Component {
                         </Box>
                     </Box>
                 </Box>
-                <Box className="hideOnSmallScreens" alignSelf="stretch" fill={true}>
+                <Box className="hideOnSmallScreens" style={{height: '100%'}} alignSelf="stretch" fill={true}>
                     <Switch>
                         <Route path="/quote" component={QuoteHelp}/>
                     </Switch>
