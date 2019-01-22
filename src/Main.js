@@ -64,7 +64,7 @@ class Main extends Component {
                                 <img src={img} alt="iq-logo" style={styles.mainLogo}/>
                             </Box>
                         </nav>
-                        <Box style={{marginTop: 70, height: '100%'}} direction="row" fill="horizontal">
+                        <Box className="quote-form-content" style={{paddingTop: 70}} direction="row" fill="horizontal">
                             <Switch>
                                 <Route path="/app" component={Application}/>
                                 <Route path="/application" component={Application}/>
