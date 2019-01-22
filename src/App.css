@@ -76,3 +76,20 @@
     }
 }
 
+.addBenButton {
+    border-color: #aaaaaa;
+    transition: all 0.3s ease;
+    color: #888888;
+    padding: 8px;
+    border-style: dashed;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    border-width: 1px;
+}
+
+.addBenButton:hover {
+    background-color: #eee;
+    color: #9c37f2;
+    border-color: #9c37f2;
+}

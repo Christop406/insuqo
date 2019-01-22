@@ -9,13 +9,15 @@ import {
     FormField,
     Heading,
     MaskedInput,
-    RadioButton,
+    RadioButton, RangeInput,
     Select,
     Text,
     TextInput
 } from "grommet";
 import countries from './country-by-abbreviation';
 import states from './states.json';
+import {Close} from "grommet-icons";
+import BeneficiaryList from "./beneficiary-list";
 
 class Application extends Component {
 
@@ -41,6 +43,7 @@ class Application extends Component {
         intendedParty: false,
         willFinance: false,
         willLiquidate: false,
+        beneficiaries: []
     };
 
     updateOtherLifeInsurance = event => {
@@ -111,14 +114,14 @@ class Application extends Component {
 
         switch (freq) {
             case "quarter":
-                return parseFloat(quote.quarterlyTotalPremium).toFixed(2) + "/QTR";
+                return parseFloat(quote.quarterlyTotalPremium).toFixed(2);
             case "semiannual":
-                return parseFloat(quote.semiAnnualTotalPremium).toFixed(2) + "/SA";
+                return parseFloat(quote.semiAnnualTotalPremium).toFixed(2);
             case "annual":
-                return parseFloat(quote.annualTotalPremium).toFixed(2) + "/YR";
+                return parseFloat(quote.annualTotalPremium).toFixed(2);
             case "month":
             default:
-                return parseFloat(quote.monthlyTotalPremium).toFixed(2) + "/MO";
+                return parseFloat(quote.monthlyTotalPremium).toFixed(2);
         }
     };
 
@@ -294,7 +297,7 @@ class Application extends Component {
                         <Box margin="xsmall">
                             <Heading margin="none" level={3}>Beneficiaries</Heading>
                             <Heading margin="none" color="gray" level={4}>Who is covered if the plan goes into effect?</Heading>
-                            // todo implement
+                            <BeneficiaryList/>
                         </Box>
                         <Box margin="xsmall">
                             <Heading margin="none" level={3}>Payment Frequency</Heading>
@@ -307,7 +310,7 @@ class Application extends Component {
                                     <RadioButton checked={freq === 'annual'} onChange={this.updateFreq} name="annual" label="Annually"/>
                                 </Box>
                                 <Box align="center" justify="center" fill style={{backgroundColor: '#efecff', height: 'auto'}}>
-                                    <Heading color="#9c37f2">${this.getPaymentByTerm()}</Heading>
+                                    <Heading wrap color="#9c37f2">${this.getPaymentByTerm()}</Heading>
                                 </Box>
                             </Box>
                         </Box>
