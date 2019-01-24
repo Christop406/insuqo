@@ -7,6 +7,14 @@ import relations from './relations';
 
 class BeneficiaryList extends Component {
 
+    beneficiary = {
+        "fname" : undefined,
+        "middleI" : undefined,
+        "lname": undefined,
+        "rel" : undefined,
+        "share" : undefined
+    };
+
     state = {
         beneficiaries: [],
         idCounter: 0
@@ -41,10 +49,29 @@ class BeneficiaryList extends Component {
 
     updateBenInfo = event => {
         this.setState({[event.target.name]: event.target.value});
+        this.updateParent(event);
     };
 
     updateBenRelation = event => {
         this.setState({[event.target.name]: event.value});
+        this.updateParent(event);
+    };
+
+    updateParent = event => {
+        console.log(event.target.name);
+        const id = event.target.name.substr(0, event.target.name.indexOf('-'));
+        const field = event.target.name.substr(event.target.name.indexOf('-') + 1);
+        this.beneficiary["fname"] = this.state[id + '-fname'];
+        this.beneficiary["middleI"] = this.state[id + '-middleI'];
+        this.beneficiary["lname"] = this.state[id + '-lname'];
+        this.beneficiary["rel"] = this.state[id + '-rel'];
+        this.beneficiary["share"] = this.state[id + '-share'];
+        if(field === "rel") {
+            this.beneficiary[field] = event.value;
+        } else {
+            this.beneficiary[field] = event.target.value;
+        }
+        this.props.onUpdate(id, this.beneficiary);
     };
 
     componentDidMount = () => {

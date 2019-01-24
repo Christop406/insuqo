@@ -106,6 +106,11 @@ class Application extends Component {
         console.log('submitted (jk not yet - 1/18/19)');
     };
 
+    test = (id, obj) => {
+        console.log(id, obj);
+        this.setState({['ben-' + id]: obj})
+    };
+
     getPaymentByTerm = () => {
         let { freq } = this.state;
         let quote = this.props.store.get('quote');
@@ -297,7 +302,7 @@ class Application extends Component {
                         <Box margin="xsmall">
                             <Heading margin="none" level={3}>Beneficiaries</Heading>
                             <Heading margin="none" color="gray" level={4}>Who is covered if the plan goes into effect?</Heading>
-                            <BeneficiaryList/>
+                            <BeneficiaryList onUpdate={this.test}/>
                         </Box>
                         <Box margin="xsmall">
                             <Heading margin="none" level={3}>Payment Frequency</Heading>
