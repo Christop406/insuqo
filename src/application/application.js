@@ -231,8 +231,8 @@ class Application extends Component {
                                 <FormField label="Apartment/Unit (Address Line 2)">
                                     <TextInput value={addrLine2} onChange={this.updateAddrLine2} placeholder="10B"/>
                                 </FormField>
-                                <Box align="left">
-                                    <Box wrap justify="left" align="center" margin="none" direction="row" gap="small">
+                                <Box align="start">
+                                    <Box wrap justify="start" align="center" margin="none" direction="row" gap="small">
                                         <Text color="#999" size="large" weight="bold">{this.props.store.get('city')},</Text>
                                         <Text color="#999" size="large" weight="bold">{this.props.store.get('stateName')}</Text>
                                         <Text color="#999" size="large" weight="bold">{this.props.store.get('zipCode')}</Text>
@@ -310,7 +310,7 @@ class Application extends Component {
                                     <RadioButton checked={freq === 'annual'} onChange={this.updateFreq} name="annual" label="Annually"/>
                                 </Box>
                                 <Box align="center" justify="center" fill style={{backgroundColor: '#efecff', height: 'auto'}}>
-                                    <Heading wrap color="#9c37f2">${this.getPaymentByTerm()}</Heading>
+                                    <Heading color="#9c37f2">${this.getPaymentByTerm()}</Heading>
                                 </Box>
                             </Box>
                         </Box>
