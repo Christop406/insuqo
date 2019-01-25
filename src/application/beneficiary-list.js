@@ -31,7 +31,7 @@ class BeneficiaryList extends Component {
             [id + '-fname']: '',
             [id + '-middleI']: '',
             [id + '-lname']: '',
-            [id + '-rel']: '',
+            [id + '-rel']: {"code" : "chs", "name" : "Relationship"},
             [id + '-share']: ''
         }));
     };
@@ -82,40 +82,52 @@ class BeneficiaryList extends Component {
         const { beneficiaries } = this.state;
         return beneficiaries.map((value, index) => {
             return(
-                <Box margin={{top: 'small', bottom: 'small'}} key={value} pad="small" elevation="small" round="small" gap="small" fill="horizontal">
+                <Box margin={{top: 'small', bottom: 'small'}} key={value} pad="small" animation="zoomIn" elevation="small" round="small" gap="small" fill="horizontal">
                     <Box fill wrap gap="small">
                         <Heading margin="xxsmall" level={3}>Beneficiary {index + 1}</Heading>
-                        <Box gap="small" direction="row">
-                            <TextInput id={value + '-fname'}
-                                       name={value + '-fname'}
-                                       value={this.state[value + '-fname']}
-                                       onChange={this.updateBenInfo}
-                                       placeholder="First Name"/>
-                            <Box width="small">
+                        <Box wrap flex="grow" justify="between" direction="row">
+                            <Box flex="grow" align="center">
+                                <TextInput id={value + '-fname'}
+                                           name={value + '-fname'}
+                                           value={this.state[value + '-fname']}
+                                           onChange={this.updateBenInfo}
+                                           placeholder="First Name"/>
+                            </Box>
+                            <span className="hideOnXSmallScreens" style={{width: 10}}/>
+                            <div className="showOnXSmallScreens"/>
+                            <Box align="center" flex="grow" width="small">
                                 <TextInput id={value + '-middleI'}
                                            name={value + '-middleI'}
                                            value={this.state[value + '-middleI']}
                                            onChange={this.updateBenInfo}
                                            placeholder="Middle Initial"/>
                             </Box>
-                            <TextInput id={value + '-lname'}
-                                       name={value + '-lname'}
-                                       value={this.state[value + '-lname']}
-                                       onChange={this.updateBenInfo}
-                                       placeholder="Last Name"/>
+                            <span className="hideOnXSmallScreens" style={{width: 10}}/>
+                            <div className="showOnXSmallScreens"/>
+                            <Box align="center" flex="grow">
+                                <TextInput id={value + '-lname'}
+                                           name={value + '-lname'}
+                                           value={this.state[value + '-lname']}
+                                           onChange={this.updateBenInfo}
+                                           placeholder="Last Name"/>
+                            </Box>
                         </Box>
-                        <Box gap="small" direction="row">
-                            <Box fill>
+                        <Box wrap direction="row">
+                            <Box flex="grow">
                                 <Select onChange={this.updateBenRelation} id={value + '-rel'} name={value + '-rel'} value={this.state[value + '-rel'].name} options={relations} children={(option) => {return <Box margin="small">{option.name}</Box>}} placeholder="Relationship"/>
                             </Box>
-                            <TextInput id={value + '-share'}
-                                       name={value + '-share'}
-                                       value={this.state[value + '-share']}
-                                       onChange={this.updateBenInfo}
-                                       type="number"
-                                       placeholder="Percentage of Payout"/>
+                            <span className="hideOnXSmallScreens" style={{width: 10}}/>
+                            <div className="showOnXSmallScreens"/>
+                            <Box flex="grow">
+                                <TextInput id={value + '-share'}
+                                           name={value + '-share'}
+                                           value={this.state[value + '-share']}
+                                           onChange={this.updateBenInfo}
+                                           type="number"
+                                           placeholder="Percentage of Payout"/>
+                            </Box>
                         </Box>
-                        <Box gap="small" fill="horizontal" justify="end" direction="row">
+                        <Box gap="small" flex="grow" justify="end" direction="row">
                             <Button onClick={() => this.deleteBeneficiary(value)} label={"Delete"}/>
                         </Box>
                     </Box>

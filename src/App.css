@@ -58,9 +58,24 @@
     margin-left: 10px;
 }
 
+.showOnXSmallScreens {
+    display: none;
+}
+
 @media screen and (max-width: 455px) {
     .cyLPmt {
         font-size: 22px !important;
+    }
+}
+
+@media screen and (max-width: 685px) {
+    .hideOnXSmallScreens {
+        display: none !important;
+    }
+    .showOnXSmallScreens {
+        width: 100%;
+        height: 6px;
+        display: block !important;
     }
 }
 
