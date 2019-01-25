@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Store from '../../../ApplicationStore';
-import {Accordion, AccordionPanel, Anchor, Box, Button, Heading, Paragraph, RadioButton, RangeInput} from "grommet";
+import {Anchor, Box, Button, Heading, Paragraph, RadioButton, RangeInput} from "grommet";
 import {formatCovAmount} from "../../../func";
 
 const styles = {

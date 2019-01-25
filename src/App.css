@@ -54,6 +54,22 @@
     background-color: #9c37f2 !important;
 }
 
+.field-label {
+    color: black;
+}
+
+.purpleText {
+    color: #9c37f2;
+}
+
+.purpleOutline {
+    border-color: #9c37f2;
+}
+
+.purpleBackground {
+    background-color: #9c37f2;
+}
+
 .sexButton {
     margin-left: 10px;
 }

@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import Store from '../ApplicationStore';
 import {Box, Button, Heading, Select, TextInput} from "grommet/es6";
-import {identity} from "rxjs";
 import {makeid} from '../func';
 import relations from './relations';
+import {Text} from "grommet";
 
 class BeneficiaryList extends Component {
 
@@ -31,7 +31,7 @@ class BeneficiaryList extends Component {
             [id + '-fname']: '',
             [id + '-middleI']: '',
             [id + '-lname']: '',
-            [id + '-rel']: {"code" : "chs", "name" : "Relationship"},
+            [id + '-rel']: {"code" : "chs", "name" : "Choose"},
             [id + '-share']: ''
         }));
     };
@@ -86,49 +86,54 @@ class BeneficiaryList extends Component {
                     <Box fill wrap gap="small">
                         <Heading margin="xxsmall" level={3}>Beneficiary {index + 1}</Heading>
                         <Box wrap flex="grow" justify="between" direction="row">
-                            <Box flex="grow" align="center">
+                            <Box flex="grow">
+                                <Text className="field-label">First Name</Text>
                                 <TextInput id={value + '-fname'}
                                            name={value + '-fname'}
                                            value={this.state[value + '-fname']}
                                            onChange={this.updateBenInfo}
-                                           placeholder="First Name"/>
+                                           placeholder="Johnny"/>
                             </Box>
                             <span className="hideOnXSmallScreens" style={{width: 10}}/>
                             <div className="showOnXSmallScreens"/>
-                            <Box align="center" flex="grow" width="small">
+                            <Box flex="grow" width="small">
+                                <Text className="field-label">Middle Initial</Text>
                                 <TextInput id={value + '-middleI'}
                                            name={value + '-middleI'}
                                            value={this.state[value + '-middleI']}
                                            onChange={this.updateBenInfo}
-                                           placeholder="Middle Initial"/>
+                                           placeholder="K"/>
                             </Box>
                             <span className="hideOnXSmallScreens" style={{width: 10}}/>
                             <div className="showOnXSmallScreens"/>
-                            <Box align="center" flex="grow">
+                            <Box flex="grow">
+                                <Text className="field-label">Last Name</Text>
                                 <TextInput id={value + '-lname'}
                                            name={value + '-lname'}
                                            value={this.state[value + '-lname']}
                                            onChange={this.updateBenInfo}
-                                           placeholder="Last Name"/>
+                                           placeholder="Rocket"/>
                             </Box>
                         </Box>
                         <Box wrap direction="row">
                             <Box flex="grow">
+                                <Text className="field-label">Relationship to You</Text>
                                 <Select onChange={this.updateBenRelation} id={value + '-rel'} name={value + '-rel'} value={this.state[value + '-rel'].name} options={relations} children={(option) => {return <Box margin="small">{option.name}</Box>}} placeholder="Relationship"/>
                             </Box>
                             <span className="hideOnXSmallScreens" style={{width: 10}}/>
                             <div className="showOnXSmallScreens"/>
                             <Box flex="grow">
+                                <Text className="field-label">Percentage of Payout</Text>
                                 <TextInput id={value + '-share'}
                                            name={value + '-share'}
                                            value={this.state[value + '-share']}
                                            onChange={this.updateBenInfo}
                                            type="number"
-                                           placeholder="Percentage of Payout"/>
+                                           placeholder="10%"/>
                             </Box>
                         </Box>
                         <Box gap="small" flex="grow" justify="end" direction="row">
-                            <Button onClick={() => this.deleteBeneficiary(value)} label={"Delete"}/>
+                            <Button className="purpleText purpleOutline" onClick={() => this.deleteBeneficiary(value)} label={"Delete"}/>
                         </Box>
                     </Box>
                 </Box>

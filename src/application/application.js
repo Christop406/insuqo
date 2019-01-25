@@ -9,14 +9,13 @@ import {
     FormField,
     Heading,
     MaskedInput,
-    RadioButton, RangeInput,
+    RadioButton,
     Select,
     Text,
     TextInput
 } from "grommet";
 import countries from './country-by-abbreviation';
 import states from './states.json';
-import {Close} from "grommet-icons";
 import BeneficiaryList from "./beneficiary-list";
 
 class Application extends Component {
@@ -130,6 +129,25 @@ class Application extends Component {
         }
     };
 
+    getPaymentTerm = () => {
+        let { freq } = this.state;
+        let quote = this.props.store.get('quote');
+        if(quote === undefined) return '';
+        if(typeof quote === 'string') {quote = JSON.parse(quote);}
+
+        switch (freq) {
+            case "quarter":
+                return '3 months';
+            case "semiannual":
+                return '6 months';
+            case "annual":
+                return "12 months";
+            case "month":
+            default:
+                return "month";
+        }
+    };
+
     componentDidMount = () => {
         document.title = "Application | INSUQO";
     };
@@ -161,8 +179,8 @@ class Application extends Component {
             <Box fill align="center">
                 <Box style={{maxWidth: 800}} justify="start" margin="small">
                     {false ? JSON.stringify(qs.parse(this.props.location.search, {ignoreQueryPrefix: true})) : ""}
-                    <Heading margin="xsmall" color="black">We're Almost There.</Heading>
-                    <Heading margin="xsmall" color="gray" level={2}>We just need a few more things to get you covered.</Heading>
+                    <Heading margin="xsmall" color="black">You're Almost There.</Heading>
+                    <Heading margin="xsmall" className="purpleText" level={2}>We just need a few more things to get you on your way.</Heading>
                     <Box justify="start" className="formContent" gap="xsmall">
                         <Heading margin="xsmall" color="black" level={3}>Personal Info</Heading>
                         <Box className="nameSection"  gap="small">
@@ -306,7 +324,7 @@ class Application extends Component {
                         </Box>
                         <Box margin="xsmall">
                             <Heading margin="none" level={3}>Payment Frequency</Heading>
-                            <Heading margin="none" level={4}><Anchor href="#">Help me choose!</Anchor></Heading>
+                            <Heading margin="none" level={4}><Anchor className="purpleText" href="#">Help me choose!</Anchor></Heading>
                             <Box direction="row">
                                 <Box fill margin="small" gap="small">
                                     <RadioButton checked={freq === 'month'} onChange={this.updateFreq} name="month" label="Monthly"/>
@@ -315,7 +333,8 @@ class Application extends Component {
                                     <RadioButton checked={freq === 'annual'} onChange={this.updateFreq} name="annual" label="Annually"/>
                                 </Box>
                                 <Box align="center" justify="center" fill style={{backgroundColor: '#efecff', height: 'auto'}}>
-                                    <Heading color="#9c37f2">${this.getPaymentByTerm()}</Heading>
+                                    <Heading margin="none" color="#9c37f2">${this.getPaymentByTerm()}</Heading>
+                                    <Text className="purpleText">every <b>{this.getPaymentTerm()}</b></Text>
                                 </Box>
                             </Box>
                         </Box>
@@ -333,7 +352,7 @@ class Application extends Component {
                             </Box>
                         </Box>
                     </Box>
-                    <Button primary label="Submit Application" onClick={this.submitApplication}/>
+                    <Button primary className="purpleBackground purpleOutline" label="Submit Application" onClick={this.submitApplication}/>
                 </Box>
             </Box>
         );

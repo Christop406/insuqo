@@ -4,7 +4,7 @@
   "private": true,
   "homepage": "https://insuqo.herokuapp.com/",
   "dependencies": {
-    "antd": "^3.11.6",
+    "antd": "^3.12.4",
     "axios": "^0.18.0",
     "grommet": "^2.2.1",
     "grommet-icons": "^4.1.0",
