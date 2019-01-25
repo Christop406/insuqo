@@ -131,9 +131,6 @@ class Application extends Component {
 
     getPaymentTerm = () => {
         let { freq } = this.state;
-        let quote = this.props.store.get('quote');
-        if(quote === undefined) return '';
-        if(typeof quote === 'string') {quote = JSON.parse(quote);}
 
         switch (freq) {
             case "quarter":
