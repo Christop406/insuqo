@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "IQ Quote",
+  "name": "Insuqo Quoting Tool",
   "icons": [
     {
       "src": "favicon.ico",
