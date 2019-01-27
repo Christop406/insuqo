@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Store from '../ApplicationStore';
-import {Box, Button, Heading, Select, TextInput} from "grommet/es6";
+import {Box, Button, Heading, TextInput} from "grommet/es6";
 import {makeid} from '../func';
 import relations from './relations';
 import {Text} from "grommet";
@@ -53,7 +53,7 @@ class BeneficiaryList extends Component {
     };
 
     updateBenRelation = event => {
-        this.setState({[event.target.name]: event.value});
+        this.setState({[event.target.name]: event.target.value});
         this.updateParent(event);
     };
 
@@ -118,7 +118,7 @@ class BeneficiaryList extends Component {
                         <Box wrap direction="row">
                             <Box flex="grow">
                                 <Text className="field-label">Relationship to You</Text>
-                                <Select onChange={this.updateBenRelation} id={value + '-rel'} name={value + '-rel'} value={this.state[value + '-rel'].name} options={relations} children={(option) => {return <Box margin="small">{option.name}</Box>}} placeholder="Relationship"/>
+                                <select className="rel-select" onChange={this.updateBenRelation} id={value + '-rel'} name={value + '-rel'} value={this.state[value + '-rel'].name} children={relations.map((option) => <option value={option.code}>{option.name}</option>)}/>
                             </Box>
                             <span className="hideOnXSmallScreens" style={{width: 10}}/>
                             <div className="showOnXSmallScreens"/>

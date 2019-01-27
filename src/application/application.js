@@ -10,7 +10,6 @@ import {
     Heading,
     MaskedInput,
     RadioButton,
-    Select,
     Text,
     TextInput
 } from "grommet";
@@ -58,8 +57,8 @@ class Application extends Component {
     };
 
     updateBirthCountry = event => {
-        console.log(event);
-        this.setState({birthCountry: event.value.country, birthCountryCode: event.value.abbreviation});
+        console.log(event.target.value);
+        this.setState({birthCountryCode: event.target.value});
     };
 
     updateSsn = event => {
@@ -78,7 +77,7 @@ class Application extends Component {
     };
 
     updateDlState = event => {
-        this.setState({dlState: event.value.name, dlStateCode: event.value.abbreviation});
+        this.setState({dlStateCode: event.target.value});
     };
 
     updateStreetAddress = event => {
@@ -156,7 +155,7 @@ class Application extends Component {
             ssn,
             hasDl,
             dlNum,
-            dlState,
+            dlStateCode,
             email,
             pPhoneNum,
             freq,
@@ -167,8 +166,8 @@ class Application extends Component {
             willFinance,
             willLiquidate,
             intendedParty,
-            birthCountry,
             streetAddress,
+            birthCountryCode,
             addrLine2
         } = this.state;
         // noinspection ConstantConditionalExpressionJS
@@ -191,7 +190,7 @@ class Application extends Component {
                         <Heading margin="xsmall" color="black" level={3}>Citizenship</Heading>
                         <Box gap="small" className="citizenshipSection">
                             <FormField label="Country of Birth">
-                                <Select onChange={this.updateBirthCountry} value={birthCountry} placeholder="United States" options={countries} children={(option) => {return <Box margin="small">{option.country}</Box>}}/>
+                                <select className="bc-select" onChange={this.updateBirthCountry} value={birthCountryCode} placeholder="United States" children={countries.map(option => <option value={option.abbreviation}>{option.country}</option>)}/>
                             </FormField>
                             <FormField label="Social Security Number" help="We are required to use this for validation purposes.">
                                 <MaskedInput mask={[
@@ -226,7 +225,7 @@ class Application extends Component {
                                     <Box margin="small">
                                         <Heading margin="xsmall" color="black" level={3}>Driver's License</Heading>
                                         <FormField label="Registered State">
-                                            <Select value={dlState} onChange={this.updateDlState} placeholder="California" options={states} children={(option) => {return <div style={{height: 40}}>{option.name}</div>}}/>
+                                            <select className="dls-select" value={dlStateCode} onChange={this.updateDlState} placeholder="California" children={states.map(option => <option value={option.abbreviation}>{option.name}</option>)}/>
                                         </FormField>
                                         <FormField label="License Number">
                                             <MaskedInput mask={[
