@@ -8,6 +8,7 @@ import {Text} from "grommet";
 class BeneficiaryList extends Component {
 
     beneficiary = {
+        "id": undefined,
         "fname" : undefined,
         "middleI" : undefined,
         "lname": undefined,
@@ -61,16 +62,24 @@ class BeneficiaryList extends Component {
         console.log(event.target.name);
         const id = event.target.name.substr(0, event.target.name.indexOf('-'));
         const field = event.target.name.substr(event.target.name.indexOf('-') + 1);
+
+        if(id !== this.beneficiary.id) {
+            this.beneficiary = {
+                "id": id,
+                "fname" : undefined,
+                "middleI" : undefined,
+                "lname": undefined,
+                "rel" : undefined,
+                "share" : undefined
+            };
+        }
+
         this.beneficiary["fname"] = this.state[id + '-fname'];
         this.beneficiary["middleI"] = this.state[id + '-middleI'];
         this.beneficiary["lname"] = this.state[id + '-lname'];
         this.beneficiary["rel"] = this.state[id + '-rel'];
         this.beneficiary["share"] = this.state[id + '-share'];
-        if(field === "rel") {
-            this.beneficiary[field] = event.value;
-        } else {
-            this.beneficiary[field] = event.target.value;
-        }
+        this.beneficiary[field] = event.target.value;
         this.props.onUpdate(id, this.beneficiary);
     };
 

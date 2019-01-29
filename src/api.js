@@ -28,6 +28,12 @@ export function getQuote(state, actualAge, nearestAge, amount, termLength, healt
     });
 }
 
+export function newApplication(app) {
+    return axios.post(apiUrl + "/application/new",
+        app
+    , {})
+}
+
 export function localizeZip(zip) {
     if(zip == null || zip === undefined || zip.length < 5) {
         return null;

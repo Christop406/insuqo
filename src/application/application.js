@@ -16,6 +16,7 @@ import {
 import countries from './country-by-abbreviation';
 import states from './states.json';
 import BeneficiaryList from "./beneficiary-list";
+import {newApplication} from "../api";
 
 class Application extends Component {
 
@@ -41,7 +42,6 @@ class Application extends Component {
         intendedParty: false,
         willFinance: false,
         willLiquidate: false,
-        beneficiaries: []
     };
 
     updateOtherLifeInsurance = event => {
@@ -102,6 +102,8 @@ class Application extends Component {
 
     submitApplication = () => {
         console.log('submitted (jk not yet - 1/18/19)');
+        console.log(this.state);
+        newApplication(this.state);
     };
 
     test = (id, obj) => {
