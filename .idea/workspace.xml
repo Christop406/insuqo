@@ -3,9 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="8d5e87d4-159a-4544-ad37-0e170308d0d6" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/api.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/application/application.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/application/application.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/application/beneficiary-list.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/application/beneficiary-list.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/application/relations.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/application/relations.json" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -24,7 +24,7 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/api.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="45">
+            <state relative-caret-position="30">
               <caret line="3" column="2" selection-start-line="3" selection-start-column="2" selection-end-line="3" selection-end-column="2" />
               <folding>
                 <element signature="e#0#26#0" expanded="true" />
@@ -36,7 +36,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/quote/panes/begin/begin.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="270">
+            <state relative-caret-position="-61">
               <caret line="18" column="17" selection-start-line="18" selection-start-column="17" selection-end-line="18" selection-end-column="17" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
@@ -49,8 +49,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/application/application.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="277">
-              <caret line="320" column="34" lean-forward="true" selection-start-line="320" selection-start-column="34" selection-end-line="320" selection-end-column="34" />
+            <state relative-caret-position="-262">
+              <caret line="31" column="24" selection-start-line="31" selection-start-column="24" selection-end-line="31" selection-end-column="24" />
               <folding>
                 <element signature="e#0#41#0" expanded="true" />
               </folding>
@@ -79,8 +79,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/application/beneficiary-list.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="251">
-              <caret line="74" column="9" lean-forward="true" selection-start-line="74" selection-start-column="9" selection-end-line="74" selection-end-column="9" />
+            <state relative-caret-position="1524">
+              <caret line="129" column="263" selection-start-line="129" selection-start-column="263" selection-end-line="129" selection-end-column="263" />
               <folding>
                 <element signature="e#0#41#0" expanded="true" />
               </folding>
@@ -114,8 +114,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/application/relations.json">
           <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret column="1" selection-start-column="1" selection-end-column="1" />
+            <state relative-caret-position="15">
+              <caret line="1" column="15" selection-start-line="1" selection-start-column="12" selection-end-line="1" selection-end-column="15" />
             </state>
           </provider>
         </entry>
@@ -193,19 +193,19 @@
         <option value="$PROJECT_DIR$/src/quote/panes/results/results.js" />
         <option value="$PROJECT_DIR$/src/Main.js" />
         <option value="$PROJECT_DIR$/src/func.js" />
-        <option value="$PROJECT_DIR$/src/application/relations.json" />
         <option value="$PROJECT_DIR$/public/index.html" />
         <option value="$PROJECT_DIR$/src/quote/panes/plan/plan.js" />
         <option value="$PROJECT_DIR$/public/manifest.json" />
         <option value="$PROJECT_DIR$/src/App.css" />
-        <option value="$PROJECT_DIR$/src/application/application.js" />
+        <option value="$PROJECT_DIR$/src/application/relations.json" />
         <option value="$PROJECT_DIR$/src/application/beneficiary-list.js" />
+        <option value="$PROJECT_DIR$/src/application/application.js" />
         <option value="$PROJECT_DIR$/src/api.js" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="92" />
+    <option name="x" value="12" />
     <option name="y" value="23" />
     <option name="width" value="1414" />
     <option name="height" value="998" />
@@ -385,7 +385,8 @@
       <workItem from="1548617998424" duration="2663000" />
       <workItem from="1548725917473" duration="205000" />
       <workItem from="1548739597206" duration="3000" />
-      <workItem from="1548740519305" duration="1535000" />
+      <workItem from="1548740519305" duration="1758000" />
+      <workItem from="1548917737400" duration="1448000" />
     </task>
     <task id="LOCAL-00001" summary="Initial Commit">
       <created>1545600876754</created>
@@ -688,11 +689,18 @@
       <option name="project" value="LOCAL" />
       <updated>1548621339990</updated>
     </task>
-    <option name="localTasksCounter" value="44" />
+    <task id="LOCAL-00044" summary="Started Application Submit API call">
+      <created>1548782858746</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1548782858746</updated>
+    </task>
+    <option name="localTasksCounter" value="45" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="110345000" />
+    <option name="totallyTimeSpent" value="112016000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -704,7 +712,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="92" y="23" width="1414" height="998" extended-state="0" />
+    <frame x="12" y="23" width="1414" height="998" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.885" visible="true" weight="0.28427854" />
@@ -713,7 +721,7 @@
       <window_info id="Favorites" order="3" sideWeight="0.115" side_tool="true" weight="0.3036187" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.47882268" visible="true" weight="0.23730685" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4781048" visible="true" weight="0.23730685" />
       <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.49908924" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -721,7 +729,7 @@
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" sideWeight="0.49533382" weight="0.3289183" />
       <window_info anchor="bottom" id="TypeScript" order="9" sideWeight="0.49964106" weight="0.3289183" />
-      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.5211773" side_tool="true" visible="true" weight="0.23730685" />
+      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.5218952" side_tool="true" visible="true" weight="0.23730685" />
       <window_info anchor="bottom" id="Terminal" order="11" sideWeight="0.6970567" weight="0.4437086" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -732,7 +740,6 @@
     <option name="version" value="1" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Added LocalStorage Retrieval&#10;&#10;On each pane, the info (if it exists in `localStorage`) should be automatically pulled from disk and auto-filled into the fields." />
     <MESSAGE value="Changing Things &#10;&#10;Old commit - forgot to commit - Don't remember why I changed stuff." />
     <MESSAGE value="Merge branch 'master' of https://github.com/Christop406/insuqo&#10;&#10;# Conflicts:&#10;#&#9;src/quote/panes/results/results.js" />
     <MESSAGE value="Renamed Project" />
@@ -757,7 +764,8 @@
     <MESSAGE value="Remove unused var" />
     <MESSAGE value="Change &lt;Select&gt;s to &lt;select&gt;s" />
     <MESSAGE value="Hopefully fix select styling on iOS" />
-    <option name="LAST_COMMIT_MESSAGE" value="Hopefully fix select styling on iOS" />
+    <MESSAGE value="Started Application Submit API call" />
+    <option name="LAST_COMMIT_MESSAGE" value="Started Application Submit API call" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/src/quote/panes/results/results-help.js">
@@ -1006,13 +1014,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://$APPLICATION_HOME_DIR$/lib/platform-impl.jar!/resources/html5-schema/html5/web-forms.rnc">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="222">
-          <caret line="410" column="16" selection-start-line="410" selection-start-column="16" selection-end-line="410" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/App.css">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2025">
@@ -1051,16 +1052,23 @@
     <entry file="file://$PROJECT_DIR$/src/application/states.json">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
+    <entry file="jar://$APPLICATION_HOME_DIR$/lib/platform-impl.jar!/resources/html5-schema/html5/web-forms.rnc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="705">
+          <caret line="360" column="16" selection-start-line="360" selection-start-column="16" selection-end-line="360" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/application/relations.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="1" selection-start-column="1" selection-end-column="1" />
+        <state relative-caret-position="15">
+          <caret line="1" column="15" selection-start-line="1" selection-start-column="12" selection-end-line="1" selection-end-column="15" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/quote/panes/begin/begin.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
+        <state relative-caret-position="-61">
           <caret line="18" column="17" selection-start-line="18" selection-start-column="17" selection-end-line="18" selection-end-column="17" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
@@ -1069,20 +1077,20 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/application/application.js">
+    <entry file="file://$PROJECT_DIR$/src/application/beneficiary-list.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="277">
-          <caret line="320" column="34" lean-forward="true" selection-start-line="320" selection-start-column="34" selection-end-line="320" selection-end-column="34" />
+        <state relative-caret-position="1524">
+          <caret line="129" column="263" selection-start-line="129" selection-start-column="263" selection-end-line="129" selection-end-column="263" />
           <folding>
             <element signature="e#0#41#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/application/beneficiary-list.js">
+    <entry file="file://$PROJECT_DIR$/src/application/application.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="251">
-          <caret line="74" column="9" lean-forward="true" selection-start-line="74" selection-start-column="9" selection-end-line="74" selection-end-column="9" />
+        <state relative-caret-position="-262">
+          <caret line="31" column="24" selection-start-line="31" selection-start-column="24" selection-end-line="31" selection-end-column="24" />
           <folding>
             <element signature="e#0#41#0" expanded="true" />
           </folding>
@@ -1091,7 +1099,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/api.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
+        <state relative-caret-position="30">
           <caret line="3" column="2" selection-start-line="3" selection-start-column="2" selection-end-line="3" selection-end-column="2" />
           <folding>
             <element signature="e#0#26#0" expanded="true" />

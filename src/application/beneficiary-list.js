@@ -127,7 +127,7 @@ class BeneficiaryList extends Component {
                         <Box wrap direction="row">
                             <Box flex="grow">
                                 <Text className="field-label">Relationship to You</Text>
-                                <select className="rel-select" onChange={this.updateBenRelation} id={value + '-rel'} name={value + '-rel'} value={this.state[value + '-rel'].name} children={relations.map((option) => <option value={option.code}>{option.name}</option>)}/>
+                                <select placeholder="Choose" className="rel-select" onChange={this.updateBenRelation} id={value + '-rel'} name={value + '-rel'} value={this.state[value + '-rel'].name} children={relations.map((option) => <option value={option.code}>{option.name}</option>)}/>
                             </Box>
                             <span className="hideOnXSmallScreens" style={{width: 10}}/>
                             <div className="showOnXSmallScreens"/>
