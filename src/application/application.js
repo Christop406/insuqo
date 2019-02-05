@@ -30,7 +30,7 @@ class Application extends Component {
         dlNum: '',
         dlState: 'Alabama',
         dlStateCode: 'AL',
-        streetAddress: '',
+        addrLine1: '',
         addrLine2: '',
         email: '',
         pPhoneNum: '',
@@ -80,8 +80,8 @@ class Application extends Component {
         this.setState({dlStateCode: event.target.value});
     };
 
-    updateStreetAddress = event => {
-        this.setState({streetAddress: event.target.value})
+    updateAddrLine1 = event => {
+        this.setState({addrLine1: event.target.value})
     };
 
     updateAddrLine2 = event => {
@@ -101,9 +101,19 @@ class Application extends Component {
     };
 
     submitApplication = () => {
-        console.log('submitted (jk not yet - 1/18/19)');
-        console.log(this.state);
-        newApplication(this.state);
+        const store = this.props.store;
+        newApplication({
+            ...this.state,
+            birthCountry: undefined,
+            dlState: undefined,
+            addrCity: store.get('city'),
+            addrState: store.get('stateCode'),
+            addrZip: store.get('zipCode'),
+            covAmount: store.get('quote').faceAmount,
+            rider: store.get('rider'),
+            termLength: store.get('quote').term,
+            carrierID: store.get('quote').companyID
+        });
     };
 
     test = (id, obj) => {
@@ -168,7 +178,7 @@ class Application extends Component {
             willFinance,
             willLiquidate,
             intendedParty,
-            streetAddress,
+            addrLine1,
             birthCountryCode,
             addrLine2
         } = this.state;
@@ -247,7 +257,7 @@ class Application extends Component {
                             <Heading margin="xsmall" color="black" level={3}>Address</Heading>
                             <Box>
                                 <FormField label="Street Address">
-                                    <TextInput value={streetAddress} onChange={this.updateStreetAddress} placeholder="123 Mulberry Lane"/>
+                                    <TextInput value={addrLine1} onChange={this.updateAddrLine1} placeholder="123 Mulberry Lane"/>
                                 </FormField>
                                 <FormField label="Apartment/Unit (Address Line 2)">
                                     <TextInput value={addrLine2} onChange={this.updateAddrLine2} placeholder="10B"/>

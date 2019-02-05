@@ -44,6 +44,10 @@ export function fillStoreFromLocalStorage(store) {
     return new Promise(function(resolve, reject) {
         if(localStorage.getItem("store_persisted") === "true") {
             Object.assign(store.state, localStorage);
+            Object.assign(store.state, {
+                quote: JSON.parse(localStorage.getItem('quote')),
+                quotes: JSON.parse(localStorage.getItem('quotes'))
+            });
             resolve(store.state);
         }
         reject(store.state);
