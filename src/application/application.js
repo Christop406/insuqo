@@ -116,7 +116,7 @@ class Application extends Component {
         });
     };
 
-    test = (id, obj) => {
+    updateBens = (id, obj) => {
         console.log(id, obj);
         this.setState({['ben-' + id]: obj})
     };
@@ -328,7 +328,7 @@ class Application extends Component {
                         <Box margin="xsmall">
                             <Heading margin="none" level={3}>Beneficiaries</Heading>
                             <Heading margin="none" color="gray" level={4}>Who is covered if the plan goes into effect?</Heading>
-                            <BeneficiaryList onUpdate={this.test}/>
+                            <BeneficiaryList onUpdate={this.updateBens}/>
                         </Box>
                         <Box margin="xsmall">
                             <Heading margin="none" level={3}>Payment Frequency</Heading>
