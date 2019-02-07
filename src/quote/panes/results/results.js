@@ -151,12 +151,9 @@ class Results extends Component {
     };
 
     apply = quote => {
-        let that = this;
         this.props.store.set('quote')(quote);
         localStorage.setItem('quote', JSON.stringify(quote));
-        setTimeout(function (){
-            that.props.history.push('/application');
-        }, 1000);
+        this.props.history.push('/application');
     };
 
     updateFreq = (newFreq) => {

@@ -3,12 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="8d5e87d4-159a-4544-ad37-0e170308d0d6" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/api.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/quote/panes/begin/begin.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/quote/panes/begin/begin.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/quote/panes/personal/personal.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/quote/panes/personal/personal.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/quote/panes/plan/plan.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/quote/panes/plan/plan.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/quote/panes/results/results.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/quote/panes/results/results.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -49,11 +45,23 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/quote/panes/personal/personal.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="479">
+            <state relative-caret-position="464">
               <caret line="145" column="129" selection-start-line="145" selection-start-column="129" selection-end-line="145" selection-end-column="129" />
+              <folding>
+                <element signature="e#0#41#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/quote/panes/plan/plan.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-601">
+              <caret line="32" column="10" selection-start-line="32" selection-start-column="10" selection-end-line="32" selection-end-column="10" />
               <folding>
                 <element signature="e#0#41#0" expanded="true" />
               </folding>
@@ -100,11 +108,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/quote/panes/results/results.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1650">
-              <caret line="116" column="67" selection-start-line="116" selection-start-column="62" selection-end-line="116" selection-end-column="67" />
+            <state relative-caret-position="209">
+              <caret line="153" column="23" selection-start-line="153" selection-start-column="23" selection-end-line="153" selection-end-column="23" />
               <folding>
                 <element signature="e#0#41#0" expanded="true" />
               </folding>
@@ -194,10 +202,8 @@
         <option value="$PROJECT_DIR$/src/application/country-by-abbreviation.json" />
         <option value="$PROJECT_DIR$/src/quote/quote.js" />
         <option value="$PROJECT_DIR$/src/quote/panes/plan/plan-help.js" />
-        <option value="$PROJECT_DIR$/src/quote/panes/results/results.js" />
         <option value="$PROJECT_DIR$/src/Main.js" />
         <option value="$PROJECT_DIR$/public/index.html" />
-        <option value="$PROJECT_DIR$/src/quote/panes/plan/plan.js" />
         <option value="$PROJECT_DIR$/public/manifest.json" />
         <option value="$PROJECT_DIR$/src/application/relations.json" />
         <option value="$PROJECT_DIR$/src/application/beneficiary-list.js" />
@@ -207,6 +213,8 @@
         <option value="$PROJECT_DIR$/src/quote/panes/begin/begin.js" />
         <option value="$PROJECT_DIR$/src/App.css" />
         <option value="$PROJECT_DIR$/src/quote/panes/personal/personal.js" />
+        <option value="$PROJECT_DIR$/src/quote/panes/plan/plan.js" />
+        <option value="$PROJECT_DIR$/src/quote/panes/results/results.js" />
       </list>
     </option>
   </component>
@@ -273,6 +281,22 @@
               <item name="quote" type="462c0819:PsiDirectoryNode" />
               <item name="panes" type="462c0819:PsiDirectoryNode" />
               <item name="personal" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="insuqo" type="b2602c69:ProjectViewProjectNode" />
+              <item name="insuqo" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="quote" type="462c0819:PsiDirectoryNode" />
+              <item name="panes" type="462c0819:PsiDirectoryNode" />
+              <item name="plan" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="insuqo" type="b2602c69:ProjectViewProjectNode" />
+              <item name="insuqo" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="quote" type="462c0819:PsiDirectoryNode" />
+              <item name="panes" type="462c0819:PsiDirectoryNode" />
+              <item name="results" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -380,7 +404,7 @@
       <workItem from="1549218499314" duration="10000" />
       <workItem from="1549337094631" duration="585000" />
       <workItem from="1549342099337" duration="4001000" />
-      <workItem from="1549571743258" duration="3410000" />
+      <workItem from="1549571743258" duration="4058000" />
     </task>
     <task id="LOCAL-00001" summary="Initial Commit">
       <created>1545600876754</created>
@@ -711,11 +735,18 @@
       <option name="project" value="LOCAL" />
       <updated>1549352523284</updated>
     </task>
-    <option name="localTasksCounter" value="48" />
+    <task id="LOCAL-00048" summary="Validation Started on Begin/Personal">
+      <created>1549576150739</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1549576150740</updated>
+    </task>
+    <option name="localTasksCounter" value="49" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="120145000" />
+    <option name="totallyTimeSpent" value="120793000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -755,7 +786,6 @@
     <option name="version" value="1" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Began Application&#10;&#10;- Removed the 100vh constraint from the application (not needed)&#10;   - May have fixed the weird issues on some panes&#10;&#10;- Added State and Country JSON files&#10;&#10;- Added link to `/application` on the results page" />
     <MESSAGE value="Continuing Application" />
     <MESSAGE value="[Application] Personal info added to form" />
     <MESSAGE value="[Application] Added all fields to Application Form&#10;&#10;- Except Beneficiaries (whoopsie)" />
@@ -780,7 +810,8 @@
     <MESSAGE value="Refactored some of the values on &lt;select&gt;s" />
     <MESSAGE value="Application submitted in correct format" />
     <MESSAGE value="Rename beneficiary update method" />
-    <option name="LAST_COMMIT_MESSAGE" value="Rename beneficiary update method" />
+    <MESSAGE value="Validation Started on Begin/Personal" />
+    <option name="LAST_COMMIT_MESSAGE" value="Validation Started on Begin/Personal" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/build/manifest.json">
@@ -980,13 +1011,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/quote/panes/plan/plan.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="2" column="8" selection-start-line="2" selection-start-column="8" selection-end-line="2" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/application/states.json">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -1032,16 +1056,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="300">
           <caret line="28" column="51" selection-start-line="28" selection-start-column="46" selection-end-line="28" selection-end-column="51" />
-          <folding>
-            <element signature="e#0#41#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/quote/panes/results/results.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1650">
-          <caret line="116" column="67" selection-start-line="116" selection-start-column="62" selection-end-line="116" selection-end-column="67" />
           <folding>
             <element signature="e#0#41#0" expanded="true" />
           </folding>
@@ -1128,8 +1142,28 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/quote/panes/personal/personal.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="479">
+        <state relative-caret-position="464">
           <caret line="145" column="129" selection-start-line="145" selection-start-column="129" selection-end-line="145" selection-end-column="129" />
+          <folding>
+            <element signature="e#0#41#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/quote/panes/plan/plan.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-601">
+          <caret line="32" column="10" selection-start-line="32" selection-start-column="10" selection-end-line="32" selection-end-column="10" />
+          <folding>
+            <element signature="e#0#41#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/quote/panes/results/results.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="209">
+          <caret line="153" column="23" selection-start-line="153" selection-start-column="23" selection-end-line="153" selection-end-column="23" />
           <folding>
             <element signature="e#0#41#0" expanded="true" />
           </folding>

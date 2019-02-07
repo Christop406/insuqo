@@ -30,7 +30,7 @@ class Plan extends Component {
     };
 
     formatTermLength = (len) => {
-        console.log(typeof len);
+        //console.log(typeof len);
         if(len === '25') return '10';
         if(len === '50') return '15';
         if(len === '75') return '20';
@@ -51,13 +51,13 @@ class Plan extends Component {
         let tL = localStorage.getItem('termLength');
         let rd = localStorage.getItem('rider');
         if(cA == null) {
-            cA = 500000;
+            cA = JSON.stringify(500000);
         }
         if(tL === null || tL === undefined || tL.length === 0) {
            // todo: implement
         }
 
-        if(rd == null || rd === undefined || rd.length === 0) {
+        if(rd == null || rd.length === 0) {
             rd = 'none';
         }
 
