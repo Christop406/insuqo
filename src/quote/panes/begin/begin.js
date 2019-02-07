@@ -30,6 +30,7 @@ class Begin extends Component {
     submitZip = () => {
         const store = this.props.store;
         const { zipCode } = this.state;
+        let that = this;
         if(zipCode.length < 5) return;
         this.setState({loading: true});
         localizeZip(zipCode).then(res => {
@@ -40,11 +41,11 @@ class Begin extends Component {
                 store.set('stateCode')(res.data.stateCode);
                 store.set('city')(res.data.city);
 
-                this.props.history.push('/quote/personal');
+                that.props.history.push('/quote/personal');
             }
         }).catch((err) => {
-            if(err.response.status === 400 && err.response.data === "invalid_zip") {
-                this.setState({loading: false, zipInvalid: true});
+            if(err.response.status === 400) {
+                that.setState({loading: false, zipInvalid: true});
             }
         });
     };
@@ -57,7 +58,7 @@ class Begin extends Component {
 
     componentDidMount = () => {
         const zip = localStorage.getItem("zipCode");
-        if(zip != null && zip !== undefined && zip !== '') {
+        if(zip != null && zip !== '') {
             this.setState({zipCode: zip, readyToContinue: zip.length === 5});
         }
     };
@@ -77,6 +78,7 @@ class Begin extends Component {
                         value={zipCode}
                         onChange={this.updateZipCode}
                         onKeyPress={this.handleKeyPress}
+                        style={{borderColor: zipInvalid ? '#f03434' : undefined}}
                         mask={[
                             {
                                 length: 5,
@@ -84,7 +86,7 @@ class Begin extends Component {
                                 placeholder: "94041"
                             }
                         ]} />
-                    {zipInvalid ? <Text color="red">ZIP code invalid, please try again.</Text> : ""}
+                    {zipInvalid ? <Text color="#f03434">ZIP code invalid, please try again.</Text> : ""}
                 </Box>
 
                 <Button onClick={this.submitZip} color="#9c37f2" fill style={{maxHeight: 40}} label={loading ? "Loading..." : "Let's Get Started!"} primary disabled={!readyToContinue || (readyToContinue && loading)} />

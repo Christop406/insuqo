@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import Store from '../../../ApplicationStore';
-import {Anchor, Box, Button, CheckBox, Heading, MaskedInput, Paragraph, RadioButton} from "grommet";
+import {Anchor, Box, Button, CheckBox, Heading, Paragraph, RadioButton, Text} from "grommet";
+import Cleave from 'cleave.js/react'
+import moment from "moment";
 
 const styles = {
     quoteSubtitle: {
@@ -19,12 +21,26 @@ class Personal extends Component {
         birthday: '',
         sex: 'none',
         tobacco: false,
-        cannabis: false
+        cannabis: false,
+        bdError: false,
+        bdErrMsg: ""
     };
 
     updateBirthday = event => {
         console.log(event.target.value);
-        this.setState({birthday: event.target.value});
+        let bd = moment(event.target.value, "MM/DD/YYYY");
+        let now = moment();
+        let val = event.target.value;
+        if(val.length > 8 && now.isBefore(bd)) {
+            console.log('after today');
+            this.setState({birthday: val, bdError: true, bdErrMsg: "Please input a valid birthdate."});
+        } else if(val.length > 8 && now.subtract(18, "years").isBefore(bd)) {
+            console.log('not 18');
+            this.setState({birthday: val, bdError: true, bdErrMsg: "You must be 18 years or older to use this service."});
+        } else {
+            console.log('ok');
+            this.setState({birthday: val, bdError: false, bdErrMsg: ""});
+        }
     };
 
     updateSex = event => {
@@ -69,10 +85,10 @@ class Personal extends Component {
         if(sex == null || sex.length < 4) {
             sex = 'none';
         }
-        if(tob == null || tob === undefined) {
+        if(tob == null) {
             tob = 'false';
         }
-        if(can == null || can === undefined) {
+        if(can == null) {
             can = 'false';
         }
 
@@ -85,7 +101,7 @@ class Personal extends Component {
 
     render = () => {
         const store = this.props.store;
-        const { birthday, sex, tobacco, cannabis } = this.state;
+        const { birthday, sex, tobacco, cannabis, bdError, bdErrMsg } = this.state;
         return(
             <Box animation="fadeIn">
                 <Heading margin="xsmall" level={1} color="#9c37f2">The weather's fine in {store.get('stateName') ? store.get('stateName') : 'XXXX'}!</Heading>
@@ -96,48 +112,16 @@ class Personal extends Component {
                 <Box margin="xsmall">
                     <Heading level={3} color="#9c37f2">Birthdate</Heading>
                     <Box style={{maxWidth: 300}}>
-                        <MaskedInput
+                        <Cleave
+                            style={{borderColor: bdError ? '#f03434' : undefined}}
+                            placeholder="12/21/1997"
+                            className="bd-input"
+                            options={{date: true, datePattern: ['m', 'd', 'Y']}}
                             onChange={this.updateBirthday}
                             value={birthday}
-                            mask={
-                            [   {
-                                    length: [1, 2],
-                                    placeholder: '04',
-                                    options: [
-                                        "1",
-                                        "2",
-                                        "3",
-                                        "4",
-                                        "5",
-                                        "6",
-                                        "7",
-                                        "8",
-                                        "9",
-                                        "10",
-                                        "11",
-                                        "12"
-                                    ]
-                                },
-                                {
-                                    fixed: '/'
-                                },
-                                {
-                                    length: [1, 2],
-                                    placeholder: '01',
-                                    options: [
-                                        "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16",
-                                        "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27","28","29","30","31"
-                                    ]
-                                },
-                                {
-                                    fixed: '/'
-                                },
-                                {
-                                    length: 4,
-                                    placeholder: '2000'
-                                }]
-                        } />
+                            />
                     </Box>
+                    {bdError ? <Text color="#f03434">{bdErrMsg}</Text> : ""}
                 </Box>
                 <Box margin="xsmall">
                     <Heading level={3} color="#9c37f2">Sex</Heading>
@@ -159,7 +143,7 @@ class Personal extends Component {
                         <CheckBox onChange={this.updateCannabis} checked={cannabis} name="cannabis" label="I regularly use cannabis products."/>
                     </Box>
                 </Box>
-                <Button onClick={this.submitPersonalInfo} color="#9c37f2" label="Continue" primary disabled={birthday.length < 8 || sex === 'none'} />
+                <Button onClick={this.submitPersonalInfo} color="#9c37f2" label="Continue" primary disabled={birthday.length < 10 || bdError || sex === 'none'} />
             </Box>
         );
     };

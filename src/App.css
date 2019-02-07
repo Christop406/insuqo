@@ -153,3 +153,14 @@
     min-width: 0;
     width: 100%;
 }
+
+.bd-input {
+    border-width: 1px;
+    border-style: solid;
+    border-color: gray;
+    flex: auto;
+    height: 46px;
+    border-radius: 5px;
+    padding: 11px;
+    font-weight: 600;
+}
