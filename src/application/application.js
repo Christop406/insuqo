@@ -42,6 +42,9 @@ class Application extends Component {
         intendedParty: false,
         willFinance: false,
         willLiquidate: false,
+        fnameError: false,
+        lnameError: false,
+        ssError: false
     };
 
     updateOtherLifeInsurance = event => {
@@ -49,11 +52,27 @@ class Application extends Component {
     };
 
     updateFname = event => {
-        this.setState({fname: event.target.value});
+        this.setState({fname: event.target.value, fnameError: false});
+    };
+
+    blurFname = event => {
+        if(event.target.value.length < 2) {
+            this.setState({fnameError: true})
+        } else {
+            this.setState({fnameError: false})
+        }
     };
 
     updateLname = event => {
-        this.setState({lname: event.target.value});
+        this.setState({lname: event.target.value, lnameError: false});
+    };
+
+    blurLname = event => {
+        if(event.target.value.length < 2) {
+            this.setState({lnameError: true})
+        } else {
+            this.setState({lnameError: false})
+        }
     };
 
     updateBirthCountry = event => {
@@ -63,6 +82,15 @@ class Application extends Component {
 
     updateSsn = event => {
         this.setState({ssn: event.target.value});
+    };
+
+    blurSsn = event => {
+        console.log(event.target.value);
+        if(event.target.value.length < 12) {
+            this.setState({ssError: true})
+        } else {
+            this.setState({ssError: false})
+        }
     };
 
     updateHasDl = event => {
@@ -180,7 +208,10 @@ class Application extends Component {
             intendedParty,
             addrLine1,
             birthCountryCode,
-            addrLine2
+            addrLine2,
+            fnameError,
+            lnameError,
+            ssError
         } = this.state;
         // noinspection ConstantConditionalExpressionJS
         return(
@@ -192,11 +223,11 @@ class Application extends Component {
                     <Box justify="start" className="formContent" gap="xsmall">
                         <Heading margin="xsmall" color="black" level={3}>Personal Info</Heading>
                         <Box className="nameSection"  gap="small">
-                            <FormField label="First Name">
-                                <TextInput value={fname} onChange={this.updateFname} placeholder="John"/>
+                            <FormField label="First Name" error={fnameError ? "First name must be longer than 2 characters." : undefined}>
+                                <TextInput value={fname} onBlur={this.blurFname} onChange={this.updateFname} placeholder="John"/>
                             </FormField>
-                            <FormField label="Last Name">
-                                <TextInput value={lname} onChange={this.updateLname} placeholder="Smith"/>
+                            <FormField label="Last Name" error={lnameError ? "Last name must be longer than 2 characters." : undefined}>
+                                <TextInput value={lname} onBlur={this.blurLname} onChange={this.updateLname} placeholder="Smith"/>
                             </FormField>
                         </Box>
                         <Heading margin="xsmall" color="black" level={3}>Citizenship</Heading>
@@ -204,15 +235,17 @@ class Application extends Component {
                             <FormField label="Country of Birth">
                                 <select className="bc-select" onChange={this.updateBirthCountry} value={birthCountryCode} placeholder="United States" children={countries.map(option => <option value={option.abbreviation}>{option.country}</option>)}/>
                             </FormField>
-                            <FormField label="Social Security Number" help="We are required to use this for validation purposes.">
+                            <FormField label="Social Security Number"
+                                       help="We are required to use this for validation purposes."
+                                       error={ssError ? "Please input a valid social security number." : undefined}>
                                 <MaskedInput mask={[
-                                    {
+                                    { // todo - replace with Cleave
                                         length: 3,
                                         regexp: /^[0-9]{1,3}$/,
                                         placeholder: 'XXX'
                                     },
                                     {
-                                        fixed: ' '
+                                        fixed: '-'
                                     },
                                     {
                                         length: 2,
@@ -220,7 +253,7 @@ class Application extends Component {
                                         placeholder: 'XX'
                                     },
                                     {
-                                        fixed: ' '
+                                        fixed: '-'
                                     },
                                     {
                                         length: 4,
@@ -229,7 +262,8 @@ class Application extends Component {
                                     }
                                 ]}
                                 value={ssn}
-                                onChange={this.updateSsn}/>
+                                onChange={this.updateSsn}
+                                />
                             </FormField>
                             <Box style={{backgroundColor: '#efecff', padding: 20}}>
                                 <CheckBox onChange={this.updateHasDl} checked={hasDl} label={<Box>I have a valid driver's license.</Box>}/>
@@ -240,7 +274,7 @@ class Application extends Component {
                                             <select className="dls-select" value={dlStateCode} onChange={this.updateDlState} placeholder="California" children={states.map(option => <option value={option.abbreviation}>{option.name}</option>)}/>
                                         </FormField>
                                         <FormField label="License Number">
-                                            <MaskedInput mask={[
+                                            <MaskedInput mask={[ // todo - replace with cleave
                                                 {
                                                 length: 8,
                                                 regexp: /^[a-zA-Z0-9]{1,8}$/}
