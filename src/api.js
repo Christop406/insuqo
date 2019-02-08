@@ -35,7 +35,7 @@ export function newApplication(app) {
 }
 
 export function localizeZip(zip) {
-    if(zip == null || zip === undefined || zip.length < 5) {
+    if(zip == null || zip.length < 5) {
         return null;
     }
     return axios.get(apiUrl + "/util/zip/lookup", {
