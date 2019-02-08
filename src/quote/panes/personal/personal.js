@@ -73,6 +73,17 @@ class Personal extends Component {
         });
     };
 
+    showGenderModal = () => {
+        Modal.info({
+            title: 'Why can I only choose male or female?',
+            centered: true,
+            content: <Text>For insurance purposes, and estimation of quotes,
+                    we can only use either male or female. If you do not identify as
+                    male or female, please use your sex at birth instead.</Text>
+            }
+        );
+    };
+
     //hideSmokingModal = () => {this.setState({sModalVisible: false});};
 
     submitPersonalInfo = () => {
@@ -138,7 +149,7 @@ class Personal extends Component {
                 </Box>
                 <Box margin="xsmall">
                     <Heading level={3} color="#9c37f2">Sex</Heading>
-                    <Anchor style={{marginTop: -5}} color="dark-4" label="Why are there only two options?"/>
+                    <Anchor style={{marginTop: -5}} color="dark-4" onClick={this.showGenderModal} label="Why are there only two options?"/>
                     <Box style={styles.sexButtons}>
                         <RadioButton checked={sex === 'male'} onChange={this.updateSex} name="male" label="Male"/>
                         <span style={{height: '10px'}}/>

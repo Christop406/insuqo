@@ -173,6 +173,7 @@
 .ant-modal-confirm-btns .ant-btn.ant-btn-primary:hover {
     background-color: #bd60ff;
     border-color: #bd60ff;
+    color: white !important;
 }
 
 .ant-modal-confirm-btns .ant-btn.ant-btn:hover {

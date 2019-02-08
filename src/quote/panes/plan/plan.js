@@ -50,7 +50,8 @@ class Plan extends Component {
     showRiderInfo = () => {
         Modal.info({
             title: 'More on Riders',
-            content: <RiderInfoModal/>
+            content: <RiderInfoModal/>,
+            centered: true
         });
     };
 
