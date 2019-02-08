@@ -17,6 +17,7 @@ import countries from './country-by-abbreviation';
 import states from './states.json';
 import BeneficiaryList from "./beneficiary-list";
 import {newApplication} from "../api";
+import {Modal} from "antd";
 
 class Application extends Component {
 
@@ -126,6 +127,41 @@ class Application extends Component {
 
     updateFreq = event => {
         this.setState({freq: event.target.name});
+    };
+
+    showCityReasoning = () => {
+        Modal.info({
+            title: 'Why can\'t I change my city/state?',
+            content: <Text>We do not allow you to change your city or state because a change in this information would require running more quotes. If you would like to change your address, please re-run our quoting tool with your correct address.</Text>,
+            centered: true
+        });
+    };
+
+    showFreqInfo = () => {
+        Modal.info({
+            title: 'Why the different prices?',
+            content: <Text justify="stretch">A lot like any other kind of subscription,
+                a vendor will reward up-front payment with a discounted rate.
+                It is the same for life insurance. If you decide to pay on
+                an annual pay schedule, your overall rate will be somewhat lower
+                than on a monthly schedule.</Text>,
+            centered: true
+        });
+    };
+
+    showConfirm = () => {
+        let that = this;
+        Modal.confirm({
+            title: 'You are about to apply for life insurance',
+            content: <Text>Please ensure all of your information is correct. If anything needs to be changed, please click <b>Cancel</b> and try again</Text>,
+            onOk() {
+                that.submitApplication();
+            },
+            onCancel() {
+                console.log('Cancelled');
+            },
+            centered: true,
+        });
     };
 
     submitApplication = () => {
@@ -301,7 +337,7 @@ class Application extends Component {
                                         <Text color="#999" size="large" weight="bold">{this.props.store.get('city')},</Text>
                                         <Text color="#999" size="large" weight="bold">{this.props.store.get('stateName')}</Text>
                                         <Text color="#999" size="large" weight="bold">{this.props.store.get('zipCode')}</Text>
-                                        <Anchor size="small">Why can't I change my city?</Anchor>
+                                        <Anchor onClick={this.showCityReasoning} size="small">Why can't I change my city?</Anchor>
                                     </Box>
 
                                 </Box>
@@ -366,7 +402,7 @@ class Application extends Component {
                         </Box>
                         <Box margin="xsmall">
                             <Heading margin="none" level={3}>Payment Frequency</Heading>
-                            <Heading margin="none" level={4}><Anchor className="purpleText" href="#">Help me choose!</Anchor></Heading>
+                            <Heading margin="none" level={4}><Anchor className="purpleText" onClick={this.showFreqInfo}>Help me choose!</Anchor></Heading>
                             <Box direction="row">
                                 <Box fill margin="small" gap="small">
                                     <RadioButton checked={freq === 'month'} onChange={this.updateFreq} name="month" label="Monthly"/>
@@ -394,7 +430,7 @@ class Application extends Component {
                             </Box>
                         </Box>
                     </Box>
-                    <Button primary className="purpleBackground purpleOutline" label="Submit Application" onClick={this.submitApplication}/>
+                    <Button primary className="purpleBackground purpleOutline" label="Submit Application" onClick={this.showConfirm}/>
                 </Box>
             </Box>
         );

@@ -164,3 +164,22 @@
     padding: 11px;
     font-weight: 600;
 }
+
+.ant-modal-confirm-btns .ant-btn.ant-btn-primary {
+    background-color: #9c37f2;
+    border-color: #9c37f2;
+}
+
+.ant-modal-confirm-btns .ant-btn.ant-btn-primary:hover {
+    background-color: #bd60ff;
+    border-color: #bd60ff;
+}
+
+.ant-modal-confirm-btns .ant-btn.ant-btn:hover {
+    border-color: #bd60ff;
+    color: #bd60ff;
+}
+
+.anticon.anticon-info-circle svg {
+    fill: #9c37f2;
+}

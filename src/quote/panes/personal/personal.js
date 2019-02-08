@@ -3,6 +3,8 @@ import Store from '../../../ApplicationStore';
 import {Anchor, Box, Button, CheckBox, Heading, Paragraph, RadioButton, Text} from "grommet";
 import Cleave from 'cleave.js/react'
 import moment from "moment";
+import {Modal} from "antd";
+import SmokingPopover from "./smoking-popover";
 
 const styles = {
     quoteSubtitle: {
@@ -11,7 +13,7 @@ const styles = {
     sexButtons: {
         marginLeft: 10,
         marginBottom: 10,
-        marginTop: 5
+        marginTop: 0
     }
 };
 
@@ -23,7 +25,8 @@ class Personal extends Component {
         tobacco: false,
         cannabis: false,
         bdError: false,
-        bdErrMsg: ""
+        bdErrMsg: "",
+        sModalVisible: false
     };
 
     updateBirthday = event => {
@@ -61,6 +64,16 @@ class Personal extends Component {
         // todo - implement
         return true;
     };
+
+    showSmokingModal = () => {
+        Modal.info({
+            title: 'Why we need your smoking habits',
+            centered : true,
+            content: <SmokingPopover/>
+        });
+    };
+
+    //hideSmokingModal = () => {this.setState({sModalVisible: false});};
 
     submitPersonalInfo = () => {
         if(this.validateBirthdate()) {
@@ -135,7 +148,8 @@ class Personal extends Component {
                 <Box margin="xsmall">
                     <Heading level={3} color="#9c37f2">Lifestyle</Heading>
                     <Paragraph style={{marginTop: -8, maxWidth: 'none'}}>
-                        Select any of the answers below, if they apply to you.<Anchor margin="xsmall" label="Why?"/>
+                        Select any of the answers below, if they apply to you.
+                        <Anchor margin="xsmall" label="Why?" onClick={this.showSmokingModal}/>
                     </Paragraph>
                     <Box style={{marginBottom: 20}} margin="xsmall">
                         <CheckBox onChange={this.updateTobacco} checked={tobacco} name="tobacco" label="I regularly smoke tobacco products."/>

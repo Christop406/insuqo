@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import Store from '../../../ApplicationStore';
 import {Anchor, Box, Button, Heading, Paragraph, RadioButton, RangeInput} from "grommet";
 import {formatCovAmount} from "../../../func";
+import {Modal} from "antd";
+import PlanInfoModal from "./plan-info-modal";
+import RiderInfoModal from "./rider-info-modal";
 
 const styles = {
     quoteSubtitle: {
@@ -35,6 +38,20 @@ class Plan extends Component {
         if(len === '50') return '15';
         if(len === '75') return '20';
         if(len === '100') return '30';
+    };
+
+    showHelpMeChoose = () => {
+        Modal.info({
+            title: 'How to choose the right coverage',
+            content: <PlanInfoModal/>
+        });
+    };
+
+    showRiderInfo = () => {
+        Modal.info({
+            title: 'More on Riders',
+            content: <RiderInfoModal/>
+        });
     };
 
     submitPlanInfo = () => {
@@ -71,7 +88,7 @@ class Plan extends Component {
                 <Heading margin="xsmall" level={1} color="#9c37f2">Choose your coverage.</Heading>
                 <Heading margin="small" style={styles.quoteSubtitle} color="dark-4" level={3}>You can change these values later.</Heading>
                 <Paragraph style={{maxWidth: '600px'}} margin="small">
-                    These values help insurers calculate how much you need to pay for your insurance. <Anchor label="Help me choose!"/>
+                    These values help insurers calculate how much you need to pay for your insurance. <Anchor onClick={this.showHelpMeChoose} label="Help me choose!"/>
                 </Paragraph>
                 <Heading margin="small" level={3} color="#9c37f2">Coverage Amount</Heading>
                 <Box align="end" margin="small">
@@ -86,17 +103,17 @@ class Plan extends Component {
                 <Box margin="small">
                     <Heading margin="xsmall" level={2} color="#9c37f2">Other Options</Heading>
                     <Heading margin="small" level={3} color="#9c37f2">Riders</Heading>
-                    <Anchor margin="small" style={{marginTop: -10}} color="dark-4" label="What are these?"/>
+                    <Anchor margin="small" style={{marginTop: -10}} color="dark-4" onClick={this.showRiderInfo} label="What are these?"/>
                     <span style={{height: '10px'}}/>
                     <Box margin="small" style={styles.sexButtons}>
                         <RadioButton checked={rider === 'accidental_death'} name="accidental_death" onChange={this.updateRider} label="Accidental Death"/>
-                        <span style={{display: 'block', height: 30}}/>
+                        <span style={{display: 'block', height: 20}}/>
                         <RadioButton checked={rider === 'waiver_premium'} name="waiver_premium" onChange={this.updateRider} label="Waiver of Premium"/>
-                        <span style={{height: 30}}/>
+                        <span style={{height: 20}}/>
                         <RadioButton checked={rider === 'return_premium'} name="return_premium" onChange={this.updateRider} label="Return of Premium"/>
-                        <span style={{height: 30}}/>
+                        <span style={{height: 20}}/>
                         <RadioButton checked={rider === 'child'} name="child" onChange={this.updateRider} label="Child Rider"/>
-                        <span style={{height: 30}}/>
+                        <span style={{height: 20}}/>
                         <RadioButton checked={rider === 'none'} name="none" onChange={this.updateRider} label="None"/>
                         <span style={{height: 30}}/>
                     </Box>
