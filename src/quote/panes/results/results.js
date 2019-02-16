@@ -163,10 +163,10 @@ class Results extends Component {
     render = () => {
         const { active, loading } = this.state;
         return (
-            <Box>
+            <Box fill>
                 {loading ?
-                    <Box style={{visibility: loading ? 'visible' : 'hidden'}}>
-                        <Spinner name='folding-cube' color="#9c37f2"/>
+                    <Box fill align="center" justify="center" style={{visibility: loading ? 'visible' : 'hidden'}}>
+                        <Spinner style={{marginTop: '45%'}} name='folding-cube' color="#9c37f2"/>
                     </Box> :
                     <Box>
                         <Heading margin="xsmall" level={1} color="#9c37f2">Here are your quotes</Heading>

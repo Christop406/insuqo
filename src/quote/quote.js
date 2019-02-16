@@ -27,10 +27,10 @@ class Quote extends Component {
         return (
             <Box direction="row" style={{height: "100%"}} fill="horizontal">
                 <Box className="form-content" alignSelf="stretch" fill={true} align={this.getAlignment()}>
-                    <Box align="center">
+                    <Box align="center" fill>
                         <Box /*elevation="xlarge"*/ round={false}
                                                     style={{WebkitOverflowScrolling: 'touch'}}
-                                                    pad="large" truncate={false}>
+                                                    pad="large" truncate={false} fill>
                             <Switch>
                                 <Route path={this.props.match.path + "/begin"} component={Begin}/>
                                 <Route path={this.props.match.path + "/personal"} component={Personal}/>

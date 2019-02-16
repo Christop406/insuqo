@@ -43,7 +43,8 @@ class Plan extends Component {
     showHelpMeChoose = () => {
         Modal.info({
             title: 'How to choose the right coverage',
-            content: <PlanInfoModal/>
+            content: <PlanInfoModal/>,
+            centered: true
         });
     };
 

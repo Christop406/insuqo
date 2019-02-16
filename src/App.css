@@ -184,3 +184,8 @@
 .anticon.anticon-info-circle svg {
     fill: #9c37f2;
 }
+
+.ant-modal {
+    width: auto !important;
+    max-width: 600px;
+}
