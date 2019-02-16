@@ -1,14 +1,18 @@
 import React, { Component } from 'react';
-import {Text} from "grommet";
+import {Anchor, Box, Button, FormField, Heading, Paragraph, Text, TextInput} from "grommet";
 
 class PlanInfoModal extends Component {
+
     render() {
         return(
-            <div style={{maxWidth: 500}}>
-                <Text>
-                    This is a placeholder for the way we will help people figure out how much coverage they need.
-                </Text>
-            </div>
+            <Box style={{maxWidth: 500}}>
+                <Paragraph>
+                    <b>Choosing the right amount of coverage can be daunting.</b><br/><br/> That's why we've created a handy calculator
+                    for you to figure out how much coverage you need. <br/><br/>Please
+                    <Anchor target="_blank" href="https://insuqo.com/calculator" label=" click here "/>
+                    to open the calculator. (It will open in a new window)
+                </Paragraph>
+            </Box>
         );
     }
 }

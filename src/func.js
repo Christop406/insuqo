@@ -7,11 +7,6 @@ export function reduceQuote(quote) {
     q.amBest = quote.amBest;
 }
 
-export function calcNeededCoverage() {
-
-}
-
-
 export function formatCovAmount(x) {
     if(x === undefined) return '';
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");

@@ -66,7 +66,7 @@ class Begin extends Component {
     render = () => {
         const { zipCode, readyToContinue, loading, zipInvalid } = this.state;
         return(
-            <div>
+            <div style={{maxWidth: 650}}>
                 <Heading margin="xsmall" color="#9c37f2" level={1} >Looking for life insurance?</Heading>
                 <Heading margin="xsmall" style={styles.quoteSubtitle} color="black" level={2}>You've come to the right place.</Heading>
                 <Paragraph margin="small">

@@ -132,7 +132,9 @@ class Application extends Component {
     showCityReasoning = () => {
         Modal.info({
             title: 'Why can\'t I change my city/state?',
-            content: <Text>We do not allow you to change your city or state because a change in this information would require running more quotes. If you would like to change your address, please re-run our quoting tool with your correct address.</Text>,
+            content: <Text>We do not allow you to change your city or state because a change in this information
+                may affect your quoted amount.<br/><br/>If you would like to change your address, please re-run our
+                quoting tool with your correct address.</Text>,
             centered: true
         });
     };
@@ -144,7 +146,9 @@ class Application extends Component {
                 a vendor will reward up-front payment with a discounted rate.
                 It is the same for life insurance. If you decide to pay on
                 an annual pay schedule, your overall rate will be somewhat lower
-                than on a monthly schedule.</Text>,
+                than on a monthly schedule.<br/><br/>
+                To see the different rates, click each radio button to change your payment frequency.
+            </Text>,
             centered: true
         });
     };
