@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Anchor, Box, Button, FormField, Heading, Paragraph, Text, TextInput} from "grommet";
+import {Anchor, Box, Paragraph} from "grommet";
 
 class PlanInfoModal extends Component {
 
