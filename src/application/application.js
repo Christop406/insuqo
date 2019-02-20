@@ -8,7 +8,6 @@ import {
     CheckBox,
     FormField,
     Heading,
-    MaskedInput,
     RadioButton,
     Text,
     TextInput
@@ -18,6 +17,8 @@ import states from './states.json';
 import BeneficiaryList from "./beneficiary-list";
 import {newApplication} from "../api";
 import {Modal} from "antd";
+import Cleave from 'cleave.js/react'
+import {validateEmail} from "../func";
 
 class Application extends Component {
 
@@ -45,7 +46,14 @@ class Application extends Component {
         willLiquidate: false,
         fnameError: false,
         lnameError: false,
-        ssError: false
+        ssError: false,
+        pPhoneError: false,
+        emailError: false,
+        fnameValid: false,
+        lnameValid: false,
+        ssValid: false,
+        pPhoneValid: false,
+        emailValid: false
     };
 
     updateOtherLifeInsurance = event => {
@@ -53,7 +61,7 @@ class Application extends Component {
     };
 
     updateFname = event => {
-        this.setState({fname: event.target.value, fnameError: false});
+        this.setState({fname: event.target.value, fnameError: false, fnameValid: event.target.value.length >= 2});
     };
 
     blurFname = event => {
@@ -65,7 +73,7 @@ class Application extends Component {
     };
 
     updateLname = event => {
-        this.setState({lname: event.target.value, lnameError: false});
+        this.setState({lname: event.target.value, lnameError: false, lnameValid: event.target.value.length >=2});
     };
 
     blurLname = event => {
@@ -82,12 +90,12 @@ class Application extends Component {
     };
 
     updateSsn = event => {
-        this.setState({ssn: event.target.value});
+        this.setState({ssn: event.target.value, ssError: false, ssValid: event.target.value.length >= 11});
     };
 
     blurSsn = event => {
         console.log(event.target.value);
-        if(event.target.value.length < 12) {
+        if(event.target.value.length < 11) {
             this.setState({ssError: true})
         } else {
             this.setState({ssError: false})
@@ -118,11 +126,27 @@ class Application extends Component {
     };
 
     updateEmail = event => {
-        this.setState({email: event.target.value});
+        this.setState({email: event.target.value, emailValid: validateEmail(event.target.value)});
+    };
+
+    blurEmail = event => {
+        if(validateEmail(event.target.value)) {
+            this.setState({emailError: false})
+        } else {
+            this.setState({emailError: true})
+        }
     };
 
     updatePPhoneNum = event => {
-        this.setState({pPhoneNum: event.target.value});
+        this.setState({pPhoneNum: event.target.value, pPhoneError: false, pPhoneValid: event.target.value.length >= 10});
+    };
+
+    blurPPhoneNum = event => {
+        if(event.target.rawValue.length < 10) {
+            this.setState({pPhoneError: true})
+        } else {
+            this.setState({pPhoneError: false})
+        }
     };
 
     updateFreq = event => {
@@ -157,7 +181,8 @@ class Application extends Component {
         let that = this;
         Modal.confirm({
             title: 'You are about to apply for life insurance',
-            content: <Text>Please ensure all of your information is correct. If anything needs to be changed, please click <b>Cancel</b> and try again</Text>,
+            content: <Text>Please ensure all of your information is correct.
+                If anything needs to be changed, please click <b>Cancel</b> and try again.</Text>,
             onOk() {
                 that.submitApplication();
             },
@@ -232,12 +257,9 @@ class Application extends Component {
         const {
             fname,
             lname,
-            ssn,
             hasDl,
-            dlNum,
             dlStateCode,
             email,
-            pPhoneNum,
             freq,
             otherLifeInsurance,
             oiPending,
@@ -251,7 +273,14 @@ class Application extends Component {
             addrLine2,
             fnameError,
             lnameError,
-            ssError
+            ssError,
+            pPhoneError,
+            emailError,
+            fnameValid,
+            lnameValid,
+            ssValid,
+            pPhoneValid,
+            emailValid
         } = this.state;
         // noinspection ConstantConditionalExpressionJS
         return(
@@ -273,37 +302,25 @@ class Application extends Component {
                         <Heading margin="xsmall" color="black" level={3}>Citizenship</Heading>
                         <Box gap="small" className="citizenshipSection">
                             <FormField label="Country of Birth">
-                                <select className="bc-select" onChange={this.updateBirthCountry} value={birthCountryCode} placeholder="United States" children={countries.map(option => <option value={option.abbreviation}>{option.country}</option>)}/>
+                                <Box>
+                                <select className="bc-select" onChange={this.updateBirthCountry} value={birthCountryCode} placeholder="United States" children={countries.map((option, index) => <option key={index} value={option.abbreviation}>{option.country}</option>)}/>
+                                </Box>
                             </FormField>
                             <FormField label="Social Security Number"
                                        help="We are required to use this for validation purposes."
                                        error={ssError ? "Please input a valid social security number." : undefined}>
-                                <MaskedInput mask={[
-                                    { // todo - replace with Cleave
-                                        length: 3,
-                                        regexp: /^[0-9]{1,3}$/,
-                                        placeholder: 'XXX'
-                                    },
-                                    {
-                                        fixed: '-'
-                                    },
-                                    {
-                                        length: 2,
-                                        regexp: /^[0-9]{1,2}$/,
-                                        placeholder: 'XX'
-                                    },
-                                    {
-                                        fixed: '-'
-                                    },
-                                    {
-                                        length: 4,
-                                        regexp: /^[0-9]{1,4}$/,
-                                        placeholder: 'XXXX'
-                                    }
-                                ]}
-                                value={ssn}
-                                onChange={this.updateSsn}
+                                <Box>
+                                <Cleave placeholder="XXX-XX-XXXX"
+                                        style={{borderWidth: 0, height: 46, padding: 11, fontWeight: 600, outline: 'none'}}
+                                        onChange={this.updateSsn}
+                                        onBlur={this.blurSsn}
+                                        options={{
+                                            numericOnly: true,
+                                            delimiter: '-',
+                                            blocks: [3, 2, 4]
+                                        }}
                                 />
+                                </Box>
                             </FormField>
                             <Box style={{backgroundColor: '#efecff', padding: 20}}>
                                 <CheckBox onChange={this.updateHasDl} checked={hasDl} label={<Box>I have a valid driver's license.</Box>}/>
@@ -311,17 +328,22 @@ class Application extends Component {
                                     <Box margin="small">
                                         <Heading margin="xsmall" color="black" level={3}>Driver's License</Heading>
                                         <FormField label="Registered State">
-                                            <select className="dls-select" value={dlStateCode} onChange={this.updateDlState} placeholder="California" children={states.map(option => <option value={option.abbreviation}>{option.name}</option>)}/>
+                                            <Box>
+                                            <select className="dls-select" value={dlStateCode} onChange={this.updateDlState} placeholder="California" children={states.map((option, index) => <option key={index} value={option.abbreviation}>{option.name}</option>)}/>
+                                            </Box>
                                         </FormField>
                                         <FormField label="License Number">
-                                            <MaskedInput mask={[ // todo - replace with cleave
-                                                {
-                                                length: 8,
-                                                regexp: /^[a-zA-Z0-9]{1,8}$/}
-                                            ]}
-                                            value={dlNum}
-                                            onChange={this.updateDlNum}
-                                            placeholder="F870684"/>
+                                            <Box>
+                                                <Cleave
+                                                    style={{borderWidth: 0, height: 46, padding: 11, fontWeight: 600, outline: 'none', backgroundColor: 'transparent'}}
+                                                    options={{
+                                                        blocks: [8],
+                                                        numericOnly: false,
+                                                        uppercase: true
+                                                    }}
+                                                onChange={this.updateDlNum}
+                                                placeholder="F870684"/>
+                                            </Box>
                                         </FormField>
                                     </Box>
                                 }
@@ -349,51 +371,31 @@ class Application extends Component {
                         </Box>
                         <Box>
                             <Heading margin="xsmall" color="black" level={3}>Contact Info</Heading>
-                            <FormField label="Email Address">
-                                <MaskedInput
-                                    mask={[
-                                        {
-                                            regexp: /^[\w-.]*$/,
-                                            placeholder: "person"
-                                        },
-                                        { fixed: "@" },
-                                        {
-                                            regexp: /^[\w-]*$/,
-                                            placeholder: "example"
-                                        },
-                                        { fixed: "." },
-                                        {
-                                            regexp: /^[\w-]{1,4}$/,
-                                            placeholder: "com"
-                                        }
-                                    ]}
+                            <FormField label="Email Address"
+                                       error={emailError ? "Please input a valid email address." : undefined}
+                            >
+                                <TextInput
+                                    placeholder="jsmith@example.com"
                                     value={email}
                                     onChange={this.updateEmail}
+                                    onBlur={this.blurEmail}
                                 />
                             </FormField>
-                            <FormField label="Primary Phone Number">
-                                <MaskedInput
-                                    mask={[
-                                        { fixed: '('},
-                                        {
-                                            regexp: /^[0-9]{1,3}$/,
-                                            placeholder: "123"
-                                        },
-                                        { fixed: ')'},
-                                        { fixed: ' '},
-                                        {
-                                            regexp: /^[0-9]{1,3}$/,
-                                            placeholder: "456"
-                                        },
-                                        { fixed: '-'},
-                                        {
-                                            regexp: /^[0-9]{1,4}$/,
-                                            placeholder: '7890'
-                                        }
-                                    ]}
-                                    value={pPhoneNum}
-                                    onChange={this.updatePPhoneNum}
-                                />
+                            <FormField label="Primary Phone Number"
+                                       error={pPhoneError ? "Please input a valid phone number." : undefined}
+                            >
+                                <Box>
+                                    <Cleave placeholder="(123) 456-7890"
+                                            style={{borderWidth: 0, height: 46, padding: 11, fontWeight: 600, outline: 'none'}}
+                                            options={{
+                                                numericOnly: true,
+                                                blocks: [0, 3, 0, 3, 4],
+                                                delimiters: ["(", ")", " ", "-"]
+                                            }}
+                                            onChange={this.updatePPhoneNum}
+                                            onBlur={this.blurPPhoneNum}
+                                    />
+                                </Box>
                             </FormField>
                         </Box>
                     </Box>
@@ -434,7 +436,7 @@ class Application extends Component {
                             </Box>
                         </Box>
                     </Box>
-                    <Button primary className="purpleBackground purpleOutline" label="Submit Application" onClick={this.showConfirm}/>
+                    <Button primary disabled={!fnameValid || !lnameValid || !ssValid || !pPhoneValid || !emailValid} className="purpleBackground purpleOutline" label="Submit Application" onClick={this.showConfirm}/>
                 </Box>
             </Box>
         );
