@@ -2,6 +2,7 @@ import React, { Component }  from 'react';
 import Store from './ApplicationStore';
 import Quote  from './quote/quote';
 import Application from './application/application';
+import AppStatus from './application/application-status/application-status';
 import { fadeInUpBig } from 'react-animations';
 import Radium, {StyleRoot} from 'radium';
 import {Box, Grommet} from 'grommet';
@@ -66,8 +67,9 @@ class Main extends Component {
                         </nav>
                         <Box className="quote-form-content" style={{paddingTop: 70}} direction="row" fill="horizontal">
                             <Switch>
-                                <Route path="/app" component={Application}/>
-                                <Route path="/application" component={Application}/>
+                                <Route path="/application/status" component={AppStatus}/>
+                                <Route exact path="/app" component={Application}/>
+                                <Route exact path="/application" component={Application}/>
                                 <Route path="/quote" component={Quote}/>
                                 <Redirect to="/quote"/>
                             </Switch>

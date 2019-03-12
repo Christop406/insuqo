@@ -65,11 +65,7 @@ class Application extends Component {
     };
 
     blurFname = event => {
-        if(event.target.value.length < 2) {
-            this.setState({fnameError: true})
-        } else {
-            this.setState({fnameError: false})
-        }
+        this.setState({fnameError: event.target.value.length < 2})
     };
 
     updateLname = event => {
@@ -77,11 +73,7 @@ class Application extends Component {
     };
 
     blurLname = event => {
-        if(event.target.value.length < 2) {
-            this.setState({lnameError: true})
-        } else {
-            this.setState({lnameError: false})
-        }
+        this.setState({lnameError: event.target.value.length < 2})
     };
 
     updateBirthCountry = event => {
@@ -94,12 +86,7 @@ class Application extends Component {
     };
 
     blurSsn = event => {
-        console.log(event.target.value);
-        if(event.target.value.length < 11) {
-            this.setState({ssError: true})
-        } else {
-            this.setState({ssError: false})
-        }
+        this.setState({ssError: event.target.value.length < 11})
     };
 
     updateHasDl = event => {
@@ -142,11 +129,7 @@ class Application extends Component {
     };
 
     blurPPhoneNum = event => {
-        if(event.target.rawValue.length < 10) {
-            this.setState({pPhoneError: true})
-        } else {
-            this.setState({pPhoneError: false})
-        }
+        this.setState({pPhoneError: event.target.rawValue.length < 10})
     };
 
     updateFreq = event => {
@@ -206,6 +189,11 @@ class Application extends Component {
             rider: store.get('rider'),
             termLength: store.get('quote').term,
             carrierID: store.get('quote').companyID
+        }).then(response => {
+            if(response.status === 200) {
+                localStorage.setItem("app_id", response.data.data.app.uuid);
+                this.props.history.push('/application/success');
+            }
         });
     };
 
