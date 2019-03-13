@@ -19,6 +19,7 @@ import {newApplication} from "../api";
 import {Modal} from "antd";
 import Cleave from 'cleave.js/react'
 import {validateEmail} from "../func";
+import constants from '../constants';
 
 class Application extends Component {
 
@@ -192,7 +193,7 @@ class Application extends Component {
         }).then(response => {
             if(response.status === 200) {
                 localStorage.setItem("app_id", response.data.data.app.uuid);
-                this.props.history.push('/application/success');
+                this.props.history.push('/application/status');
             }
         });
     };
@@ -405,7 +406,7 @@ class Application extends Component {
                                     <RadioButton checked={freq === 'annual'} onChange={this.updateFreq} name="annual" label="Annually"/>
                                 </Box>
                                 <Box align="center" justify="center" fill style={{backgroundColor: '#efecff', height: 'auto'}}>
-                                    <Heading margin="none" color="#9c37f2">${this.getPaymentByTerm()}</Heading>
+                                    <Heading margin="none" color={constants.colors.iqBrand}>${this.getPaymentByTerm()}</Heading>
                                     <Text className="purpleText">every <b>{this.getPaymentTerm()}</b></Text>
                                 </Box>
                             </Box>
