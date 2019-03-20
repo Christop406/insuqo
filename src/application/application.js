@@ -191,7 +191,7 @@ class Application extends Component {
             termLength: store.get('quote').term,
             carrierID: store.get('quote').companyID
         }).then(response => {
-            if(response.status === 200) {
+            if(response.status === 201 || response.status === 200) {
                 localStorage.setItem("app_id", response.data.data.app.uuid);
                 this.props.history.push('/application/status');
             }
