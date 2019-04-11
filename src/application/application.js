@@ -189,7 +189,8 @@ class Application extends Component {
             covAmount: store.get('quote').faceAmount,
             rider: store.get('rider'),
             termLength: store.get('quote').term,
-            carrierID: store.get('quote').companyID
+            carrierID: store.get('quote').companyID,
+            birthDate: store.get('birthdate')
         }).then(response => {
             if(response.status === 201 || response.status === 200) {
                 localStorage.setItem("app_id", response.data.data.app.uuid);

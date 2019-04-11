@@ -2,7 +2,7 @@
   "name": "viscosity-apply",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://insuqo.herokuapp.com/",
+  "homepage": "https://iq.insuqo.com/",
   "dependencies": {
     "antd": "^3.12.4",
     "axios": "^0.18.0",
