@@ -34,13 +34,7 @@ class Main extends Component {
 
     componentDidMount = () => {
         var store = this.props.store;
-        fillStoreFromLocalStorage(store).then(state => {
-            if(state.zipCode.length === 0) {
-                //this.props.history.push('/quote');
-            }
-            if(state.birthdate.length === 0) {
-                //this.props.history.push('/quote/personal');
-            }
+        fillStoreFromLocalStorage(store).then(() => {
             this.forceUpdate();
         }, rejected => {
             this.props.history.push("/quote");
