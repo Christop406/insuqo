@@ -19,7 +19,6 @@ class Quote extends Component {
     };
 
     getAlignment = () => {
-        if(this.props.location.pathname === "/quote/results") return 'start';
         return 'start';
     };
 

@@ -36,10 +36,10 @@ class Main extends Component {
         var store = this.props.store;
         fillStoreFromLocalStorage(store).then(state => {
             if(state.zipCode.length === 0) {
-                this.props.history.push('/quote');
+                //this.props.history.push('/quote');
             }
             if(state.birthdate.length === 0) {
-                this.props.history.push('/quote/personal');
+                //this.props.history.push('/quote/personal');
             }
             this.forceUpdate();
         }, rejected => {
