@@ -31,7 +31,6 @@ const styles = {
 
 
 class Main extends Component {
-
     componentDidMount = () => {
         var store = this.props.store;
         fillStoreFromLocalStorage(store).then(() => {
