@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import Store from '../../../ApplicationStore';
-import {Accordion, AccordionPanel, Anchor, Box, Button, Heading, Paragraph} from "grommet";
+import {Accordion, AccordionPanel, Anchor, Box, Button, Heading, Paragraph, Select, Text} from "grommet";
 import {getQuote} from "../../../api";
 import moment from 'moment';
 import {formatCovAmount, logoImageForCompanyID, splitPrice} from "../../../func";
 import Spinner from 'react-spinkit';
+import countries from "../../../application/country-by-abbreviation";
 
 const styles = {
     quoteSubtitle: {
@@ -20,13 +21,20 @@ const styles = {
     }
 };
 
+const frequencies = [
+    {val: "month", name: "Monthly"},
+    {val: "quarter", name: "Quarterly"} ,
+    {val: "semiannual", name: "Semi-annually"},
+    {val: "annual", name: "Annually"}];
+
 class Results extends Component {
 
     state = {
         loading: true,
         quotes: [],
         active: 0,
-        freq: 'month'
+        freq: 'month',
+        freqLabel: 'Monthly'
     };
 
     getQuotes = () => {
@@ -52,14 +60,19 @@ class Results extends Component {
 
     componentDidMount = () => {
         if(localStorage.getItem("quotes_ran") === "true") {
-            this.setState({loading: false, quotes: JSON.parse(localStorage.getItem("quotes"))});
+            let q = localStorage.getItem("quotes");
+            if(q !== undefined) this.setState({loading: false, quotes: JSON.parse(q)});
         } else {
             this.getQuotes().then(res => {
-                localStorage.setItem("quotes_ran", "true");
-                // todo - handle errors
-                let data = res.data;
-                this.setState({loading: false, quotes: data});
-                localStorage.setItem("quotes", JSON.stringify(data));
+                if(res.status === 404) {
+                    console.log('show an error here');
+                } else {
+                    localStorage.setItem("quotes_ran", "true");
+                    // todo - handle errors
+                    let data = res.data;
+                    this.setState({loading: false, quotes: data});
+                    localStorage.setItem("quotes", JSON.stringify(data));
+                }
             });
         }
     };
@@ -77,42 +90,71 @@ class Results extends Component {
         return "None";
     };
 
-    formatQuotes = () => {
+    formatShortFreqType = (freq) => {
+        switch (freq) {
+            case "quarter":
+                return '/ quarter';
+            case "semiannual":
+                return '/ six months';
+            case "annual":
+                return '/ year';
+            case "month":
+            default:
+                return '/ month';
+        }
+    };
+
+    formatQuotes = (freq) => {
         const { quotes } = this.state;
         if(quotes === undefined || quotes.length === 0) {
             return <div/>;
         }
         return quotes.map((quote, index) => {
             return(
-                <AccordionPanel key={index} activeIndex={0} label={this.formatQuoteHeading(quote, index)}>
-                    {this.formatQuoteBody(quote)}
+                <AccordionPanel key={index} activeIndex={0} label={this.formatQuoteHeading(quote, index, freq)}>
+                    {this.formatQuoteBody(quote, index, freq)}
                 </AccordionPanel>
             );
         });
     };
 
-    formatQuoteBody = (quote) => {
+    formatQuoteBody = (quote, index, freq) => {
+        const { active } = this.state;
         return(
             <Box>
-                <Box style={{backgroundColor: '#F5F5F5'}} direction="row-responsive">
-                    <Box style={{width: '50%', padding: 10}}>
-                        <Heading level={3}>Provider<Paragraph style={{color: '#9c37f2'}}>{quote.companyName}</Paragraph></Heading>
-                        <Heading level={3}>Coverage<Paragraph style={{color: '#9c37f2'}}>$ {formatCovAmount(quote.faceAmount)}</Paragraph></Heading>
-                        <Heading level={3}>Product Name<Paragraph style={{color: '#9c37f2'}}>{quote.productName}</Paragraph></Heading>
+                <Box style={{backgroundColor: '#F5F5F5', padding: 10}}>
+                    <Box direction="row-responsive">
+                        <Box style={{width: '50%'}}>
+                            <Heading level={3}>Provider<Paragraph style={{color: '#9c37f2'}}>{quote.companyName}</Paragraph></Heading>
+                            <Heading level={3}>Coverage<Paragraph style={{color: '#9c37f2'}}>$ {formatCovAmount(quote.faceAmount)}</Paragraph></Heading>
+                            <Heading level={3}>Product Name<Paragraph style={{color: '#9c37f2'}}>{quote.productName}</Paragraph></Heading>
+                        </Box>
+                        <Box style={{width: '50%', marginTop: 10, paddingRight: 10}}>
+                            <Heading level={3}>Term Length<Paragraph style={{color: '#9c37f2'}}>{quote.term} Years</Paragraph></Heading>
+                            <Heading level={3}>AMBest Rating <Anchor label="(?)"/><Paragraph style={{color: '#9c37f2'}}>{quote.amBest}</Paragraph></Heading>
+                            <Heading level={3}>Features<Paragraph style={{color: '#9c37f2'}}>{this.formatRider(quote)}</Paragraph></Heading>
+                        </Box>
                     </Box>
-                    <Box style={{width: '50%', marginTop: 10, marginBottom: 10, paddingLeft: 10, paddingRight: 10}}>
-                        <Heading level={3}>Term Length<Paragraph style={{color: '#9c37f2'}}>{quote.term} Years</Paragraph></Heading>
-                        <Heading level={3}>AMBest Rating <Anchor label="(?)"/><Paragraph style={{color: '#9c37f2'}}>{quote.amBest}</Paragraph></Heading>
-                        <Heading level={3}>Features<Paragraph style={{color: '#9c37f2'}}>{this.formatRider(quote)}</Paragraph></Heading>
+                    <Box style={{ width: '100%' ,maxWidth: 300}} alignSelf="center">
+                        <Button primary={active === index} onClick={(event) => {this.apply(quote, event)}} fill={false} hoverIndicator="#EAC4FF" label="APPLY"/>
                     </Box>
                 </Box>
             </Box>
         );
     };
 
-    formatQuoteHeading = (quote, index) => {
-        let splitPremium = splitPrice(quote.monthlyTotalPremium);
-        const { active } = this.state;
+    formatQuoteHeading = (quote, index, freq) => {
+        let splitPremium = splitPrice(
+            freq === 'month' ?
+                quote.monthlyTotalPremium :
+            freq === 'annual' ?
+                quote.annualTotalPremium :
+            freq === 'semiannual' ?
+                quote.semiAnnualTotalPremium :
+            freq === 'quarter' ?
+                quote.quarterlyTotalPremium :
+                0.00
+        );
         return (
             <Box direction="row-responsive" fill="horizontal" align="stretch" margin="small" alignSelf="stretch">
                 <Heading
@@ -129,18 +171,18 @@ class Results extends Component {
                         </Box>
                     </Box>
                 </Heading>
+                <Box fill="horizontal" justify="center" align="center">
+                    <Heading style={{width: '100%'}} truncate level={3} margin="none">{quote.companyName}</Heading>
+                </Box>
                 <Box fill="horizontal">
                     <Box fill="vertical" direction="row" align="center" justify="center">
                         <Box direction="row" style={{height: 50}} align="center">
                             <span>$</span>
                             <span style={{fontSize: 40, fontWeight: 'bold'}}>{splitPremium[0]}</span>
                             <span style={{fontSize: 20, verticalAlign: 'top', fontWeight: 'bold'}}>{splitPremium[1]}</span>
-                            <span style={{fontSize: 20, fontWeight: 'bold', verticalAlign: 'bottom'}}>/MO</span>
+                            <span style={{fontSize: 20, fontWeight: 'bold', verticalAlign: 'bottom', color: '#888'}}>&nbsp;{this.formatShortFreqType(freq)}</span>
                         </Box>
                     </Box>
-                </Box>
-                <Box fill="horizontal" justify="center" align="center">
-                    <Button primary={active === index} onClick={(event) => {this.apply(quote, event)}} fill={false} hoverIndicator="#EAC4FF" label="APPLY"/>
                 </Box>
             </Box>
         );
@@ -158,11 +200,11 @@ class Results extends Component {
     };
 
     updateFreq = (newFreq) => {
-        this.setState({freq: newFreq});
+        this.setState({freq: newFreq.target.value});
     };
 
     render = () => {
-        const { active, loading } = this.state;
+        const { active, loading, freq, freqLabel } = this.state;
         return (
             <Box fill>
                 {loading ?
@@ -172,9 +214,13 @@ class Results extends Component {
                     <Box>
                         <Heading margin="xsmall" level={1} color="#9c37f2">Here are your quotes</Heading>
                         <Heading margin="xsmall" style={styles.quoteSubtitle} color="dark-4" level={3}>Click on each for more info.</Heading>
+                        <Box background={{color: '#FFFFFF'}} direction="row-responsive" justify="end" align="center">
+                            <Heading margin="xsmall" level={5}>Choose payment frequency: </Heading>
+                            <select value={freq} onChange={this.updateFreq} children={frequencies.map((option, index) => <option value={option.val} key={index}>{option.name}</option>)}/>
+                        </Box>
                         <Box style={{paddingLeft: 5, paddingRight: 5}}>
-                            <Accordion onActive={this.updateActiveIndex} activeIndex={loading ? undefined : active}>
-                                {this.formatQuotes()}
+                            <Accordion animate={false} onActive={this.updateActiveIndex} activeIndex={loading ? undefined : active}>
+                                {this.formatQuotes(freq)}
                             </Accordion>
                         </Box>
                     </Box>
