@@ -10,6 +10,9 @@ import { grommet } from 'grommet/themes';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import img from './img/insuqo-logo.png';
 import {fillStoreFromLocalStorage} from "./func";
+import Agent from "./agent/Agent";
+import Client from './client/Client';
+import Login from "./login/Login";
 
 const styles = {
     fadeInUpBig: {
@@ -52,26 +55,39 @@ class Main extends Component {
         return(
             <StyleRoot>
                 <Grommet theme={grommet}>
-                    <Box style={{height: '100%'}} fill={true} /*animation="fadeIn"*/>
-                        <nav style={styles.topNav}>
-                            <Box fill style={{backgroundColor: 'white'}}>
-                                <img src={img} alt="iq-logo" style={styles.mainLogo}/>
-                            </Box>
-                        </nav>
-                        <Box className="quote-form-content" style={{paddingTop: 70}} direction="row" fill="horizontal">
-                            <Switch>
-                                <Route path="/application/status" component={AppStatus}/>
-                                <Route exact path="/app" component={Application}/>
-                                <Route exact path="/application" component={Application}/>
-                                <Route path="/quote" component={Quote}/>
-                                <Redirect to="/quote"/>
-                            </Switch>
-                        </Box>
-                    </Box>
+                    <Switch>
+                        <Route path="/login" component={Login}/>
+                        <Route path="/client" component={Client}/>
+                        <Route path="/agent" component={Agent}/>
+                        <Route component={QuotingTool}/>
+                    </Switch>
                 </Grommet>
             </StyleRoot>
         )
     };
+}
+
+class QuotingTool extends Component {
+    render() {
+        return (
+            <Box style={{height: '100%'}} fill={true} /*animation="fadeIn"*/>
+                <nav style={styles.topNav}>
+                    <Box fill style={{backgroundColor: 'white'}}>
+                        <img src={img} alt="iq-logo" style={styles.mainLogo}/>
+                    </Box>
+                </nav>
+                <Box className="quote-form-content" style={{paddingTop: 70}} direction="row" fill="horizontal">
+                    <Switch>
+                        <Route path="/application/status" component={AppStatus}/>
+                        <Route exact path="/app" component={Application}/>
+                        <Route exact path="/application" component={Application}/>
+                        <Route path="/quote" component={Quote}/>
+                        <Redirect to="/quote"/>
+                    </Switch>
+                </Box>
+            </Box>
+        );
+    }
 }
 
 export default Store.withStore(Main);
