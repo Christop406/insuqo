@@ -59,15 +59,15 @@
 }
 
 .purpleText {
-    color: #9c37f2;
+    color: #9c37f2 !important;
 }
 
 .purpleOutline {
-    border-color: #9c37f2;
+    border-color: #9c37f2 !important;
 }
 
 .purpleBackground {
-    background-color: #9c37f2;
+    background-color: #9c37f2 !important;
 }
 
 .sexButton {
