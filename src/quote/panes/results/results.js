@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import Store from '../../../ApplicationStore';
-import {Accordion, AccordionPanel, Anchor, Box, Button, Heading, Paragraph, Select, Text} from "grommet";
+import {Accordion, AccordionPanel, Anchor, Box, Button, Heading, Paragraph} from "grommet";
 import {getQuote} from "../../../api";
 import moment from 'moment';
 import {formatCovAmount, logoImageForCompanyID, splitPrice} from "../../../func";
 import Spinner from 'react-spinkit';
-import countries from "../../../application/country-by-abbreviation";
 
 const styles = {
     quoteSubtitle: {

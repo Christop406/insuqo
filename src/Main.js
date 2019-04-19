@@ -6,13 +6,14 @@ import AppStatus from './application/application-status/application-status';
 import { fadeInUpBig } from 'react-animations';
 import Radium, {StyleRoot} from 'radium';
 import {Box, Grommet} from 'grommet';
-import { grommet, dark } from 'grommet/themes';
+import { grommet } from 'grommet/themes';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import img from './img/insuqo-logo.png';
 import {fillStoreFromLocalStorage} from "./func";
 import Agent from "./agent/Agent";
 import Client from './client/Client';
-import Login from "./login/Login";
+import ClientLogin from "./client/ClientLogin";
+import AgentLogin from "./agent/AgentLogin";
 
 const styles = {
     fadeInUpBig: {
@@ -57,9 +58,9 @@ class Main extends Component {
                 <Grommet theme={grommet}>
                     <Box style={{height: '100%'}} fill>
                         <Switch>
-                            <Route path="/login" component={Login}/>
-                            <Route path="/client" component={Client}/>
-                            <Route path="/agent" component={Agent}/>
+                            <Route path="/user/login" component={ClientLogin}/>
+                            <Route path="/agent/login" component={AgentLogin}/>
+                            <Redirect path="/login" to="/user/login"/>
                             <Route component={QuotingTool}/>
                         </Switch>
                     </Box>
@@ -78,8 +79,10 @@ class QuotingTool extends Component {
                         <img src={img} alt="iq-logo" style={styles.mainLogo}/>
                     </Box>
                 </nav>
-                <Box className="quote-form-content" style={{paddingTop: 70}} direction="row" fill="horizontal">
+                <Box className="quote-form-content" style={{paddingTop: 70, marginBottom: 70}} direction="row" fill="horizontal">
                     <Switch>
+                        <Route path="/client" component={Client}/>
+                        <Route path="/agent" component={Agent}/>
                         <Route path="/application/status" component={AppStatus}/>
                         <Route exact path="/app" component={Application}/>
                         <Route exact path="/application" component={Application}/>
