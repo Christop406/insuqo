@@ -1,5 +1,6 @@
 import axios from 'axios';
 import querystring from "querystring";
+import constants from './constants';
 let apiUrl = "https://api.insuqo.com";
 //let apiUrl = "http://localhost:4567";
 
@@ -40,11 +41,19 @@ export function newApplication(app) {
 
 export function localizeZip(zip) {
     if(zip == null || zip.length < 5) {
-        return null;
+        return Promise.reject("zip_invalid")
     }
     return axios.get(apiUrl + "/util/zip/lookup", {
         params: {
             zip: zip
         }
     })
+}
+
+export function login(type, email, password) {
+    if(email == null || password == null || type !== constants.userTypes.client || type !== constants.userTypes.agent) return Promise.reject("invalid username/password/type");
+    return axios.post(apiUrl + "/" + type + "/login", {
+        email,
+        password
+    });
 }

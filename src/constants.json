@@ -1,5 +1,9 @@
 {
   "colors": {
     "iqBrand": "#9c37f2"
+  },
+  "userTypes" : {
+    "agent": "agent",
+    "client": "client"
   }
 }

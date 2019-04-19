@@ -6,7 +6,7 @@ import AppStatus from './application/application-status/application-status';
 import { fadeInUpBig } from 'react-animations';
 import Radium, {StyleRoot} from 'radium';
 import {Box, Grommet} from 'grommet';
-import { grommet } from 'grommet/themes';
+import { grommet, dark } from 'grommet/themes';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import img from './img/insuqo-logo.png';
 import {fillStoreFromLocalStorage} from "./func";
@@ -55,12 +55,14 @@ class Main extends Component {
         return(
             <StyleRoot>
                 <Grommet theme={grommet}>
-                    <Switch>
-                        <Route path="/login" component={Login}/>
-                        <Route path="/client" component={Client}/>
-                        <Route path="/agent" component={Agent}/>
-                        <Route component={QuotingTool}/>
-                    </Switch>
+                    <Box style={{height: '100%'}} fill>
+                        <Switch>
+                            <Route path="/login" component={Login}/>
+                            <Route path="/client" component={Client}/>
+                            <Route path="/agent" component={Agent}/>
+                            <Route component={QuotingTool}/>
+                        </Switch>
+                    </Box>
                 </Grommet>
             </StyleRoot>
         )

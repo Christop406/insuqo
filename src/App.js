@@ -8,13 +8,15 @@ import './App.css';
 class App extends React.Component {
     render = () => {
         return (
-            <Store.Container>
-                <Router>
-                    <Switch>
-                        <Route path="/" component={Main}/>
-                    </Switch>
-                </Router>
-            </Store.Container>
+            <div style={{height: '100%', width: '100%'}}>
+                <Store.Container>
+                    <Router>
+                        <Switch>
+                            <Route path="/" component={Main}/>
+                        </Switch>
+                    </Router>
+                </Store.Container>
+            </div>
         )
     }
 }
