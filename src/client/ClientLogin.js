@@ -35,7 +35,7 @@ class ClientLogin extends Component {
                         </Box>
                         <Box pad="xsmall" style={{textAlign: 'center'}}>
                             <Button margin="xsmall" className="purpleBackground purpleOutline" primary label="Login"/>
-                            <Button margin="xsmall" className="purpleOutline" label="Cancel"/>
+                            <Button onClick={() => window.location.href = "https://insuqo.com/"} margin="xsmall" className="purpleOutline" label="Cancel"/>
                             <Anchor className="purpleText" margin="xsmall" size="small" label="Forgot My Password"/>
                             <Anchor className="purpleText" href="/agent/login" size="small" label="Agent Login"/>
                         </Box>
