@@ -11,6 +11,10 @@ class AgentLogin extends Component {
         password: ''
     };
 
+    componentDidMount() {
+        document.title = "Agent Login | INSUQO";
+    }
+
     render() {
         return (
             <Box style={{height: "100vh"}} justify="center" fill>

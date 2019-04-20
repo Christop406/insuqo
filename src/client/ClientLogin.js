@@ -11,6 +11,10 @@ class ClientLogin extends Component {
         password: ''
     };
 
+    componentDidMount() {
+        document.title = "Login | INSUQO";
+    }
+
     render() {
         return (
             <Box style={{height: "100vh"}} justify="center" fill>
