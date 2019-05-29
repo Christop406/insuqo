@@ -19,7 +19,7 @@ import {newApplication} from "../api";
 import {Modal} from "antd";
 import Cleave from 'cleave.js/react'
 import {validateEmail} from "../func";
-import constants from '../constants';
+import constants from '../util/constants';
 
 class Application extends Component {
 

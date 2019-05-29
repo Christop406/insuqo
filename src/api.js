@@ -1,8 +1,8 @@
 import axios from 'axios';
 import querystring from "querystring";
-import constants from './constants';
-let apiUrl = "https://api.insuqo.com";
-//let apiUrl = "http://localhost:4567";
+import constants from './util/constants';
+//let apiUrl = "https://api.insuqo.com";
+let apiUrl = "http://localhost:4567";
 
 export function getQuote(state, actualAge, nearestAge, amount, termLength, healthType, sex, rider, showTop) {
 
@@ -51,9 +51,13 @@ export function localizeZip(zip) {
 }
 
 export function login(type, email, password) {
-    if(email == null || password == null || type !== constants.userTypes.client || type !== constants.userTypes.agent) return Promise.reject("invalid username/password/type");
-    return axios.post(apiUrl + "/" + type + "/login", {
+    if(email == null || password == null || (type !== constants.userTypes.client && type !== constants.userTypes.agent)) return Promise.reject("invalid username/password/type");
+    return axios.post(apiUrl + "/" + type + "/login", querystring.stringify({
         email,
         password
+    }), {
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+        }
     });
 }
