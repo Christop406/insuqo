@@ -19,7 +19,10 @@ class ClientLogin extends Component {
     login = () => {
         console.log('logging in');
         login(constants.userTypes.client, this.state.email, this.state.password).then(res => {
-            console.log(JSON.stringify(res));
+            console.log(res.data);
+            localStorage.setItem("lt", res.data.data.tok);
+            sessionStorage.setItem("usr", JSON.stringify(res.data.data.user));
+            this.props.history.push('/client');
         });
     };
 

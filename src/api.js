@@ -30,7 +30,11 @@ export function getQuote(state, actualAge, nearestAge, amount, termLength, healt
 }
 
 export function getApplication(app) {
-    return axios.get(apiUrl + "/application/" + app);
+    return axios.get(apiUrl + "/application/" + app, {
+        headers: {
+            "Authorization": getAuthHeader(localStorage.getItem("lt"))
+        }
+    });
 }
 
 export function newApplication(app) {
@@ -60,4 +64,25 @@ export function login(type, email, password) {
             "Content-Type": "application/x-www-form-urlencoded",
         }
     });
+}
+
+export function getUserInfo(type) {
+    if(type !== constants.userTypes.client && type !== constants.userTypes.agent) return Promise.reject("invalid username/password/type");
+
+    let tok = localStorage.getItem("lt");
+    console.log(tok);
+    if( tok !== undefined ) {
+        return axios.get(apiUrl + "/" + type + "/info", {
+            headers: {
+                "Authorization" : getAuthHeader(tok)
+            }
+        });
+    } else {
+        return Promise.reject("no_jwt");
+    }
+}
+
+
+function getAuthHeader(jwt) {
+    return 'Bearer ' + jwt;
 }

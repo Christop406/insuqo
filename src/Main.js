@@ -58,7 +58,7 @@ class Main extends Component {
                 <Grommet theme={grommet}>
                     <Box style={{height: '100%'}} fill>
                         <Switch>
-                            <Route path="/user/login" component={ClientLogin}/>
+                            <Route path="/client/login" component={ClientLogin}/>
                             <Route path="/agent/login" component={AgentLogin}/>
                             <Redirect path="/login" to="/user/login"/>
                             <Route component={QuotingTool}/>
