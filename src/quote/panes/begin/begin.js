@@ -37,9 +37,9 @@ class Begin extends Component {
             if(res.data) {
                 store.set('started')(true);
                 store.set('zipCode')(zipCode);
-                store.set('stateName')(res.data.state);
+                store.set('stateName')(res.data.stateName);
                 store.set('stateCode')(res.data.stateCode);
-                store.set('city')(res.data.city);
+                store.set('city')(res.data.cityName);
 
                 that.props.history.push('/quote/personal');
             }

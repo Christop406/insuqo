@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import Store from '../../../ApplicationStore';
 import {Accordion, AccordionPanel, Anchor, Box, Button, Heading, Paragraph} from "grommet";
-import {getQuote} from "../../../api";
 import moment from 'moment';
 import {formatCovAmount, logoImageForCompanyID, splitPrice} from "../../../func";
+import {QuoteService} from "../../../services/quote.service";
 import Spinner from 'react-spinkit';
 
 const styles = {
@@ -54,7 +54,7 @@ class Results extends Component {
         const cannabis = store.get('cannabis');
         const healthType = tobacco || cannabis ? 'preferred_smoker' : 'preferred_non_smoker';
 
-        return getQuote(stateCode,actualAge,nearestAge,covAmount,termLength,healthType,sex,rider,10)
+        return QuoteService.getQuote(stateCode,actualAge,nearestAge,covAmount,termLength,healthType,sex,rider,10)
     };
 
     componentDidMount = () => {

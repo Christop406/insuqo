@@ -3,31 +3,6 @@ import querystring from "querystring";
 import constants from './util/constants';
 let apiUrl = process.env.REACT_APP_API_URL;
 
-export function getQuote(state, actualAge, nearestAge, amount, termLength, healthType, sex, rider, showTop) {
-
-    let array = [state, actualAge, nearestAge, amount, termLength, healthType, sex, rider, showTop];
-
-    if(array.some(el => el === undefined)) {
-        return Promise.reject("undfined_data");
-    }
-
-    return axios.post(apiUrl + "/quote", querystring.stringify({
-        state: state,
-        actualAge: actualAge,
-        nearestAge: nearestAge,
-        amount: amount,
-        termLength: termLength,
-        healthType: healthType,
-        sex: sex,
-        rider: rider,
-        top: showTop
-    }), {
-        headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
-        }
-    });
-}
-
 export function getApplication(app) {
     return axios.get(apiUrl + "/application/" + app, {
         headers: {
