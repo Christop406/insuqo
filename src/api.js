@@ -1,8 +1,7 @@
 import axios from 'axios';
 import querystring from "querystring";
 import constants from './util/constants';
-//let apiUrl = "https://api.insuqo.com";
-let apiUrl = "http://localhost:4567";
+let apiUrl = process.env.REACT_APP_API_URL;
 
 export function getQuote(state, actualAge, nearestAge, amount, termLength, healthType, sex, rider, showTop) {
 

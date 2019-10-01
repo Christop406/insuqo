@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import Store from '../ApplicationStore';
 import Begin from './panes/begin/begin';
 import Personal from './panes/personal/personal';
@@ -12,8 +12,8 @@ class Quote extends Component {
 
     componentDidMount = () => {
         document.title = "Quote | INSUQO";
-        if(this.props.store) {
-            if(this.props.match.path !== '/quote/begin' && this.props.store.state.started === false) {
+        if (this.props.store) {
+            if (this.props.match.path !== '/quote/begin' && this.props.store.state.started === false) {
                 //this.props.history.push("/iq/quote/begin");
             }
         }
