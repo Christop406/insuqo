@@ -10,20 +10,20 @@ export class QuoteService {
             return Promise.reject("undefined_data");
         }
 
-        return axios.post(process.env.REACT_APP_API_URL + "/quote", querystring.stringify({
-            state: state,
-            actualAge: actualAge,
-            nearestAge: nearestAge,
-            amount: amount,
-            termLength: termLength,
-            healthType: healthType,
-            sex: sex,
-            rider: rider,
-            top: showTop
-        }), {
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded"
-            }
+        return axios.get(process.env.REACT_APP_API_URL + "/quotes/get", {
+            params: {
+                state: state,
+                actualAge: actualAge,
+                nearestAge: nearestAge,
+                amount: amount,
+                length: termLength,
+                // health: healthType,
+                sex: sex,
+                rider: rider,
+                top: showTop,
+                paymentFreq: 'Monthly',
+                smoker: 'false'
+            },
         });
     }
 }

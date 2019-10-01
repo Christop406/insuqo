@@ -68,7 +68,7 @@ class Results extends Component {
                 } else {
                     localStorage.setItem("quotes_ran", "true");
                     // todo - handle errors
-                    let data = res.data;
+                    let data = res.data.quotes;
                     this.setState({loading: false, quotes: data});
                     localStorage.setItem("quotes", JSON.stringify(data));
                 }
