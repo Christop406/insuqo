@@ -77,13 +77,13 @@ class Results extends Component {
     };
 
     formatRider = quote => {
-        if(quote.annualADBPremium !== 0) {
+        if(quote.AnnualADBPremium !== 0) {
             return "Accidental Death Rider";
-        } else if(quote.annualChildRiderPremium !== 0) {
+        } else if(quote.AnnualChildRiderPremium !== 0) {
             return "Child Rider";
-        } else if(quote.annualReturnOfPremiumPremium !== 0) {
+        } else if(quote.AnnualReturnOfPremiumPremium !== 0) {
             return "Return of Premium";
-        } else if(quote.annualWaiverOfPremiumPremium !== 0) {
+        } else if(quote.AnnualWaiverOfPremiumPremium !== 0) {
             return "Waiver of Premium";
         }
         return "None";
@@ -124,13 +124,13 @@ class Results extends Component {
                 <Box style={{backgroundColor: '#F5F5F5', padding: 10}}>
                     <Box direction="row-responsive">
                         <Box style={{width: '50%'}}>
-                            <Heading level={3}>Provider<Paragraph style={{color: '#9c37f2'}}>{quote.companyName}</Paragraph></Heading>
-                            <Heading level={3}>Coverage<Paragraph style={{color: '#9c37f2'}}>$ {formatCovAmount(quote.faceAmount)}</Paragraph></Heading>
-                            <Heading level={3}>Product Name<Paragraph style={{color: '#9c37f2'}}>{quote.productName}</Paragraph></Heading>
+                            <Heading level={3}>Provider<Paragraph style={{color: '#9c37f2'}}>{quote.CompanyName}</Paragraph></Heading>
+                            <Heading level={3}>Coverage<Paragraph style={{color: '#9c37f2'}}>$ {formatCovAmount(quote.FaceAmount)}</Paragraph></Heading>
+                            <Heading level={3}>Product Name<Paragraph style={{color: '#9c37f2'}}>{quote.ProductName}</Paragraph></Heading>
                         </Box>
                         <Box style={{width: '50%', marginTop: 10, paddingRight: 10}}>
-                            <Heading level={3}>Term Length<Paragraph style={{color: '#9c37f2'}}>{quote.term} Years</Paragraph></Heading>
-                            <Heading level={3}>AMBest Rating <Anchor label="(?)"/><Paragraph style={{color: '#9c37f2'}}>{quote.amBest}</Paragraph></Heading>
+                            <Heading level={3}>Term Length<Paragraph style={{color: '#9c37f2'}}>{quote.Term} Years</Paragraph></Heading>
+                            <Heading level={3}>AMBest Rating <Anchor label="(?)"/><Paragraph style={{color: '#9c37f2'}}>{quote.AMBest}</Paragraph></Heading>
                             <Heading level={3}>Features<Paragraph style={{color: '#9c37f2'}}>{this.formatRider(quote)}</Paragraph></Heading>
                         </Box>
                     </Box>
@@ -145,13 +145,13 @@ class Results extends Component {
     formatQuoteHeading = (quote, index, freq) => {
         let splitPremium = splitPrice(
             freq === 'month' ?
-                quote.monthlyTotalPremium :
+                quote.MonthlyTotalPremium :
             freq === 'annual' ?
-                quote.annualTotalPremium :
+                quote.AnnualTotalPremium :
             freq === 'semiannual' ?
-                quote.semiAnnualTotalPremium :
+                quote.SemiAnnualTotalPremium :
             freq === 'quarter' ?
-                quote.quarterlyTotalPremium :
+                quote.QuarterlyTotalPremium :
                 0.00
         );
         return (
@@ -163,15 +163,15 @@ class Results extends Component {
                         <Box fill="horizontal" align="center" style={{minWidth: 150}}>
                             <img
                                 style={{marginTop: 10}}
-                                alt={"logo-" + quote.companyID}
+                                alt={"logo-" + quote.CompanyID}
                                 height={60}
-                                src={logoImageForCompanyID(quote.companyID)}
+                                src={logoImageForCompanyID(quote.CompanyID)}
                             />
                         </Box>
                     </Box>
                 </Heading>
                 <Box fill="horizontal" justify="center" align="center">
-                    <Heading style={{width: '100%'}} truncate level={3} margin="none">{quote.companyName}</Heading>
+                    <Heading style={{width: '100%'}} truncate level={3} margin="none">{quote.CompanyName}</Heading>
                 </Box>
                 <Box fill="horizontal">
                     <Box fill="vertical" direction="row" align="center" justify="center">

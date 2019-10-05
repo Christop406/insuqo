@@ -1,5 +1,5 @@
 import axios from 'axios';
-import querystring from "querystring";
+import * as qs from 'query-string';
 import constants from './util/constants';
 let apiUrl = process.env.REACT_APP_API_URL;
 
@@ -12,9 +12,12 @@ export function getApplication(app) {
 }
 
 export function newApplication(app) {
-    return axios.post(apiUrl + "/application/new",
-        app
-    , {})
+    console.log(app, JSON.stringify(app));
+    return axios.put(apiUrl + "/applications/new", JSON.stringify(app),{
+        headers: {
+            "Content-Type": 'application/json'
+        }
+    });
 }
 
 export function localizeZip(zip) {
@@ -30,7 +33,7 @@ export function localizeZip(zip) {
 
 export function login(type, email, password) {
     if(email == null || password == null || (type !== constants.userTypes.client && type !== constants.userTypes.agent)) return Promise.reject("invalid username/password/type");
-    return axios.post(apiUrl + "/" + type + "/login", querystring.stringify({
+    return axios.post(apiUrl + "/" + type + "/login", qs.stringify({
         email,
         password
     }), {
