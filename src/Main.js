@@ -1,19 +1,19 @@
 import React, { Component }  from 'react';
 import Store from './ApplicationStore';
-import Quote  from './quote/quote';
-import Application from './application/application';
-import AppStatus from './application/application-status/application-status';
+import Quote  from './controllers/quote/Quote';
+import Application from './controllers/application/Application';
+import AppStatus from './controllers/application-status/application-status';
 import { fadeInUpBig } from 'react-animations';
 import Radium, {StyleRoot} from 'radium';
 import {Box, Grommet} from 'grommet';
 import { grommet } from 'grommet/themes';
 import { Route, Switch, Redirect } from 'react-router-dom';
-import img from './img/insuqo-logo.png';
+import img from './assets/img/insuqo-logo.png';
 import {fillStoreFromLocalStorage} from "./func";
-import Agent from "./agent/Agent";
-import Client from './client/Client';
-import ClientLogin from "./client/ClientLogin";
-import AgentLogin from "./agent/AgentLogin";
+import Agent from "./controllers/agent/Agent";
+import Client from './controllers/client/Client';
+import ClientLogin from "./controllers/login/ClientLogin";
+// import AgentLogin from "./controllers/login/AgentLogin";
 
 const styles = {
     fadeInUpBig: {
@@ -59,8 +59,8 @@ class Main extends Component {
                     <Box style={{height: '100%'}} fill>
                         <Switch>
                             <Route path="/client/login" component={ClientLogin}/>
-                            <Route path="/agent/login" component={AgentLogin}/>
-                            <Redirect path="/login" to="/user/login"/>
+                            {/*<Route path="/agent/login" component={AgentLogin}/>*/}
+                            <Redirect path="/login" to="/client/login"/>
                             <Route component={QuotingTool}/>
                         </Switch>
                     </Box>
