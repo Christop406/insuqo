@@ -9,10 +9,10 @@ import {Box, Grommet} from 'grommet';
 import { grommet } from 'grommet/themes';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import img from './assets/img/insuqo-logo.png';
-import {fillStoreFromLocalStorage} from "./func";
-import Agent from "./controllers/agent/Agent";
+import {fillStoreFromLocalStorage} from './func';
+import Agent from './controllers/agent/Agent';
 import Client from './controllers/client/Client';
-import ClientLogin from "./controllers/login/ClientLogin";
+import ClientLogin from './controllers/login/ClientLogin';
 // import AgentLogin from "./controllers/login/AgentLogin";
 
 const styles = {
@@ -79,7 +79,7 @@ class QuotingTool extends Component {
                         <img src={img} alt="iq-logo" style={styles.mainLogo}/>
                     </Box>
                 </nav>
-                <Box className="quote-form-content" style={{paddingTop: 70, marginBottom: 70}} direction="row" fill="horizontal">
+                <Box className="quote-form-content" style={{paddingTop: 70}} direction="row" fill="horizontal">
                     <Switch>
                         <Route path="/client" component={Client}/>
                         <Route path="/agent" component={Agent}/>

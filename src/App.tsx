@@ -1,8 +1,8 @@
 import React from 'react';
 import Store from './ApplicationStore';
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
-import Main from "./Main";
-import './App.css';
+import Main from './Main';
+import './App.scss';
 
 
 class App extends React.Component {
@@ -17,7 +17,7 @@ class App extends React.Component {
                     </Router>
                 </Store.Container>
             </div>
-        )
+        );
     }
 }
 

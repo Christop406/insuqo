@@ -1,0 +1,10 @@
+{
+	"function": {},
+	"auth": {
+		"iqwebapp76865f86": {
+			"service": "Cognito",
+			"providerPlugin": "awscloudformation",
+			"dependsOn": []
+		}
+	}
+}

@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import Store from '../../../../ApplicationStore';
-import {Accordion, AccordionPanel, Anchor, Box, Button, Heading, Paragraph} from "grommet";
+import {Accordion, AccordionPanel, Anchor, Box, Button, Heading, Paragraph} from 'grommet';
 import moment from 'moment';
-import {formatCovAmount, logoImageForCompanyID, splitPrice} from "../../../../func";
-import {QuoteService} from "../../../../services/quote.service";
+import {formatCovAmount, logoImageForCompanyID, splitPrice} from '../../../../func';
+import {QuoteService} from '../../../../services/quote.service';
 import Spinner from 'react-spinkit';
-import {Store as S} from "undux";
-import {History, LocationState} from "history";
-import {QuickTermQuoteResult, Quote} from "insuqo-shared";
+import {Store as S} from 'undux';
+import {History, LocationState} from 'history';
+import {QuickTermQuoteResult} from 'insuqo-shared';
 
-interface IResultsProps {
+interface ResultsProps {
     store: S<any>;
     history: History<LocationState>;
 }
@@ -29,12 +29,12 @@ const styles = {
 };
 
 const frequencies = [
-    {val: "month", name: "Monthly"},
-    {val: "quarter", name: "Quarterly"} ,
-    {val: "semiannual", name: "Semi-annually"},
-    {val: "annual", name: "Annually"}];
+    {val: 'month', name: 'Monthly'},
+    {val: 'quarter', name: 'Quarterly'} ,
+    {val: 'semiannual', name: 'Semi-annually'},
+    {val: 'annual', name: 'Annually'}];
 
-class Results extends Component<IResultsProps> {
+class Results extends Component<ResultsProps> {
 
     state = {
         loading: true,
@@ -54,7 +54,7 @@ class Results extends Component<IResultsProps> {
         const rider = store.get('rider') || 'none';
 
         const now = moment();
-        const birthTime = moment(birthdate, "MM/DD/YYYY");
+        const birthTime = moment(birthdate, 'MM/DD/YYYY');
         const actualAge = now.diff(birthTime, 'years');
         const nearestAge = Math.round(now.diff(birthTime, 'years', true));
 
@@ -62,23 +62,23 @@ class Results extends Component<IResultsProps> {
         const cannabis = store.get('cannabis');
         const healthType = tobacco || cannabis ? 'preferred_smoker' : 'preferred_non_smoker';
 
-        return QuoteService.getQuote(stateCode,actualAge,nearestAge,covAmount,termLength,healthType,sex,rider,10)
+        return QuoteService.getQuote(stateCode,actualAge,nearestAge,covAmount,termLength,healthType,sex,rider,10);
     };
 
     componentDidMount = () => {
-        if(localStorage.getItem("quotes_ran") === "true") {
-            let q = localStorage.getItem("quotes");
+        if(localStorage.getItem('quotes_ran') === 'true') {
+            const q = localStorage.getItem('quotes');
             if(q !== undefined && q !== null) this.setState({loading: false, quotes: JSON.parse(q!)});
         } else {
             this.getQuotes().then(res => {
                 if(res.status === 404) {
                     console.log('show an error here');
                 } else {
-                    localStorage.setItem("quotes_ran", "true");
+                    localStorage.setItem('quotes_ran', 'true');
                     // todo - handle errors
-                    let data = res.data.quotes;
+                    const data = res.data.quotes;
                     this.setState({loading: false, quotes: data});
-                    localStorage.setItem("quotes", JSON.stringify(data));
+                    localStorage.setItem('quotes', JSON.stringify(data));
                 }
             });
         }
@@ -86,26 +86,26 @@ class Results extends Component<IResultsProps> {
 
     formatRider = (quote: QuickTermQuoteResult) => {
         if(Number(quote.AnnualADBPremium) !== 0) {
-            return "Accidental Death Rider";
+            return 'Accidental Death Rider';
         } else if(Number(quote.AnnualChildRiderPremium) !== 0) {
-            return "Child Rider";
+            return 'Child Rider';
         } else if(Number(quote.AnnualReturnOfPremiumPremium) !== 0) {
-            return "Return of Premium";
+            return 'Return of Premium';
         } else if(Number(quote.AnnualWaiverOfPremiumPremium) !== 0) {
-            return "Waiver of Premium";
+            return 'Waiver of Premium';
         }
-        return "None";
+        return 'None';
     };
 
     formatShortFreqType = (freq: string) => {
         switch (freq) {
-            case "quarter":
+            case 'quarter':
                 return '/ quarter';
-            case "semiannual":
+            case 'semiannual':
                 return '/ six months';
-            case "annual":
+            case 'annual':
                 return '/ year';
-            case "month":
+            case 'month':
             default:
                 return '/ month';
         }
@@ -143,7 +143,7 @@ class Results extends Component<IResultsProps> {
                         </Box>
                     </Box>
                     <Box style={{ width: '100%' ,maxWidth: 300}} alignSelf="center">
-                        <Button primary={active === index} onClick={(event: any) => {this.apply(quote, event)}} fill={false} hoverIndicator="#EAC4FF" label="APPLY"/>
+                        <Button primary={active === index} onClick={(event: any) => {this.apply(quote, event);}} fill={false} hoverIndicator="#EAC4FF" label="APPLY"/>
                     </Box>
                 </Box>
             </Box>
@@ -151,16 +151,16 @@ class Results extends Component<IResultsProps> {
     };
 
     formatQuoteHeading = (quote: QuickTermQuoteResult, index: number, freq: string) => {
-        let splitPremium = splitPrice(
+        const splitPremium = splitPrice(
             freq === 'month' ?
                 quote.MonthlyTotalPremium :
-            freq === 'annual' ?
-                quote.AnnualTotalPremium :
-            freq === 'semiannual' ?
-                quote.SemiAnnualTotalPremium :
-            freq === 'quarter' ?
-                quote.QuarterlyTotalPremium :
-                0.00
+                freq === 'annual' ?
+                    quote.AnnualTotalPremium :
+                    freq === 'semiannual' ?
+                        quote.SemiAnnualTotalPremium :
+                        freq === 'quarter' ?
+                            quote.QuarterlyTotalPremium :
+                            0.00
         );
         return (
             <Box direction="row-responsive" fill="horizontal" align="stretch" margin="small" alignSelf="stretch">
@@ -171,7 +171,7 @@ class Results extends Component<IResultsProps> {
                         <Box fill="horizontal" align="center" style={{minWidth: 150}}>
                             <img
                                 style={{marginTop: 10}}
-                                alt={"logo-" + quote.CompanyID}
+                                alt={'logo-' + quote.CompanyID}
                                 height={60}
                                 src={logoImageForCompanyID(quote.CompanyID)}
                             />
@@ -223,6 +223,7 @@ class Results extends Component<IResultsProps> {
                         <Heading margin="xsmall" style={styles.quoteSubtitle} color="dark-4" level={3}>Click on each for more info.</Heading>
                         <Box background={{color: '#FFFFFF'}} direction="row-responsive" justify="end" align="center">
                             <Heading margin="xsmall" level={5}>Choose payment frequency: </Heading>
+                            {/* eslint-disable-next-line react/no-children-prop */}
                             <select value={freq} onChange={this.updateFreq} children={frequencies.map((option, index) => <option value={option.val} key={index}>{option.name}</option>)}/>
                         </Box>
                         <Box style={{paddingLeft: 5, paddingRight: 5}}>

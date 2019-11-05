@@ -10,14 +10,14 @@ import {
     RadioButton,
     Text,
     TextInput
-} from "grommet";
+} from 'grommet';
 import countries from '../../util/country-by-abbreviation';
-import {states} from 'insuqo-shared/constants';
-import BeneficiaryList from "../../components/beneficiary-list/BeneficiaryList";
-import {newApplication} from "../../api";
-import {Modal} from "antd";
-import Cleave from 'cleave.js/react'
-import {validateEmail} from "../../func";
+import states from 'insuqo-shared/constants/states';
+import BeneficiaryList from '../../components/beneficiary-list/BeneficiaryList';
+import {newApplication} from '../../api';
+import {Modal} from 'antd';
+import Cleave from 'cleave.js/react';
+import {validateEmail} from '../../func';
 import constants from '../../util/constants';
 
 class Application extends Component {
@@ -66,23 +66,23 @@ class Application extends Component {
     };
 
     blurFname = event => {
-        this.setState({fnameError: event.target.value.length < 2})
+        this.setState({fnameError: event.target.value.length < 2});
     };
 
 
     blurLname = event => {
-        this.setState({lnameError: event.target.value.length < 2})
+        this.setState({lnameError: event.target.value.length < 2});
     };
 
     blurSsn = event => {
-        this.setState({ssError: event.target.value.length < 11})
+        this.setState({ssError: event.target.value.length < 11});
     };
 
     blurEmail = event => {
         if (validateEmail(event.target.value)) {
-            this.setState({emailError: false})
+            this.setState({emailError: false});
         } else {
-            this.setState({emailError: true})
+            this.setState({emailError: true});
         }
     };
 
@@ -95,7 +95,7 @@ class Application extends Component {
     };
 
     blurPPhoneNum = event => {
-        this.setState({pPhoneError: event.target.rawValue.length < 10})
+        this.setState({pPhoneError: event.target.rawValue.length < 10});
     };
 
     updateFreq = event => {
@@ -131,7 +131,8 @@ class Application extends Component {
     };
 
     showConfirm = () => {
-        let that = this;
+        // eslint-disable-next-line @typescript-eslint/no-this-alias
+        const that = this;
         Modal.confirm({
             title: 'You are about to apply for life insurance',
             content: <Text>Please ensure all of your information is correct.
@@ -168,8 +169,8 @@ class Application extends Component {
             quote: quote
         }).then(response => {
             if (response.status === 201 || response.status === 200) {
-                localStorage.setItem("app_id", response.data.sk);
-                this.props.history.push('/application/status');
+                localStorage.setItem('app_id', response.data.sk);
+                this.props.history.push(`/application/status?id=${response.data.sk}`);
             }
         });
     };
@@ -180,7 +181,7 @@ class Application extends Component {
     };
 
     getPaymentByTerm = () => {
-        let {freq} = this.state;
+        const {freq} = this.state;
         let quote = this.props.store.get('quote');
         if (quote === undefined) return '';
         if (typeof quote === 'string') {
@@ -188,36 +189,36 @@ class Application extends Component {
         }
 
         switch (freq) {
-            case "quarter":
+            case 'quarter':
                 return parseFloat(quote.QuarterlyTotalPremium).toFixed(2);
-            case "semiannual":
+            case 'semiannual':
                 return parseFloat(quote.SemiAnnualTotalPremium).toFixed(2);
-            case "annual":
+            case 'annual':
                 return parseFloat(quote.AnnualTotalPremium).toFixed(2);
-            case "month":
+            case 'month':
             default:
                 return parseFloat(quote.MonthlyTotalPremium).toFixed(2);
         }
     };
 
     getPaymentTerm = () => {
-        let {freq} = this.state;
+        const {freq} = this.state;
 
         switch (freq) {
-            case "quarter":
+            case 'quarter':
                 return '3 months';
-            case "semiannual":
+            case 'semiannual':
                 return '6 months';
-            case "annual":
-                return "12 months";
-            case "month":
+            case 'annual':
+                return '12 months';
+            case 'month':
             default:
-                return "month";
+                return 'month';
         }
     };
 
     componentDidMount = () => {
-        document.title = "Application | INSUQO";
+        document.title = 'Application | INSUQO';
     };
 
     render = () => {
@@ -255,16 +256,16 @@ class Application extends Component {
                         <Heading margin="xsmall" color="black" level={3}>Personal Info</Heading>
                         <Box className="nameSection" gap="small">
                             <FormField label="First Name"
-                                       error={fnameError ? "First name must be longer than 2 characters." : undefined}>
+                                error={fnameError ? 'First name must be longer than 2 characters.' : undefined}>
                                 <TextInput onBlur={this.blurFname}
-                                           onChange={event => this.updateValue('firstName', event.target.value)}
-                                           placeholder="John"/>
+                                    onChange={event => this.updateValue('firstName', event.target.value)}
+                                    placeholder="John"/>
                             </FormField>
                             <FormField label="Last Name"
-                                       error={lnameError ? "Last name must be longer than 2 characters." : undefined}>
+                                error={lnameError ? 'Last name must be longer than 2 characters.' : undefined}>
                                 <TextInput onBlur={this.blurLname}
-                                           onChange={event => this.updateValue('lastName', event.target.value)}
-                                           placeholder="Smith"/>
+                                    onChange={event => this.updateValue('lastName', event.target.value)}
+                                    placeholder="Smith"/>
                             </FormField>
                         </Box>
                         <Heading margin="xsmall" color="black" level={3}>Citizenship</Heading>
@@ -272,47 +273,47 @@ class Application extends Component {
                             <FormField label="Country of Birth">
                                 <Box>
                                     <select className="bc-select"
-                                            onChange={event => this.updateValue('countryOfBirth', event.target.value)}
-                                            placeholder="United States"
-                                            children={countries.map((option, index) => <option key={index}
-                                                                                               value={option.abbreviation}>{option.country}</option>)}/>
+                                        onChange={event => this.updateValue('countryOfBirth', event.target.value)}
+                                        placeholder="United States"
+                                        children={countries.map((option, index) => <option key={index}
+                                            value={option.abbreviation}>{option.country}</option>)}/>
                                 </Box>
                             </FormField>
                             <FormField label="Social Security Number"
-                                       help="We are required to use this for validation purposes."
-                                       error={ssError ? "Please input a valid social security number." : undefined}>
+                                help="We are required to use this for validation purposes."
+                                error={ssError ? 'Please input a valid social security number.' : undefined}>
                                 <Box>
                                     <Cleave placeholder="XXX-XX-XXXX"
-                                            style={{
-                                                borderWidth: 0,
-                                                height: 46,
-                                                padding: 11,
-                                                fontWeight: 600,
-                                                outline: 'none'
-                                            }}
-                                            onChange={event => this.updateValue('ssn', event.target.value)}
-                                            onBlur={this.blurSsn}
-                                            options={{
-                                                numericOnly: true,
-                                                delimiter: '-',
-                                                blocks: [3, 2, 4]
-                                            }}
+                                        style={{
+                                            borderWidth: 0,
+                                            height: 46,
+                                            padding: 11,
+                                            fontWeight: 600,
+                                            outline: 'none'
+                                        }}
+                                        onChange={event => this.updateValue('ssn', event.target.value)}
+                                        onBlur={this.blurSsn}
+                                        options={{
+                                            numericOnly: true,
+                                            delimiter: '-',
+                                            blocks: [3, 2, 4]
+                                        }}
                                     />
                                 </Box>
                             </FormField>
                             <Box style={{backgroundColor: '#efecff', padding: 20}}>
                                 <CheckBox checked={hasDl} onChange={event => this.setState({hasDl: event.target.checked})}
-                                          label={<span>I have a valid driver's license.</span>}/>
-                                {!hasDl ? "" :
+                                    label={<span>I have a valid driver's license.</span>}/>
+                                {!hasDl ? '' :
                                     <Box margin="small">
                                         <Heading margin="xsmall" color="black" level={3}>Driver's License</Heading>
                                         <FormField label="Registered State">
                                             <Box>
                                                 <select className="dls-select" value={dlStateCode}
-                                                        onChange={event => this.updateValue('idState', event.target.value)}
-                                                        placeholder="California"
-                                                        children={states.map((option, index) => <option key={index}
-                                                                                                        value={option.abbreviation}>{option.name}</option>)}/>
+                                                    onChange={event => this.updateValue('idState', event.target.value)}
+                                                    placeholder="California"
+                                                    children={states.map((option, index) => <option key={index}
+                                                        value={option.abbreviation}>{option.name}</option>)}/>
                                             </Box>
                                         </FormField>
                                         <FormField label="License Number">
@@ -344,22 +345,22 @@ class Application extends Component {
                             <Box>
                                 <FormField label="Street Address">
                                     <TextInput value={addrLine1}
-                                               onChange={event => this.updateValue('addrLine1', event.target.value)}
-                                               placeholder="123 Mulberry Lane"/>
+                                        onChange={event => this.updateValue('addrLine1', event.target.value)}
+                                        placeholder="123 Mulberry Lane"/>
                                 </FormField>
                                 <FormField label="Apartment/Unit (Address Line 2)">
                                     <TextInput value={addrLine2}
-                                               onChange={event => this.updateValue('addrLine2', event.target.value)}
-                                               placeholder="10B"/>
+                                        onChange={event => this.updateValue('addrLine2', event.target.value)}
+                                        placeholder="10B"/>
                                 </FormField>
                                 <Box align="start">
                                     <Box wrap justify="start" align="center" margin="none" direction="row" gap="small">
                                         <Text color="#999" size="large"
-                                              weight="bold">{this.props.store.get('city')},</Text>
+                                            weight="bold">{this.props.store.get('city')},</Text>
                                         <Text color="#999" size="large"
-                                              weight="bold">{this.props.store.get('stateName')}</Text>
+                                            weight="bold">{this.props.store.get('stateName')}</Text>
                                         <Text color="#999" size="large"
-                                              weight="bold">{this.props.store.get('zipCode')}</Text>
+                                            weight="bold">{this.props.store.get('zipCode')}</Text>
                                         <Anchor onClick={this.showCityReasoning} size="small">Why can't I change my
                                             city?</Anchor>
                                     </Box>
@@ -370,7 +371,7 @@ class Application extends Component {
                         <Box>
                             <Heading margin="xsmall" color="black" level={3}>Contact Info</Heading>
                             <FormField label="Email Address"
-                                       error={emailError ? "Please input a valid email address." : undefined}
+                                error={emailError ? 'Please input a valid email address.' : undefined}
                             >
                                 <TextInput
                                     placeholder="jsmith@example.com"
@@ -379,24 +380,24 @@ class Application extends Component {
                                 />
                             </FormField>
                             <FormField label="Primary Phone Number"
-                                       error={pPhoneError ? "Please input a valid phone number." : undefined}
+                                error={pPhoneError ? 'Please input a valid phone number.' : undefined}
                             >
                                 <Box>
                                     <Cleave placeholder="(123) 456-7890"
-                                            style={{
-                                                borderWidth: 0,
-                                                height: 46,
-                                                padding: 11,
-                                                fontWeight: 600,
-                                                outline: 'none'
-                                            }}
-                                            options={{
-                                                numericOnly: true,
-                                                blocks: [0, 3, 0, 3, 4],
-                                                delimiters: ["(", ")", " ", "-"]
-                                            }}
-                                            onChange={event => this.updateValue('primaryPhone', event.target.value)}
-                                            onBlur={this.blurPPhoneNum}
+                                        style={{
+                                            borderWidth: 0,
+                                            height: 46,
+                                            padding: 11,
+                                            fontWeight: 600,
+                                            outline: 'none'
+                                        }}
+                                        options={{
+                                            numericOnly: true,
+                                            blocks: [0, 3, 0, 3, 4],
+                                            delimiters: ['(', ')', ' ', '-']
+                                        }}
+                                        onChange={event => this.updateValue('primaryPhone', event.target.value)}
+                                        onBlur={this.blurPPhoneNum}
                                     />
                                 </Box>
                             </FormField>
@@ -417,18 +418,18 @@ class Application extends Component {
                             <Box direction="row">
                                 <Box fill margin="small" gap="small">
                                     <RadioButton checked={freq === 'month'} onChange={this.updateFreq} name="month"
-                                                 label="Monthly"/>
+                                        label="Monthly"/>
                                     <RadioButton checked={freq === 'quarter'} onChange={this.updateFreq} name="quarter"
-                                                 label="Quarterly"/>
+                                        label="Quarterly"/>
                                     <RadioButton checked={freq === 'semiannual'} onChange={this.updateFreq}
-                                                 name="semiannual" label="Semi-Annually"/>
+                                        name="semiannual" label="Semi-Annually"/>
                                     <RadioButton checked={freq === 'annual'} onChange={this.updateFreq} name="annual"
-                                                 label="Annually"/>
+                                        label="Annually"/>
                                 </Box>
                                 <Box align="center" justify="center" fill
-                                     style={{backgroundColor: '#efecff', height: 'auto'}}>
+                                    style={{backgroundColor: '#efecff', height: 'auto'}}>
                                     <Heading margin="none"
-                                             color={constants.colors.iqBrand}>${this.getPaymentByTerm()}</Heading>
+                                        color={constants.colors.iqBrand}>${this.getPaymentByTerm()}</Heading>
                                     <Text className="purpleText">every <b>{this.getPaymentTerm()}</b></Text>
                                 </Box>
                             </Box>
@@ -438,37 +439,37 @@ class Application extends Component {
                             <Text>Please select any of the following options <b>only</b> if they apply to you.</Text>
                             <Box margin="xsmall" fill gap="small">
                                 <CheckBox name="otherLifeInsurance" checked={otherLifeInsurance}
-                                          onChange={this.updateOtherLifeInsurance}
-                                          label={<Box>I currently have another life insurance plan.</Box>}/>
+                                    onChange={this.updateOtherLifeInsurance}
+                                    label={<Box>I currently have another life insurance plan.</Box>}/>
                                 <CheckBox name="oiWillReplace" checked={oiWillReplace}
-                                          onChange={this.updateOtherLifeInsurance}
-                                          label={<Box>This policy will replace or change my other policy.</Box>}/>
+                                    onChange={this.updateOtherLifeInsurance}
+                                    label={<Box>This policy will replace or change my other policy.</Box>}/>
                                 <CheckBox name="oiPending" checked={oiPending} onChange={this.updateOtherLifeInsurance}
-                                          label={<Box>I currently have another application pending with another
+                                    label={<Box>I currently have another application pending with another
                                               insurance company.</Box>}/>
                                 <CheckBox name="oiModified" checked={oiModified}
-                                          onChange={this.updateOtherLifeInsurance}
-                                          label={<Box>A previous application has been declined, postponed, or modified
+                                    onChange={this.updateOtherLifeInsurance}
+                                    label={<Box>A previous application has been declined, postponed, or modified
                                               after applying.</Box>}/>
                                 <CheckBox name="intendedParty" checked={intendedParty}
-                                          onChange={this.updateOtherLifeInsurance}
-                                          label={<Box>Another party, besides me, will obtain a right, title, or interest
+                                    onChange={this.updateOtherLifeInsurance}
+                                    label={<Box>Another party, besides me, will obtain a right, title, or interest
                                               in any policy issued on the life of the proposed insured as a result of
                                               this application.</Box>}/>
                                 <CheckBox name="willFinance" checked={willFinance}
-                                          onChange={this.updateOtherLifeInsurance}
-                                          label={<Box>I will be taking out a loan or financing my premiums for this
+                                    onChange={this.updateOtherLifeInsurance}
+                                    label={<Box>I will be taking out a loan or financing my premiums for this
                                               plan.</Box>}/>
                                 <CheckBox name="willLiquidate" checked={willLiquidate}
-                                          onChange={this.updateOtherLifeInsurance}
-                                          label={<Box>This policy will be replaced through a 1035 exchange or
+                                    onChange={this.updateOtherLifeInsurance}
+                                    label={<Box>This policy will be replaced through a 1035 exchange or
                                               liquidation.</Box>}/>
                             </Box>
                         </Box>
                     </Box>
                     <Button primary
-                            className="purpleBackground purpleOutline" label="Submit Application"
-                            onClick={this.showConfirm}/>
+                        className="purpleBackground purpleOutline" label="Submit Application"
+                        onClick={this.showConfirm}/>
                 </Box>
             </Box>
         );

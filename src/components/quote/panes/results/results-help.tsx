@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {Box} from "grommet";
 import school from "../../../../assets/img/school.png";
 

@@ -1,0 +1,20 @@
+.status-view {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 50%;
+  min-width: 275px;
+}
+
+.app-progress {
+  width: 100%;
+  padding: 20px 0;
+  text-align: justify;
+}
+
+.progress-description {
+  max-width: 400px;
+}
+
+/*# sourceMappingURL=ApplicationStatusView.css.map */
