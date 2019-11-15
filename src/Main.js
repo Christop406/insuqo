@@ -13,6 +13,7 @@ import {fillStoreFromLocalStorage} from './func';
 import Agent from './controllers/agent/Agent';
 import Client from './controllers/client/Client';
 import ClientLogin from './controllers/login/ClientLogin';
+import {ClientAuthentication} from './controllers/sign-up/ClientAuthentication';
 // import AgentLogin from "./controllers/login/AgentLogin";
 
 const styles = {
@@ -58,6 +59,7 @@ class Main extends Component {
                 <Grommet theme={grommet}>
                     <Box style={{height: '100%'}} fill>
                         <Switch>
+                            <Route path="/register" component={ClientAuthentication}/>
                             <Route path="/client/login" component={ClientLogin}/>
                             {/*<Route path="/agent/login" component={AgentLogin}/>*/}
                             <Redirect path="/login" to="/client/login"/>

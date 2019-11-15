@@ -1,0 +1,26 @@
+@import '../../style/mixins';
+
+.modal-container {
+  position: fixed;
+  z-index: 10;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.69);
+
+  .auth-container {
+    width: 100%;
+    max-width: 400px;
+    padding: 50px;
+    background-color: rgba(#FFFFFF, 1);
+    border-radius: 10px;
+
+    @include tablet-min {
+      min-width: 300px;
+    }
+  }
+}

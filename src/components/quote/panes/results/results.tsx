@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import Store from '../../../../ApplicationStore';
 import {Accordion, AccordionPanel, Anchor, Box, Button, Heading, Paragraph} from 'grommet';
 import moment from 'moment';
@@ -8,6 +8,9 @@ import Spinner from 'react-spinkit';
 import {Store as S} from 'undux';
 import {History, LocationState} from 'history';
 import {QuickTermQuoteResult} from 'insuqo-shared';
+import {AuthenticationService} from "../../../../services/authentication.service";
+import {ClientAuthentication} from "../../../../controllers/sign-up/ClientAuthentication";
+import {CognitoUser} from "amazon-cognito-identity-js";
 
 interface ResultsProps {
     store: S<any>;
@@ -30,7 +33,7 @@ const styles = {
 
 const frequencies = [
     {val: 'month', name: 'Monthly'},
-    {val: 'quarter', name: 'Quarterly'} ,
+    {val: 'quarter', name: 'Quarterly'},
     {val: 'semiannual', name: 'Semi-annually'},
     {val: 'annual', name: 'Annually'}];
 
@@ -41,7 +44,8 @@ class Results extends Component<ResultsProps> {
         quotes: [],
         active: 0,
         freq: 'month',
-        freqLabel: 'Monthly'
+        freqLabel: 'Monthly',
+        showAuthModal: false,
     };
 
     getQuotes = () => {
@@ -62,16 +66,16 @@ class Results extends Component<ResultsProps> {
         const cannabis = store.get('cannabis');
         const healthType = tobacco || cannabis ? 'preferred_smoker' : 'preferred_non_smoker';
 
-        return QuoteService.getQuote(stateCode,actualAge,nearestAge,covAmount,termLength,healthType,sex,rider,10);
+        return QuoteService.getQuote(stateCode, actualAge, nearestAge, covAmount, termLength, healthType, sex, rider, 10);
     };
 
     componentDidMount = () => {
-        if(localStorage.getItem('quotes_ran') === 'true') {
+        if (localStorage.getItem('quotes_ran') === 'true') {
             const q = localStorage.getItem('quotes');
-            if(q !== undefined && q !== null) this.setState({loading: false, quotes: JSON.parse(q!)});
+            if (q !== undefined && q !== null) this.setState({loading: false, quotes: JSON.parse(q!)});
         } else {
             this.getQuotes().then(res => {
-                if(res.status === 404) {
+                if (res.status === 404) {
                     console.log('show an error here');
                 } else {
                     localStorage.setItem('quotes_ran', 'true');
@@ -85,13 +89,13 @@ class Results extends Component<ResultsProps> {
     };
 
     formatRider = (quote: QuickTermQuoteResult) => {
-        if(Number(quote.AnnualADBPremium) !== 0) {
+        if (Number(quote.AnnualADBPremium) !== 0) {
             return 'Accidental Death Rider';
-        } else if(Number(quote.AnnualChildRiderPremium) !== 0) {
+        } else if (Number(quote.AnnualChildRiderPremium) !== 0) {
             return 'Child Rider';
-        } else if(Number(quote.AnnualReturnOfPremiumPremium) !== 0) {
+        } else if (Number(quote.AnnualReturnOfPremiumPremium) !== 0) {
             return 'Return of Premium';
-        } else if(Number(quote.AnnualWaiverOfPremiumPremium) !== 0) {
+        } else if (Number(quote.AnnualWaiverOfPremiumPremium) !== 0) {
             return 'Waiver of Premium';
         }
         return 'None';
@@ -112,12 +116,12 @@ class Results extends Component<ResultsProps> {
     };
 
     formatQuotes = (freq: string) => {
-        const { quotes } = this.state;
-        if(quotes === undefined || quotes.length === 0) {
+        const {quotes} = this.state;
+        if (quotes === undefined || quotes.length === 0) {
             return <div/>;
         }
         return quotes.map((quote, index) => {
-            return(
+            return (
                 <AccordionPanel key={index} label={this.formatQuoteHeading(quote, index, freq)}>
                     {this.formatQuoteBody(quote, index, freq)}
                 </AccordionPanel>
@@ -126,24 +130,32 @@ class Results extends Component<ResultsProps> {
     };
 
     formatQuoteBody = (quote: QuickTermQuoteResult, index: number, freq: string) => {
-        const { active } = this.state;
-        return(
+        const {active} = this.state;
+        return (
             <Box>
                 <Box style={{backgroundColor: '#F5F5F5', padding: 10}}>
                     <Box direction="row-responsive">
                         <Box style={{width: '50%'}}>
-                            <Heading level={3}>Provider<Paragraph style={{color: '#9c37f2'}}>{quote.CompanyName}</Paragraph></Heading>
-                            <Heading level={3}>Coverage<Paragraph style={{color: '#9c37f2'}}>$ {formatCovAmount(quote.FaceAmount)}</Paragraph></Heading>
-                            <Heading level={3}>Product Name<Paragraph style={{color: '#9c37f2'}}>{quote.ProductName}</Paragraph></Heading>
+                            <Heading level={3}>Provider<Paragraph
+                                style={{color: '#9c37f2'}}>{quote.CompanyName}</Paragraph></Heading>
+                            <Heading level={3}>Coverage<Paragraph
+                                style={{color: '#9c37f2'}}>$ {formatCovAmount(quote.FaceAmount)}</Paragraph></Heading>
+                            <Heading level={3}>Product Name<Paragraph
+                                style={{color: '#9c37f2'}}>{quote.ProductName}</Paragraph></Heading>
                         </Box>
                         <Box style={{width: '50%', marginTop: 10, paddingRight: 10}}>
-                            <Heading level={3}>Term Length<Paragraph style={{color: '#9c37f2'}}>{quote.Term} Years</Paragraph></Heading>
-                            <Heading level={3}>AMBest Rating <Anchor label="(?)"/><Paragraph style={{color: '#9c37f2'}}>{quote.AMBest}</Paragraph></Heading>
-                            <Heading level={3}>Features<Paragraph style={{color: '#9c37f2'}}>{this.formatRider(quote)}</Paragraph></Heading>
+                            <Heading level={3}>Term Length<Paragraph
+                                style={{color: '#9c37f2'}}>{quote.Term} Years</Paragraph></Heading>
+                            <Heading level={3}>AMBest Rating <Anchor label="(?)"/><Paragraph
+                                style={{color: '#9c37f2'}}>{quote.AMBest}</Paragraph></Heading>
+                            <Heading level={3}>Features<Paragraph
+                                style={{color: '#9c37f2'}}>{this.formatRider(quote)}</Paragraph></Heading>
                         </Box>
                     </Box>
-                    <Box style={{ width: '100%' ,maxWidth: 300}} alignSelf="center">
-                        <Button primary={active === index} onClick={(event: any) => {this.apply(quote, event);}} fill={false} hoverIndicator="#EAC4FF" label="APPLY"/>
+                    <Box style={{width: '100%', maxWidth: 300}} alignSelf="center">
+                        <Button primary={active === index} onClick={(event: any) => {
+                            this.apply(quote, event);
+                        }} fill={false} hoverIndicator="#EAC4FF" label="APPLY"/>
                     </Box>
                 </Box>
             </Box>
@@ -186,8 +198,17 @@ class Results extends Component<ResultsProps> {
                         <Box direction="row" style={{height: 50}} align="center">
                             <span>$</span>
                             <span style={{fontSize: 40, fontWeight: 'bold'}}>{splitPremium[0]}</span>
-                            <span style={{fontSize: 20, verticalAlign: 'top', fontWeight: 'bold'}}>{splitPremium[1]}</span>
-                            <span style={{fontSize: 20, fontWeight: 'bold', verticalAlign: 'bottom', color: '#888'}}>&nbsp;{this.formatShortFreqType(freq)}</span>
+                            <span style={{
+                                fontSize: 20,
+                                verticalAlign: 'top',
+                                fontWeight: 'bold'
+                            }}>{splitPremium[1]}</span>
+                            <span style={{
+                                fontSize: 20,
+                                fontWeight: 'bold',
+                                verticalAlign: 'bottom',
+                                color: '#888'
+                            }}>&nbsp;{this.formatShortFreqType(freq)}</span>
                         </Box>
                     </Box>
                 </Box>
@@ -199,11 +220,26 @@ class Results extends Component<ResultsProps> {
         this.setState({active: active[0]});
     };
 
-    apply = (quote: QuickTermQuoteResult, event: any) => {
+    apply = async (quote: QuickTermQuoteResult, event: any) => {
         event.preventDefault();
-        this.props.store.set('quote')(quote);
-        localStorage.setItem('quote', JSON.stringify(quote));
-        this.props.history.push('/application');
+        try {
+            const userSession = await AuthenticationService.getCurrentSession();
+            if (userSession.isValid()) {
+                this.props.store.set('quote')(quote);
+                localStorage.setItem('quote', JSON.stringify(quote));
+                this.props.history.push('/application');
+            } else {
+                // noinspection ExceptionCaughtLocallyJS
+                throw new Error('Session is invalid');
+            }
+        } catch (err) {
+            this.setState({showAuthModal: true});
+        }
+    };
+
+    handleAuthentication = (user: CognitoUser) => {
+        // save user?
+        // Persist quotes to the user
     };
 
     updateFreq = (newFreq: any) => {
@@ -211,7 +247,7 @@ class Results extends Component<ResultsProps> {
     };
 
     render = () => {
-        const { active, loading, freq } = this.state;
+        const {active, loading, freq, showAuthModal} = this.state;
         return (
             <Box fill>
                 {loading ?
@@ -220,17 +256,22 @@ class Results extends Component<ResultsProps> {
                     </Box> :
                     <Box>
                         <Heading margin="xsmall" level={1} color="#9c37f2">Here are your quotes</Heading>
-                        <Heading margin="xsmall" style={styles.quoteSubtitle} color="dark-4" level={3}>Click on each for more info.</Heading>
+                        <Heading margin="xsmall" style={styles.quoteSubtitle} color="dark-4" level={3}>Click on each for
+                            more info.</Heading>
                         <Box background={{color: '#FFFFFF'}} direction="row-responsive" justify="end" align="center">
                             <Heading margin="xsmall" level={5}>Choose payment frequency: </Heading>
                             {/* eslint-disable-next-line react/no-children-prop */}
-                            <select value={freq} onChange={this.updateFreq} children={frequencies.map((option, index) => <option value={option.val} key={index}>{option.name}</option>)}/>
+                            <select value={freq} onChange={this.updateFreq}
+                                    children={frequencies.map((option, index) => <option value={option.val}
+                                                                                         key={index}>{option.name}</option>)}/>
                         </Box>
                         <Box style={{paddingLeft: 5, paddingRight: 5}}>
-                            <Accordion animate={false} onActive={this.updateActiveIndex} activeIndex={loading ? undefined : active}>
+                            <Accordion animate={false} onActive={this.updateActiveIndex}
+                                       activeIndex={loading ? undefined : active}>
                                 {this.formatQuotes(freq)}
                             </Accordion>
                         </Box>
+                        {showAuthModal && <ClientAuthentication type="signup" onAuthenticate={this.handleAuthentication}/>}
                     </Box>
                 }
             </Box>

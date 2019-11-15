@@ -4,8 +4,11 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import Amplify from 'aws-amplify';
+import awsconfig from './aws-exports';
 
 console.log(process.env);
+Amplify.configure(awsconfig);
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
