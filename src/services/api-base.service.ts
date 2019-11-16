@@ -21,8 +21,10 @@ export class ApiBaseService {
         })).data;
     }
 
-    protected async get<T>(endpoint: string): Promise<ApiResponse<T>> {
-        return (await axios.get<ApiResponse<T>>(ApiBaseService.buildURL(endpoint))).data;
+    protected async get<T>(endpoint: string, queryParams?: any): Promise<ApiResponse<T>> {
+        return (await axios.get<ApiResponse<T>>(ApiBaseService.buildURL(endpoint), {
+            params: queryParams
+        })).data;
     }
 
     private static async getAuthHeader(): Promise<string> {

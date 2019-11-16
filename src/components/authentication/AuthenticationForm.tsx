@@ -3,12 +3,13 @@ import './AuthenticationForm.scss';
 import {Formik, FormikValues} from "formik";
 import {Button, TextInput} from "grommet";
 import {Validator} from "../../services/Validator";
+import {AuthChallengeName} from "insuqo-shared/types/auth-challenge-name";
 
 interface AuthenticationFormProps {
     onSubmit: (...args: any) => unknown;
     type: 'login' | 'signup' | 'challenge';
     modal?: boolean;
-    challengeName?: string;
+    challengeName?: AuthChallengeName | string;
 }
 
 interface SubFormProps {
@@ -17,7 +18,7 @@ interface SubFormProps {
 
 interface ChallengeFormProps {
     onSubmit: (challengeResponse: string) => any;
-    challengeName: string;
+    challengeName: AuthChallengeName | string;
 }
 
 export const AuthenticationForm: React.FunctionComponent<AuthenticationFormProps> = (props) => {

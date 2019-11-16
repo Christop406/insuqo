@@ -50,12 +50,12 @@ class Results extends Component<ResultsProps> {
 
     getQuotes = () => {
         const store = this.props.store;
-        const stateCode = store.get('stateCode') || 'CA';
-        const birthdate = store.get('birthdate') || '12/21/1997';
-        const sex = store.get('sex') || 'male';
-        const covAmount = store.get('covAmount') || 100000;
-        const termLength = store.get('termLength') || 20;
-        const rider = store.get('rider') || 'none';
+        const stateCode = store.get('stateCode');
+        const birthdate = store.get('birthdate');
+        const sex = store.get('sex');
+        const covAmount = store.get('covAmount');
+        const termLength = store.get('termLength');
+        const rider = store.get('rider');
 
         const now = moment();
         const birthTime = moment(birthdate, 'MM/DD/YYYY');
@@ -66,25 +66,26 @@ class Results extends Component<ResultsProps> {
         const cannabis = store.get('cannabis');
         const healthType = tobacco || cannabis ? 'preferred_smoker' : 'preferred_non_smoker';
 
-        return QuoteService.getQuote(stateCode, actualAge, nearestAge, covAmount, termLength, healthType, sex, rider, 10);
+        return (new QuoteService()).runQuotes(stateCode, actualAge, nearestAge, covAmount, termLength, healthType, sex, rider, 10);
     };
 
-    componentDidMount = () => {
-        if (localStorage.getItem('quotes_ran') === 'true') {
-            const q = localStorage.getItem('quotes');
-            if (q !== undefined && q !== null) this.setState({loading: false, quotes: JSON.parse(q!)});
+    componentDidMount = async () => {
+        let quoteKey = localStorage.getItem('quoteKey');
+        if (quoteKey) {
+            const quotes = await new QuoteService().getQuotesByKey(quoteKey);
+            this.setState({quotes});
+            // if (q !== undefined && q !== null) this.setState({loading: false, quotes: JSON.parse(q!)});
         } else {
-            this.getQuotes().then(res => {
-                if (res.status === 404) {
-                    console.log('show an error here');
-                } else {
-                    localStorage.setItem('quotes_ran', 'true');
-                    // todo - handle errors
-                    const data = res.data.quotes;
-                    this.setState({loading: false, quotes: data});
-                    localStorage.setItem('quotes', JSON.stringify(data));
-                }
-            });
+            try {
+                const newQuotes = await this.getQuotes();
+                console.log(newQuotes);
+                quoteKey = newQuotes.data!.key;
+                this.setState({loading: false, quoteKey, quotes: newQuotes.data!.quotes});
+                localStorage.setItem('quoteKey', JSON.stringify(quoteKey));
+            } catch (error) {
+                console.error(error);
+                throw error;
+            }
         }
     };
 
@@ -271,7 +272,8 @@ class Results extends Component<ResultsProps> {
                                 {this.formatQuotes(freq)}
                             </Accordion>
                         </Box>
-                        {showAuthModal && <ClientAuthentication type="signup" onAuthenticate={this.handleAuthentication}/>}
+                        {showAuthModal &&
+						<ClientAuthentication type="signup" onAuthenticate={this.handleAuthentication}/>}
                     </Box>
                 }
             </Box>

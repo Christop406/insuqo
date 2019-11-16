@@ -37,19 +37,19 @@ const styles = {
 
 class Main extends Component {
     componentDidMount = () => {
-        var store = this.props.store;
-        fillStoreFromLocalStorage(store).then(() => {
-            this.forceUpdate();
-        }, rejected => {
-            this.props.history.push("/quote");
-        });
-
-        store.onAll().subscribe(({key, value}) => {
-            localStorage.setItem("store_persisted", "true");
-            localStorage.setItem("quotes_ran", "false");
-            // console.log('persisting', key, value);
-            localStorage.setItem(key, value);
-        });
+        // var store = this.props.store;
+        // fillStoreFromLocalStorage(store).then(() => {
+        //     this.forceUpdate();
+        // }, rejected => {
+        //     this.props.history.push("/quote");
+        // });
+        //
+        // store.onAll().subscribe(({key, value}) => {
+        //     localStorage.setItem("store_persisted", "true");
+        //     localStorage.setItem("quotes_ran", "false");
+        //     // console.log('persisting', key, value);
+        //     localStorage.setItem(key, value);
+        // });
 
     };
 
