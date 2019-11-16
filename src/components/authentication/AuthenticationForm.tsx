@@ -1,14 +1,13 @@
 import React from 'react';
-import './AuthenticationForm.scss';
+import s from './AuthenticationForm.module.scss';
 import {Formik, FormikValues} from "formik";
-import {Button, TextInput} from "grommet";
 import {Validator} from "../../services/Validator";
 import {AuthChallengeName} from "insuqo-shared/types/auth-challenge-name";
 
 interface AuthenticationFormProps {
     onSubmit: (...args: any) => unknown;
     type: 'login' | 'signup' | 'challenge';
-    modal?: boolean;
+    // modal?: boolean;
     challengeName?: AuthChallengeName | string;
 }
 
@@ -23,7 +22,7 @@ interface ChallengeFormProps {
 
 export const AuthenticationForm: React.FunctionComponent<AuthenticationFormProps> = (props) => {
     return (
-        <div className={props.modal ? 'modal-container' : ''}>
+        <div className={s['authentication-form']}>
             {props.type === 'signup' && <SignUpForm {...props}/>}
             {props.type === 'login' && <LoginForm {...props}/>}
             {props.type === 'challenge' && <ChallengeForm challengeName={props.challengeName!} {...props}/>}
@@ -35,16 +34,18 @@ const ChallengeForm: React.FunctionComponent<ChallengeFormProps> = (props) => {
     return (
         <Formik onSubmit={(values) => props.onSubmit(values.challengeResponse)} initialValues={{challengeResponse: ''}}>
             {({
-                values,
-                errors,
-                touched,
-                handleChange,
-                handleBlur,
-                handleSubmit,
-                isSubmitting
-            }) =>
+                  values,
+                  errors,
+                  touched,
+                  handleChange,
+                  handleBlur,
+                  handleSubmit,
+                  isSubmitting
+              }) =>
                 <form className="auth-container" onSubmit={handleSubmit}>
-                    <TextInput
+                    <span>Your Code</span>
+                    <input
+                        className={`${s.input} input`}
                         placeholder="Code"
                         type="text"
                         name="challengeResponse"
@@ -52,7 +53,7 @@ const ChallengeForm: React.FunctionComponent<ChallengeFormProps> = (props) => {
                         onBlur={handleBlur}
                         value={values.challengeResponse}
                     />
-                    <Button primary fill disabled={isSubmitting} type="submit">Submit</Button>
+                    <button className={`${s['submit-button']} full primary button`} disabled={isSubmitting} type="submit">Submit</button>
                 </form>
             }
         </Formik>
@@ -89,33 +90,40 @@ const SignUpForm: React.FunctionComponent<SubFormProps> = (props) => {
                   isSubmitting
               }) =>
                 <form className="auth-container" onSubmit={handleSubmit}>
-                    <TextInput
-                        placeholder="Email"
+                    <span className={s['form-label']}>Email Address</span>
+                    <input
+                        className={`${s.input} input`}
                         type="email"
+                        placeholder="Email"
                         name="email"
                         onChange={handleChange}
                         onBlur={handleBlur}
-                        value={values.email}/>
+                        value={values.email}
+                    />
                     <span className="error-text">{errors && errors.email}</span>
-                    <TextInput
-                        placeholder="Password"
+                    <span className={s['form-label']}>Password</span>
+                    <input
+                        className={`${s.input} input`}
                         type="password"
+                        placeholder="Password"
                         name="password"
                         onChange={handleChange}
                         onBlur={handleBlur}
                         value={values.password}
                     />
                     <span className="error-text">{errors && errors.password}</span>
-                    <TextInput
-                        placeholder="Confirm Password"
+                    <span className={s['form-label']}>Confirm Password</span>
+                    <input
+                        className={`${s.input} input`}
                         type="password"
+                        placeholder="Confirm Password"
                         name="passwordConf"
                         onChange={handleChange}
                         onBlur={handleBlur}
                         value={values.passwordConf}
                     />
                     <span className="error-text">{errors && errors.passwordConf}</span>
-                    <Button primary fill disabled={isSubmitting} type="submit">Submit</Button>
+                    <button className={`${s['submit-button']} full primary button`} disabled={isSubmitting} type="submit">Submit</button>
                 </form>
             }
         </Formik>
@@ -149,24 +157,27 @@ const LoginForm: React.FunctionComponent<SubFormProps> = (props) => {
                   isSubmitting
               }) =>
                 <form className="auth-container" onSubmit={handleSubmit}>
-                    <TextInput
-                        placeholder="Email"
+                    <input
+                        className={`${s.input} input`}
                         type="email"
+                        placeholder="Email"
                         name="email"
                         onChange={handleChange}
                         onBlur={handleBlur}
-                        value={values.email}/>
+                        value={values.email}
+                    />
                     <span className="error-text">{errors && errors.email}</span>
-                    <TextInput
-                        placeholder="Password"
+                    <input
+                        className={`${s.input} input`}
                         type="password"
+                        placeholder="Password"
                         name="password"
                         onChange={handleChange}
                         onBlur={handleBlur}
                         value={values.password}
                     />
                     <span className="error-text">{errors && errors.password}</span>
-                    <Button primary fill disabled={isSubmitting} type="submit">Log In</Button>
+                    <button className={`${s['submit-button']} full primary button`} disabled={isSubmitting} type="submit">Submit</button>
                 </form>
             }
         </Formik>

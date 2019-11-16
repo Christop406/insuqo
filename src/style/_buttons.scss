@@ -1,0 +1,29 @@
+@import 'variables';
+
+.button {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  border-radius: $border-radius-input;
+  border: 1px transparent solid;
+  background-color: transparent;
+
+  &.full {
+    width: 100%;
+  }
+
+  &.primary:not(.outline):not(.text) {
+    background-color: $color-primary;
+    color: $text-light;
+  }
+
+  &.primary.outline {
+    border-color: $color-primary;
+  }
+
+  &.primary.text {
+    color: $color-primary;
+  }
+}

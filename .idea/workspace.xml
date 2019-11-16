@@ -5,14 +5,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8d5e87d4-159a-4544-ad37-0e170308d0d6" name="Default Changelist" comment="Updated quote service, got rid of automatic local storage persistence, got rid of default quote values, and now save only the quote key instead of all the quotes">
-      <change afterPath="$PROJECT_DIR$/src/model/dynamo-quote.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/authentication/AuthenticationForm.module.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/style/_buttons.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/style/_input.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/style/_variables.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/style/global.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Main.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.css.map" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.css.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/authentication/AuthenticationForm.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/authentication/AuthenticationForm.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/sign-up/ClientAuthentication.module.scss" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/authentication/AuthenticationForm.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/authentication/AuthenticationForm.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/quote/panes/results/results.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/quote/panes/results/results.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controllers/sign-up/ClientAuthentication.scss" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/controllers/sign-up/ClientAuthentication.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/sign-up/ClientAuthentication.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/services/api-base.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/api-base.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/services/quote.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/quote.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/style/mixins.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/style/_mixins.scss" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -29,8 +39,8 @@
         <option value="CSS File" />
         <option value="JavaScript File" />
         <option value="TypeScript JSX File" />
-        <option value="SCSS File" />
         <option value="TypeScript File" />
+        <option value="SCSS File" />
       </list>
     </option>
   </component>
@@ -207,14 +217,7 @@
       <workItem from="1571710973995" duration="704000" />
       <workItem from="1572404455174" duration="8702000" />
       <workItem from="1572823457766" duration="17567000" />
-      <workItem from="1573539532062" duration="21630000" />
-    </task>
-    <task id="LOCAL-00036" summary="Fix Scrollbars on /results">
-      <created>1548193460065</created>
-      <option name="number" value="00036" />
-      <option name="presentableId" value="LOCAL-00036" />
-      <option name="project" value="LOCAL" />
-      <updated>1548193460065</updated>
+      <workItem from="1573539532062" duration="29842000" />
     </task>
     <task id="LOCAL-00037" summary="Beneficiary List Working">
       <created>1548367219471</created>
@@ -552,17 +555,15 @@
       <option name="project" value="LOCAL" />
       <updated>1573803828944</updated>
     </task>
-    <option name="localTasksCounter" value="85" />
+    <task id="LOCAL-00085" summary="Updated quote service, got rid of automatic local storage persistence, got rid of default quote values, and now save only the quote key instead of all the quotes">
+      <created>1573920799297</created>
+      <option name="number" value="00085" />
+      <option name="presentableId" value="LOCAL-00085" />
+      <option name="project" value="LOCAL" />
+      <updated>1573920799300</updated>
+    </task>
+    <option name="localTasksCounter" value="86" />
     <servers />
-  </component>
-  <component name="TodoView">
-    <todo-panel id="selected-file">
-      <is-autoscroll-to-source value="true" />
-    </todo-panel>
-    <todo-panel id="all">
-      <are-packages-shown value="true" />
-      <is-autoscroll-to-source value="true" />
-    </todo-panel>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
@@ -581,7 +582,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Re-did some formatting, began validation" />
     <MESSAGE value="Began Application Status Page" />
     <MESSAGE value="Added Wireframe App Status Page" />
     <MESSAGE value="Accept 201 on Application Submit" />
@@ -606,6 +606,7 @@
     <MESSAGE value="TypeScript ALL the things" />
     <MESSAGE value="Added amplify, added linter rules, re-styled application status page, broke application status into a separate component." />
     <MESSAGE value="Added basic authentication controller with support for login/sign up&#10;TODO: Auth challenges on login" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added basic authentication controller with support for login/sign up&#10;TODO: Auth challenges on login" />
+    <MESSAGE value="Updated quote service, got rid of automatic local storage persistence, got rid of default quote values, and now save only the quote key instead of all the quotes" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated quote service, got rid of automatic local storage persistence, got rid of default quote values, and now save only the quote key instead of all the quotes" />
   </component>
 </project>

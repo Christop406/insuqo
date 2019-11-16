@@ -1,6 +1,6 @@
 @import '~antd/dist/antd.css';
-
-$primary-color: #9c37f2;
+@import './style/global';
+@import './style/variables';
 
 .App {
   text-align: center;

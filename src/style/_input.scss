@@ -1,0 +1,16 @@
+@import 'variables';
+
+.input {
+  outline: none;
+  width: 100%;
+  border: 1px rgba(#000, 0.2) solid;
+  border-radius: $border-radius-input;
+  padding: 5px;
+
+  transition: 0.2s all ease;
+
+  &:focus {
+    border-color: $color-primary;
+    color: $text-dark;
+  }
+}

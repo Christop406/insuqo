@@ -1,0 +1,15 @@
+@import '../../style/mixins';
+
+.authentication-form {
+  .input {
+    margin: 0 0 5px 0;
+  }
+
+  .submit-button {
+    margin-top: 5px;
+  }
+}
+
+.form-label {
+  display: flex;
+}

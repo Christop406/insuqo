@@ -1,5 +1,5 @@
 import React from 'react';
-import './ClientAuthentication.scss';
+import s from './ClientAuthentication.module.scss';
 import {AuthenticationForm} from "../../components/authentication/AuthenticationForm";
 import {AuthenticationService} from "../../services/authentication.service";
 import {CognitoUser} from "amazon-cognito-identity-js";
@@ -17,6 +17,8 @@ interface ClientAuthenticationState {
     authChallengeRequired: boolean;
     authChallengeName?: AuthChallengeName;
     email: string;
+    title: string;
+    description?: string;
 }
 
 export class ClientAuthentication extends React.Component<ClientAuthenticationProps, ClientAuthenticationState> {
@@ -28,12 +30,17 @@ export class ClientAuthentication extends React.Component<ClientAuthenticationPr
         userNeedsConfirmation: false,
         authChallengeRequired: false,
         authChallengeName: undefined,
-        email: ''
+        email: '',
+        title: this.props.type === 'login' ? 'Log In' : 'Sign Up'
     };
 
     public signUp = async (email: string, password: string) => {
         const signUpRes = await AuthenticationService.signUp(email, password);
         this.setState({userNeedsConfirmation: !signUpRes.userConfirmed, email});
+
+        if (signUpRes.userConfirmed && this.props.onAuthenticate) {
+            this.props.onAuthenticate(signUpRes.user);
+        }
     };
 
     public logIn = async (email: string, password: string) => {
@@ -84,26 +91,32 @@ export class ClientAuthentication extends React.Component<ClientAuthenticationPr
 
     public switchPaneType = () => {
         const {paneType} = this.state;
-        this.setState({paneType: paneType === 'login' ? 'signup' : 'login'});
+        const isLogin = paneType === 'login';
+        this.setState({
+            paneType: isLogin ? 'signup' : 'login',
+            title: !isLogin ? 'Log In' : 'Sign Up'
+        });
     };
 
     public render = (): React.ReactElement | any => {
-        const {paneType, userNeedsConfirmation, authChallengeRequired, authChallengeName} = this.state;
+        const {paneType, userNeedsConfirmation, authChallengeRequired, authChallengeName, title} = this.state;
         return (
-            <>
-                {paneType === 'signup' && <AuthenticationForm
-					modal
-					type={userNeedsConfirmation ? 'challenge' : 'signup'}
-					onSubmit={userNeedsConfirmation ? this.sendConfirmation : this.signUp}/>}
-                {paneType === 'login' &&
-				<AuthenticationForm
-					modal
-					onSubmit={authChallengeRequired ? this.answerAuthChallenge : this.logIn}
-					challengeName={authChallengeName}
-					type={authChallengeRequired ? 'challenge' : 'login'}/>}
-                <button className="mode-switcher" onClick={this.switchPaneType}>Switch
-                    to {paneType === 'login' ? 'Sign Up' : 'Log In'}</button>
-            </>
+            <div className={s['modal-container']}>
+                <div className={s['auth-container']}>
+                    <h2>{title}</h2>
+                    {paneType === 'signup' &&
+					<AuthenticationForm
+						type={userNeedsConfirmation ? 'challenge' : 'signup'}
+						onSubmit={userNeedsConfirmation ? this.sendConfirmation : this.signUp}/>}
+                    {paneType === 'login' &&
+					<AuthenticationForm
+						onSubmit={authChallengeRequired ? this.answerAuthChallenge : this.logIn}
+						challengeName={authChallengeName}
+						type={authChallengeRequired ? 'challenge' : 'login'}/>}
+                    <button className={`${s['mode-switcher']} full primary text button`} onClick={this.switchPaneType}>Switch
+                        to {paneType === 'login' ? 'Sign Up' : 'Log In'}</button>
+                </div>
+            </div>
         );
     };
 }

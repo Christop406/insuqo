@@ -73,7 +73,7 @@ class Results extends Component<ResultsProps> {
         let quoteKey = localStorage.getItem('quoteKey');
         if (quoteKey) {
             const quotes = await new QuoteService().getQuotesByKey(quoteKey);
-            this.setState({quotes});
+            this.setState({quotes, loading: false});
             // if (q !== undefined && q !== null) this.setState({loading: false, quotes: JSON.parse(q!)});
         } else {
             try {
@@ -272,7 +272,7 @@ class Results extends Component<ResultsProps> {
                                 {this.formatQuotes(freq)}
                             </Accordion>
                         </Box>
-                        {showAuthModal &&
+                        {(showAuthModal || true) &&
 						<ClientAuthentication type="signup" onAuthenticate={this.handleAuthentication}/>}
                     </Box>
                 }
