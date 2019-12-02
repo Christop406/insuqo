@@ -26,7 +26,7 @@ export class QuoteService extends ApiBaseService {
             return Promise.reject("undefined_data");
         }
 
-        return this.get("/quotes/get", {
+        return this.get("/quotes/run", {
             state: state,
             actualAge: actualAge,
             nearestAge: nearestAge,

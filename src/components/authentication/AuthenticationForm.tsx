@@ -1,8 +1,10 @@
 import React from 'react';
 import s from './AuthenticationForm.module.scss';
-import {Formik, FormikValues} from "formik";
+import {Formik, FormikErrors, FormikValues} from "formik";
 import {Validator} from "../../services/Validator";
 import {AuthChallengeName} from "insuqo-shared/types/auth-challenge-name";
+import {PasswordSecurity} from "../password-security/PasswordSecurity";
+import * as Yup from 'yup';
 
 interface AuthenticationFormProps {
     onSubmit: (...args: any) => unknown;
@@ -53,7 +55,9 @@ const ChallengeForm: React.FunctionComponent<ChallengeFormProps> = (props) => {
                         onBlur={handleBlur}
                         value={values.challengeResponse}
                     />
-                    <button className={`${s['submit-button']} full primary button`} disabled={isSubmitting} type="submit">Submit</button>
+                    <button className={`${s['submit-button']} full primary button`} disabled={isSubmitting}
+                            type="submit">Submit
+                    </button>
                 </form>
             }
         </Formik>
@@ -62,13 +66,100 @@ const ChallengeForm: React.FunctionComponent<ChallengeFormProps> = (props) => {
 
 const SignUpForm: React.FunctionComponent<SubFormProps> = (props) => {
     const validateSignUpForm = (values: FormikValues) => {
-        const errors: typeof values = {};
-        const passValidationResult = Validator.validatePassword(values.password);
+        const errors: FormikErrors<{
+            email: string;
+            password: string[];
+            passwordConf?: string;
+        }> = {};
+
+        try {
+            Yup.string().email('Invalid email').validateSync(values.email);
+        } catch (err) {
+            errors.email = err.message;
+        }
+
+        const passValidationResult = Validator.validatePassword(values.password || '');
         if (passValidationResult.length > 0) {
-            errors.password = passValidationResult.join();
+            errors.password = passValidationResult || [];
         }
         if (values.password !== values.passwordConf) {
             errors.passwordConf = 'Passwords must match.';
+        }
+        return errors;
+    };
+
+    return (
+        <Formik
+            validateOnChange
+            validate={validateSignUpForm}
+            initialValues={{email: '', password: '', passwordConf: ''}}
+            onSubmit={(values) => props.onSubmit(values.email, values.password)}
+        >
+            {({
+                  values,
+                  errors,
+                  touched,
+                  handleChange,
+                  handleBlur,
+                  handleSubmit,
+                  isSubmitting,
+                  isValid
+              }) =>
+                <form className="auth-container" onSubmit={handleSubmit}>
+                    <span className={s['form-label']}>Email Address</span>
+                    <input
+                        className={`${s.input} input`}
+                        type="email"
+                        placeholder="Email"
+                        name="email"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.email}
+                    />
+                    <span className="error-text">{errors && errors.email}</span>
+                    <span className={s['form-label']}>Password</span>
+                    <input
+                        className={`${s.input} input`}
+                        type="password"
+                        placeholder="Password"
+                        name="password"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.password}
+                    />
+                    <PasswordSecurity valid={isValid} requirements={errors.password as any}/>
+                    <span className={s['form-label']}>Confirm Password</span>
+                    <input
+                        className={`${s.input} input`}
+                        type="password"
+                        placeholder="Confirm Password"
+                        name="passwordConf"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.passwordConf}
+                    />
+                    <span className="error-text">{errors && errors.passwordConf}</span>
+                    <button className={`${s['submit-button']} full primary button`} disabled={isSubmitting}
+                            type="submit">Submit
+                    </button>
+                </form>
+            }
+        </Formik>
+    );
+};
+
+const LoginForm: React.FunctionComponent<SubFormProps> = (props) => {
+    const validateSignUpForm = (values: FormikValues) => {
+        const errors: typeof values = {};
+
+        try {
+            Yup.string().email('Invalid email').validateSync(values.email);
+        } catch (err) {
+            errors.email = err.message;
+        }
+
+        if (values.password.length < 8) {
+            errors.password = 'Please enter a valid password';
         }
         return errors;
     };
@@ -112,72 +203,9 @@ const SignUpForm: React.FunctionComponent<SubFormProps> = (props) => {
                         value={values.password}
                     />
                     <span className="error-text">{errors && errors.password}</span>
-                    <span className={s['form-label']}>Confirm Password</span>
-                    <input
-                        className={`${s.input} input`}
-                        type="password"
-                        placeholder="Confirm Password"
-                        name="passwordConf"
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        value={values.passwordConf}
-                    />
-                    <span className="error-text">{errors && errors.passwordConf}</span>
-                    <button className={`${s['submit-button']} full primary button`} disabled={isSubmitting} type="submit">Submit</button>
-                </form>
-            }
-        </Formik>
-    );
-};
-
-const LoginForm: React.FunctionComponent<SubFormProps> = (props) => {
-    const validateSignUpForm = (values: FormikValues) => {
-        const errors: typeof values = {};
-        const passValidationResult = Validator.validatePassword(values.password);
-        if (passValidationResult.length > 0) {
-            errors.password = passValidationResult.join();
-        }
-        return errors;
-    };
-
-    return (
-        <Formik
-            validateOnChange
-            validate={validateSignUpForm}
-            initialValues={{email: '', password: '', passwordConf: ''}}
-            onSubmit={(values) => props.onSubmit(values.email, values.password)}
-        >
-            {({
-                  values,
-                  errors,
-                  touched,
-                  handleChange,
-                  handleBlur,
-                  handleSubmit,
-                  isSubmitting
-              }) =>
-                <form className="auth-container" onSubmit={handleSubmit}>
-                    <input
-                        className={`${s.input} input`}
-                        type="email"
-                        placeholder="Email"
-                        name="email"
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        value={values.email}
-                    />
-                    <span className="error-text">{errors && errors.email}</span>
-                    <input
-                        className={`${s.input} input`}
-                        type="password"
-                        placeholder="Password"
-                        name="password"
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        value={values.password}
-                    />
-                    <span className="error-text">{errors && errors.password}</span>
-                    <button className={`${s['submit-button']} full primary button`} disabled={isSubmitting} type="submit">Submit</button>
+                    <button className={`${s['submit-button']} full primary button`} disabled={isSubmitting}
+                            type="submit">Submit
+                    </button>
                 </form>
             }
         </Formik>

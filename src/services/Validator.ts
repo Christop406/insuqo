@@ -2,6 +2,9 @@ import PasswordValidator from 'password-validator';
 
 export class Validator {
     public static validatePassword(password: string): string[] {
+        if(password === '') {
+            return ['empty'];
+        }
         return this.getPasswordSchema().validate(password, {list: true}) as string[];
     }
 

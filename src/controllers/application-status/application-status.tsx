@@ -5,7 +5,7 @@ import './status.scss';
 import {Store as S} from 'undux';
 import {RouteComponentProps} from 'react-router-dom';
 import {ApplicationService} from '../../services/application.service';
-import {ApplicationStatusView} from '../../components/ApplicationStatusView/ApplicationStatusView';
+import {ApplicationStatusView} from '../../components/application/ApplicationStatusView/ApplicationStatusView';
 import {ApplicationStatus} from 'insuqo-shared';
 
 declare type AppStatusProps = {

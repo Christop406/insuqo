@@ -81,7 +81,7 @@ class Results extends Component<ResultsProps> {
                 console.log(newQuotes);
                 quoteKey = newQuotes.data!.key;
                 this.setState({loading: false, quoteKey, quotes: newQuotes.data!.quotes});
-                localStorage.setItem('quoteKey', JSON.stringify(quoteKey));
+                localStorage.setItem('quoteKey', quoteKey);
             } catch (error) {
                 console.error(error);
                 throw error;
@@ -230,7 +230,6 @@ class Results extends Component<ResultsProps> {
                 localStorage.setItem('quote', JSON.stringify(quote));
                 this.props.history.push('/application');
             } else {
-                // noinspection ExceptionCaughtLocallyJS
                 throw new Error('Session is invalid');
             }
         } catch (err) {
@@ -261,7 +260,6 @@ class Results extends Component<ResultsProps> {
                             more info.</Heading>
                         <Box background={{color: '#FFFFFF'}} direction="row-responsive" justify="end" align="center">
                             <Heading margin="xsmall" level={5}>Choose payment frequency: </Heading>
-                            {/* eslint-disable-next-line react/no-children-prop */}
                             <select value={freq} onChange={this.updateFreq}
                                     children={frequencies.map((option, index) => <option value={option.val}
                                                                                          key={index}>{option.name}</option>)}/>
@@ -272,7 +270,7 @@ class Results extends Component<ResultsProps> {
                                 {this.formatQuotes(freq)}
                             </Accordion>
                         </Box>
-                        {(showAuthModal || true) &&
+                        {showAuthModal &&
 						<ClientAuthentication type="signup" onAuthenticate={this.handleAuthentication}/>}
                     </Box>
                 }

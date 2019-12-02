@@ -5,6 +5,7 @@ import {AuthenticationService} from "../../services/authentication.service";
 import {CognitoUser} from "amazon-cognito-identity-js";
 import {AuthChallengeName} from "insuqo-shared/types/auth-challenge-name";
 import {Auth} from "aws-amplify";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 interface ClientAuthenticationProps {
     onAuthenticate: (user: CognitoUser) => unknown;
@@ -19,6 +20,7 @@ interface ClientAuthenticationState {
     email: string;
     title: string;
     description?: string;
+    formErrorText?: string;
 }
 
 export class ClientAuthentication extends React.Component<ClientAuthenticationProps, ClientAuthenticationState> {
@@ -31,7 +33,8 @@ export class ClientAuthentication extends React.Component<ClientAuthenticationPr
         authChallengeRequired: false,
         authChallengeName: undefined,
         email: '',
-        title: this.props.type === 'login' ? 'Log In' : 'Sign Up'
+        title: this.props.type === 'login' ? 'Log In' : 'Sign Up',
+        formErrorText: undefined
     };
 
     public signUp = async (email: string, password: string) => {
@@ -44,18 +47,22 @@ export class ClientAuthentication extends React.Component<ClientAuthenticationPr
     };
 
     public logIn = async (email: string, password: string) => {
-        const loginRes = await AuthenticationService.login(email, password);
-        this.cognitoUser = loginRes;
+        try {
+            const loginRes = await AuthenticationService.login(email, password);
+            this.cognitoUser = loginRes;
 
-        if (loginRes.challengeName) {
-            this.setState({
-                authChallengeRequired: true,
-                authChallengeName: loginRes.challengeName
-            });
-        } else {
-            if (this.props.onAuthenticate) {
-                this.props.onAuthenticate(this.cognitoUser);
+            if (loginRes.challengeName) {
+                this.setState({
+                    authChallengeRequired: true,
+                    authChallengeName: loginRes.challengeName
+                });
+            } else {
+                if (this.props.onAuthenticate) {
+                    this.props.onAuthenticate(this.cognitoUser);
+                }
             }
+        } catch (error) {
+            this.setState({formErrorText: error.message});
         }
     };
 
@@ -99,11 +106,12 @@ export class ClientAuthentication extends React.Component<ClientAuthenticationPr
     };
 
     public render = (): React.ReactElement | any => {
-        const {paneType, userNeedsConfirmation, authChallengeRequired, authChallengeName, title} = this.state;
+        const {paneType, userNeedsConfirmation, authChallengeRequired, authChallengeName, title, formErrorText} = this.state;
         return (
             <div className={s['modal-container']}>
                 <div className={s['auth-container']}>
                     <h2>{title}</h2>
+                    {formErrorText && <span className={s['form-error']}><FontAwesomeIcon className={s['error-icon']} icon="exclamation-circle"/>{formErrorText}</span>}
                     {paneType === 'signup' &&
 					<AuthenticationForm
 						type={userNeedsConfirmation ? 'challenge' : 'signup'}

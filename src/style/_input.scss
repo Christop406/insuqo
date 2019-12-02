@@ -6,11 +6,13 @@
   border: 1px rgba(#000, 0.2) solid;
   border-radius: $border-radius-input;
   padding: 5px;
+  height: 34px;
 
   transition: 0.2s all ease;
 
   &:focus {
     border-color: $color-primary;
     color: $text-dark;
+    box-shadow: 0 3px 6px rgba(#000, 0.1);
   }
 }
