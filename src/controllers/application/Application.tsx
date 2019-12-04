@@ -5,6 +5,7 @@ import {newApplication} from '../../api';
 import {Modal} from 'antd';
 import {validateEmail} from '../../func';
 import {ApplicationBasicInfo} from "../../components/application/ApplicationBasicInfo/ApplicationBasicInfo";
+import {QuickTermQuoteResult} from "insuqo-shared";
 
 class Application extends Component {
     //
@@ -84,37 +85,12 @@ class Application extends Component {
     //     this.setState({pPhoneError: event.target.rawValue.length < 10});
     // };
     //
-    // updateFreq = event => {
-    //     this.setState({freq: event.target.name});
-    // };
     //
     // updateValue = (key, value) => {
     //     this.applicationData[key] = value;
     // };
     //
-    // showCityReasoning = () => {
-    //     Modal.info({
-    //         title: 'Why can\'t I change my city/state?',
-    //         content: <Text>We do not allow you to change your city or state because a change in this information
-    //             may affect your quoted amount.<br/><br/>If you would like to change your address, please re-run our
-    //             quoting tool with your correct address.</Text>,
-    //         centered: true
-    //     });
-    // };
     //
-    // showFreqInfo = () => {
-    //     Modal.info({
-    //         title: 'Why the different prices?',
-    //         content: <Text justify="stretch">A lot like any other kind of subscription,
-    //             a vendor will reward up-front payment with a discounted rate.
-    //             It is the same for life insurance. If you decide to pay on
-    //             an annual pay schedule, your overall rate will be somewhat lower
-    //             than on a monthly schedule.<br/><br/>
-    //             To see the different rates, click each radio button to change your payment frequency.
-    //         </Text>,
-    //         centered: true
-    //     });
-    // };
     //
     // showConfirm = () => {
     //     // eslint-disable-next-line @typescript-eslint/no-this-alias
@@ -166,42 +142,6 @@ class Application extends Component {
     //     console.log(this.applicationData);
     // };
     //
-    // getPaymentByTerm = () => {
-    //     const {freq} = this.state;
-    //     let quote = this.props.store.get('quote');
-    //     if (quote === undefined) return '';
-    //     if (typeof quote === 'string') {
-    //         quote = JSON.parse(quote);
-    //     }
-    //
-    //     switch (freq) {
-    //         case 'quarter':
-    //             return parseFloat(quote.QuarterlyTotalPremium).toFixed(2);
-    //         case 'semiannual':
-    //             return parseFloat(quote.SemiAnnualTotalPremium).toFixed(2);
-    //         case 'annual':
-    //             return parseFloat(quote.AnnualTotalPremium).toFixed(2);
-    //         case 'month':
-    //         default:
-    //             return parseFloat(quote.MonthlyTotalPremium).toFixed(2);
-    //     }
-    // };
-
-    // getPaymentTerm = () => {
-    //     const {freq} = this.state;
-    //
-    //     switch (freq) {
-    //         case 'quarter':
-    //             return '3 months';
-    //         case 'semiannual':
-    //             return '6 months';
-    //         case 'annual':
-    //             return '12 months';
-    //         case 'month':
-    //         default:
-    //             return 'month';
-    //     }
-    // };
 
     componentDidMount = () => {
         document.title = 'Application | INSUQO';
@@ -210,7 +150,12 @@ class Application extends Component {
     render = () => {
         return (
             <>
-                <ApplicationBasicInfo/>
+                <ApplicationBasicInfo chosenQuote={{
+                    MonthlyTotalPremium: 145.38,
+                    QuarterlyTotalPremium: 145.38 * 4,
+                    SemiAnnualTotalPremium: 145.38 * 6,
+                    AnnualTotalPremium: 145.38 * 12,
+                } as any}/>
             </>
         );
     };

@@ -7,7 +7,7 @@ import {Text} from "grommet";
 import './beneficiary-list.scss';
 import {Col, Row} from "react-bootstrap";
 import {Beneficiary} from "insuqo-shared";
-import { Store as S } from 'undux';
+import {Store as S} from 'undux';
 
 declare type IBeneficiaryListProps = {
     onUpdate: (beneficiaries: Beneficiary[]) => void;
@@ -72,38 +72,37 @@ class BeneficiaryList extends Component<IBeneficiaryListProps, IBeneficiaryListS
                         <Row>
                             <Col>
                                 <Text className="field-label">First Name</Text>
-                                <TextInput onChange={(event) => this.updateBenInfo(event, value, 'fname')}
+                                <input className="input" onChange={(event) => this.updateBenInfo(event, value, 'fname')}
                                            placeholder="Johnny"/>
                             </Col>
                             <Col>
-                            <Text className="field-label">Middle Initial</Text>
-                            <TextInput onChange={(event) => this.updateBenInfo(event, value, 'middleI')}
-                                       placeholder="K"/>
+                                <Text className="field-label">Middle Initial</Text>
+                                <input className="input" onChange={(event) => this.updateBenInfo(event, value, 'middleI')}
+                                           placeholder="K"/>
                             </Col>
                             <Col>
                                 <Text className="field-label">Last Name</Text>
-                                <TextInput onChange={(event) => this.updateBenInfo(event, value, 'lname')}
+                                <input className="input" onChange={(event) => this.updateBenInfo(event, value, 'lname')}
                                            placeholder="Rocket"/>
                             </Col>
                         </Row>
                         <Row>
                             <Col>
                                 <Text className="field-label">Relationship to You</Text>
-                                <select placeholder="Choose" className="rel-select"
+                                <select placeholder="Choose" className="input select"
                                         onChange={(event) => this.updateBenInfo(event, value, 'rel')}
                                         children={relations.map((option, index) => <option value={option.code}
                                                                                            key={index}>{option.name}</option>)}/>
                             </Col>
                             <Col>
                                 <Text className="field-label">Percentage of Payout</Text>
-                                <TextInput onChange={(event) => this.updateBenInfo(event, value, 'share')}
+                                <input className="input" onChange={(event) => this.updateBenInfo(event, value, 'share')}
                                            type="number"
                                            placeholder="10%"/>
                             </Col>
                         </Row>
                         <Box gap="small" flex="grow" justify="end" direction="row">
-                            <Button className="purpleText purpleOutline" onClick={() => this.deleteBeneficiary(index)}
-                                    label={"Delete"}/>
+                            <button className="button primary outline" onClick={() => this.deleteBeneficiary(index)}>Delete</button>
                         </Box>
                     </Box>
                 </Box>

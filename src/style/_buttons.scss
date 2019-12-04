@@ -10,6 +10,8 @@
   border: 1px transparent solid;
   background-color: transparent;
 
+  transition: all 0.2s ease;
+
   &.full {
     width: 100%;
   }
@@ -21,6 +23,14 @@
 
   &.primary.outline {
     border-color: $color-primary;
+    color: $color-primary;
+
+    &:hover, &:focus {
+      color: white;
+      background-color: $color-primary;
+      box-shadow: $input-shadow;
+      outline: none;
+    }
   }
 
   &.primary.text {
