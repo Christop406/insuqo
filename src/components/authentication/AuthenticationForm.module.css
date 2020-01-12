@@ -1,0 +1,12 @@
+.authentication-form .input {
+  margin: 0 0 5px 0;
+}
+.authentication-form .submit-button {
+  margin-top: 5px;
+}
+
+.form-label {
+  display: flex;
+}
+
+/*# sourceMappingURL=AuthenticationForm.module.css.map */

@@ -153,7 +153,7 @@ class Personal extends Component<IPersonalProps> {
                         <Cleave
                             style={{borderColor: bdError ? '#f03434' : undefined}}
                             placeholder="12/21/1997"
-                            className="bd-input"
+                            className="input"
                             options={{date: true, datePattern: ['m', 'd', 'Y']}}
                             onChange={this.updateBirthday}
                             value={birthday}

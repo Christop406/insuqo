@@ -23,16 +23,15 @@
 
 .frequency-display {
   padding: 15px;
-  background-color: rgba(#efecff, 1);
+  background-color: #efecff;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
-  .price-label {
-    font-size: 4rem;
-    line-height: 4rem;
-  }
+}
+.frequency-display .price-label {
+  font-size: 4rem;
+  line-height: 4rem;
 }
 
 .submit-section {
@@ -40,3 +39,5 @@
   flex-direction: row-reverse;
   justify-content: space-between;
 }
+
+/*# sourceMappingURL=ApplicationBasicInfo.module.css.map */

@@ -85,9 +85,7 @@ class QuotingTool extends Component {
                     <Switch>
                         <Route path="/client" component={Client}/>
                         <Route path="/agent" component={Agent}/>
-                        <Route path="/application/status" component={AppStatus}/>
-                        <Route exact path="/app" component={Application}/>
-                        <Route exact path="/application" component={Application}/>
+                        <Route path="/application/:appId" component={Application}/>
                         <Route path="/quote" component={Quote}/>
                         <Redirect to="/quote"/>
                     </Switch>

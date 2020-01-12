@@ -1,0 +1,250 @@
+@import '~antd/dist/antd.css';
+.button {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  border-radius: 5px;
+  border: 1px transparent solid;
+  background-color: transparent;
+  transition: all 0.2s ease;
+}
+.button.full {
+  width: 100%;
+}
+.button.primary:not(.outline):not(.text) {
+  background-color: #9c37f2;
+  color: white;
+}
+.button.primary.outline {
+  border-color: #9c37f2;
+  color: #9c37f2;
+}
+.button.primary.outline:hover, .button.primary.outline:focus {
+  color: white;
+  background-color: #9c37f2;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+  outline: none;
+}
+.button.primary.text {
+  color: #9c37f2;
+}
+
+.input {
+  outline: none;
+  width: 100%;
+  border: 1px rgba(0, 0, 0, 0.2) solid;
+  border-radius: 5px;
+  padding: 5px;
+  height: 34px;
+  transition: 0.2s all ease;
+}
+.input:focus {
+  border-color: #9c37f2;
+  color: #000000;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+.select {
+  appearance: none;
+  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='50' fill='%23888888'><polygon points='0,0 100,0 50,50'/></svg>") no-repeat;
+  background-color: transparent;
+  background-size: 12px;
+  background-position: calc(100% - 10px) center;
+  padding-right: 28px;
+}
+
+.form-help {
+  display: block;
+  color: #aaaaaa;
+  font-size: 14px;
+  line-height: 14px;
+}
+
+.code {
+  font-family: monospace;
+}
+
+.not-allowed {
+  cursor: not-allowed;
+}
+
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 40vmin;
+}
+
+.StyledCheckBox-sc-1dbk5ju-6 {
+  min-width: auto !important;
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+.ant-steps-item-process .ant-steps-item-icon {
+  background-color: #9c37f2 !important;
+  border-color: #9c37f2 !important;
+}
+
+.ant-steps-item-finish .ant-steps-item-icon {
+  border-color: #9c37f2 !important;
+}
+
+.ant-steps-item-finish .ant-steps-item-icon > .ant-steps-icon {
+  color: #9c37f2 !important;
+}
+
+.ant-steps-item-finish > .ant-steps-item-tail:after {
+  background-color: #9c37f2 !important;
+}
+
+.field-label {
+  color: black;
+}
+
+.purpleText {
+  color: #9c37f2 !important;
+}
+
+.purpleOutline {
+  border-color: #9c37f2 !important;
+}
+
+.purpleBackground {
+  background-color: #9c37f2 !important;
+}
+
+.sexButton {
+  margin-left: 10px;
+}
+
+.showOnXSmallScreens {
+  display: none;
+}
+
+@media screen and (max-width: 455px) {
+  .cyLPmt {
+    font-size: 22px !important;
+  }
+}
+@media screen and (max-width: 685px) {
+  .hideOnXSmallScreens {
+    display: none !important;
+  }
+
+  .showOnXSmallScreens {
+    width: 100%;
+    height: 6px;
+    display: block !important;
+  }
+}
+@media screen and (max-width: 810px) {
+  .hideOnSmallScreens {
+    display: none !important;
+  }
+
+  .StyledBox-sc-13pk1d4-0.cYihDV {
+    overflow: visible !important;
+  }
+}
+@media screen and (min-width: 810px) {
+  .form-content {
+    min-width: 820px;
+  }
+}
+.addBenButton {
+  border-color: #aaaaaa;
+  transition: all 0.3s ease;
+  color: #888888;
+  padding: 8px;
+  border-style: dashed;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  border-width: 1px;
+}
+
+.addBenButton:hover {
+  background-color: #eee;
+  color: #9c37f2;
+  border-color: #9c37f2;
+}
+
+.rel-select {
+  background-color: transparent;
+  height: 48px;
+  min-height: 47px;
+  width: 100%;
+  min-width: 0;
+}
+
+.dls-select {
+  background-color: transparent;
+  border-width: 0;
+  height: 46px;
+  min-width: 0;
+  width: 100%;
+}
+
+.bd-input {
+  border-width: 1px;
+  border-style: solid;
+  border-color: gray;
+  flex: auto;
+  height: 46px;
+  border-radius: 5px;
+  padding: 11px;
+  font-weight: 600;
+}
+
+.ant-modal-confirm-btns .ant-btn.ant-btn-primary {
+  background-color: #9c37f2;
+  border-color: #9c37f2;
+}
+
+.ant-modal-confirm-btns .ant-btn.ant-btn-primary:hover {
+  background-color: #bd60ff;
+  border-color: #bd60ff;
+  color: white !important;
+}
+
+.ant-modal-confirm-btns .ant-btn.ant-btn:hover {
+  border-color: #bd60ff;
+  color: #bd60ff;
+}
+
+.anticon.anticon-info-circle svg {
+  fill: #9c37f2;
+}
+
+.ant-modal {
+  width: auto !important;
+  max-width: 600px;
+}
+
+/*# sourceMappingURL=App.css.map */

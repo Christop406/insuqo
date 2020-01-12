@@ -1,14 +1,15 @@
 import axios from 'axios';
-import {AuthenticationService} from './authentication.service';
+import { AuthenticationService } from './authentication.service';
 import { ApiResponse } from 'insuqo-shared/types/api-response';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
 export class ApiBaseService {
-    protected async authenticatedGet<T>(endpoint: string): Promise<ApiResponse<T>> {
+    protected async authenticatedGet<T>(endpoint: string, config?: RequestConfig): Promise<ApiResponse<T>> {
         return (await axios.get<ApiResponse<T>>(ApiBaseService.buildURL(endpoint), {
             headers: {
-                Authorization: await ApiBaseService.getAuthHeader()
+                Authorization: await ApiBaseService.getAuthHeader(),
+                ...config?.headers
             }
         })).data;
     }
@@ -16,7 +17,7 @@ export class ApiBaseService {
     protected async authenticatedPut<T>(endpoint: string, body?: any): Promise<ApiResponse<T>> {
         return (await axios.put<ApiResponse<T>>(ApiBaseService.buildURL(endpoint), body, {
             headers: {
-                Authorization: await ApiBaseService.getAuthHeader()
+                Authorization: await ApiBaseService.getAuthHeader(),
             }
         })).data;
     }
@@ -34,4 +35,8 @@ export class ApiBaseService {
     private static buildURL(endpoint: string): string {
         return apiUrl + endpoint;
     }
+}
+
+export interface RequestConfig {
+    headers?: { [key: string]: string };
 }

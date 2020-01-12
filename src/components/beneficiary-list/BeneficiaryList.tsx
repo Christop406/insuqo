@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import Store from '../../ApplicationStore';
-import {Box, Button, Heading, TextInput} from "grommet/es6/index";
+import {Box, Button, Heading} from "grommet/es6/index";
 import {makeid} from '../../func';
 import relations from 'insuqo-shared/constants/relations.json';
 import {Text} from "grommet";
@@ -8,6 +8,7 @@ import './beneficiary-list.scss';
 import {Col, Row} from "react-bootstrap";
 import {Beneficiary} from "insuqo-shared";
 import {Store as S} from 'undux';
+import Cleave from "cleave.js/react";
 
 declare type IBeneficiaryListProps = {
     onUpdate: (beneficiaries: Beneficiary[]) => void;
@@ -32,19 +33,20 @@ class BeneficiaryList extends Component<IBeneficiaryListProps, IBeneficiaryListS
         this.setState({
             beneficiaries: this.state.beneficiaries.concat({
                 key: makeid(),
-                fname: '',
-                middleI: '',
-                lname: '',
-                rel: '',
-                share: ''
-            } as any)
+                firstName: '',
+                middleInitial: '',
+                lastName: '',
+                relationship: '',
+                percentage: ''
+            } as Beneficiary | any)
         });
     };
 
     deleteBeneficiary = (index: number) => {
+        console.log('deleted');
         let oldBens = this.state.beneficiaries.map(value => value);
         oldBens.splice(index, 1);
-        this.setState({beneficiaries: oldBens});
+        this.setState({beneficiaries: oldBens}, this.updateParent.bind(this));
     };
 
     updateBenInfo = (event: any, value: any, key: string) => {
@@ -58,7 +60,9 @@ class BeneficiaryList extends Component<IBeneficiaryListProps, IBeneficiaryListS
     };
 
     componentDidMount = () => {
-        this.addBeneficiary();
+        if (this.state.beneficiaries.length < 1) {
+            this.addBeneficiary();
+        }
     };
 
     displayBeneficiaries = () => {
@@ -71,38 +75,46 @@ class BeneficiaryList extends Component<IBeneficiaryListProps, IBeneficiaryListS
                         <Heading margin="xxsmall" level={3}>Beneficiary {index + 1}</Heading>
                         <Row>
                             <Col>
-                                <Text className="field-label">First Name</Text>
-                                <input className="input" onChange={(event) => this.updateBenInfo(event, value, 'fname')}
-                                           placeholder="Johnny"/>
+                                <Text className="field-label">First Name<span className="text-danger">*</span></Text>
+                                <input className="input" value={value.firstName}
+                                       onChange={(event) => this.updateBenInfo(event, value, 'firstName')}
+                                       placeholder="Johnny"/>
                             </Col>
                             <Col>
                                 <Text className="field-label">Middle Initial</Text>
-                                <input className="input" onChange={(event) => this.updateBenInfo(event, value, 'middleI')}
-                                           placeholder="K"/>
+                                <Cleave className="input" value={value.middleInitial} options={{blocks: [1], uppercase: true}}
+                                        onChange={(event) => this.updateBenInfo(event, value, 'middleInitial')}
+                                        placeholder="K"/>
                             </Col>
                             <Col>
-                                <Text className="field-label">Last Name</Text>
-                                <input className="input" onChange={(event) => this.updateBenInfo(event, value, 'lname')}
-                                           placeholder="Rocket"/>
+                                <Text className="field-label">Last Name<span className="text-danger">*</span></Text>
+                                <input className="input" value={value.lastName}
+                                       onChange={(event) => this.updateBenInfo(event, value, 'lastName')}
+                                       placeholder="Rocket"/>
                             </Col>
                         </Row>
                         <Row>
                             <Col>
-                                <Text className="field-label">Relationship to You</Text>
+                                <Text className="field-label">Relationship to You<span className="text-danger">*</span></Text>
                                 <select placeholder="Choose" className="input select"
-                                        onChange={(event) => this.updateBenInfo(event, value, 'rel')}
+                                        value={value.relationship}
+                                        onChange={(event) => this.updateBenInfo(event, value, 'relationship')}
                                         children={relations.map((option, index) => <option value={option.code}
                                                                                            key={index}>{option.name}</option>)}/>
                             </Col>
                             <Col>
-                                <Text className="field-label">Percentage of Payout</Text>
-                                <input className="input" onChange={(event) => this.updateBenInfo(event, value, 'share')}
-                                           type="number"
-                                           placeholder="10%"/>
+                                <Text className="field-label">Percentage of Payout<span className="text-danger">*</span></Text>
+                                <input className="input"
+                                       onChange={(event) => this.updateBenInfo(event, value, 'percentage')}
+                                       value={value.percentage}
+                                       type="number"
+                                       placeholder="10%"/>
                             </Col>
                         </Row>
                         <Box gap="small" flex="grow" justify="end" direction="row">
-                            <button className="button primary outline" onClick={() => this.deleteBeneficiary(index)}>Delete</button>
+                            <button type="button" className="button primary outline"
+                                    onClick={() => this.deleteBeneficiary(index)}>Delete
+                            </button>
                         </Box>
                     </Box>
                 </Box>

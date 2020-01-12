@@ -7,7 +7,7 @@
         "eslint:recommended",
         "plugin:@typescript-eslint/eslint-recommended",
         "plugin:@typescript-eslint/recommended",
-        "plugin:react/recommended"
+        "plugin:react/recommended",
     ],
     "globals": {
         "Atomics": "readonly",
@@ -47,6 +47,9 @@
         "@typescript-eslint/no-explicit-any": "off",
         "no-restricted-globals": "off",
         "react/prop-types": "off",
-        "@typescript-eslint/no-non-null-assertion": "off"
+        "@typescript-eslint/no-non-null-assertion": "off",
+        "@typescript-eslint/no-use-before-define":"off",
+        "react/no-unescaped-entities": "off",
+        "@typescript-eslint/explicit-function-return-type": "off"
     }
 }

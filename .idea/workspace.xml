@@ -5,17 +5,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8d5e87d4-159a-4544-ad37-0e170308d0d6" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/components/application/ApplicationPaymentInfo/ApplicationPaymentInfo.module.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/quote/panes/begin/begin.module.scss" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/App.css.map" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.css.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Main.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/application/ApplicationBasicInfo/ApplicationBasicInfo.module.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/application/ApplicationBasicInfo/ApplicationBasicInfo.module.scss" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/application/ApplicationBasicInfo/ApplicationBasicInfo.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/application/ApplicationBasicInfo/ApplicationBasicInfo.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/application/ApplicationPaymentInfo.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/application/ApplicationPaymentInfo/ApplicationPaymentInfo.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/beneficiary-list/BeneficiaryList.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/beneficiary-list/BeneficiaryList.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/quote/panes/begin/begin.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/quote/panes/begin/begin.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/quote/panes/personal/personal.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/quote/panes/personal/personal.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/controllers/application/Application.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/application/Application.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/style/_buttons.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/style/_buttons.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/style/_input.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/style/_input.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/style/_select.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/style/_select.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/style/_variables.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/style/_variables.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/style/global.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/style/global.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/services/Validator.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/Validator.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/services/application.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/application.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/style/_typography.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/style/_typography.scss" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -69,17 +75,17 @@
     <property name="ts.external.directory.path" value="$PROJECT_DIR$/node_modules/typescript/lib" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/src/services" />
-      <recent name="$PROJECT_DIR$/src/agent" />
-      <recent name="$PROJECT_DIR$" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/components/application/ApplicationPaymentInfo" />
       <recent name="$PROJECT_DIR$/src/components/application" />
       <recent name="$PROJECT_DIR$/src/components/application/ApplicationBasicInfo" />
       <recent name="$PROJECT_DIR$/src/components" />
       <recent name="$PROJECT_DIR$/src/assets" />
-      <recent name="$PROJECT_DIR$/src/controllers" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/services" />
+      <recent name="$PROJECT_DIR$/src/agent" />
+      <recent name="$PROJECT_DIR$" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -216,14 +222,7 @@
       <workItem from="1574225882486" duration="5122000" />
       <workItem from="1575149984547" duration="10176000" />
       <workItem from="1575266533534" duration="13000" />
-      <workItem from="1575426712735" duration="10314000" />
-    </task>
-    <task id="LOCAL-00039" summary="Fixed Beneficiary Mobile Formatting">
-      <created>1548375539634</created>
-      <option name="number" value="00039" />
-      <option name="presentableId" value="LOCAL-00039" />
-      <option name="project" value="LOCAL" />
-      <updated>1548375539634</updated>
+      <workItem from="1575426712735" duration="27199000" />
     </task>
     <task id="LOCAL-00040" summary="Added some spice to the CSS">
       <created>1548377416889</created>
@@ -561,7 +560,14 @@
       <option name="project" value="LOCAL" />
       <updated>1575266443869</updated>
     </task>
-    <option name="localTasksCounter" value="88" />
+    <task id="LOCAL-00088" summary="Re-styled the first section of the Application form">
+      <created>1575450015122</created>
+      <option name="number" value="00088" />
+      <option name="presentableId" value="LOCAL-00088" />
+      <option name="project" value="LOCAL" />
+      <updated>1575450015123</updated>
+    </task>
+    <option name="localTasksCounter" value="89" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -581,7 +587,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Accept 201 on Application Submit" />
     <MESSAGE value="Update URLs" />
     <MESSAGE value="Hopefully fix redirection bug" />
     <MESSAGE value="Small clean-up" />
@@ -606,6 +611,7 @@
     <MESSAGE value="Updated quote service, got rid of automatic local storage persistence, got rid of default quote values, and now save only the quote key instead of all the quotes" />
     <MESSAGE value="Refactored styling and began using CSS Modules.&#10;- Also started creating custom styling (probably should be moved to components)" />
     <MESSAGE value="Continued re-implementing styles to get away from Grommet.&#10;- Refactoring Application controller/components to use TypeScript and be better" />
-    <option name="LAST_COMMIT_MESSAGE" value="Continued re-implementing styles to get away from Grommet.&#10;- Refactoring Application controller/components to use TypeScript and be better" />
+    <MESSAGE value="Re-styled the first section of the Application form" />
+    <option name="LAST_COMMIT_MESSAGE" value="Re-styled the first section of the Application form" />
   </component>
 </project>
