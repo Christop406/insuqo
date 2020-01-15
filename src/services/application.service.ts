@@ -12,8 +12,18 @@ export class ApplicationService extends ApiBaseService {
         return applicationRes.data;
     }
 
-    public async submitApplication(application: any): Promise<Application | undefined> {
-        throw new Error('Not Implemented.');
+    public async updateBasicInfo(applicationId: string, application: Application): Promise<Application | undefined> {
+        return (await this.authenticatedPut<Application>(`/applications/${applicationId}/basic-info`, application)).data;
+    }
+
+    public async updatePaymentInfo(applicationId: string, paymentInfo: any): Promise<Application | undefined> {
+        return (await this.authenticatedPut<Application>(`/applications/${applicationId}/payment-info`, paymentInfo)).data;
+    }
+
+    public async updateApplication(applicationId: string, application: Application): Promise<Application | undefined> {
+        console.log(application);
+        const res = await this.authenticatedPut<Application>(`/applications/${applicationId}/update`, application);
+        return res.data;
     }
 
     public async getSignedUploadUrl(applicationId: string, config?: RequestConfig): Promise<SignedUrlResponse | undefined> {

@@ -23,14 +23,16 @@ export const ApplicationBasicInfo: React.FunctionComponent<ApplicationBasicInfoP
         return <></>;
     }
 
-    let beneficiaries: Beneficiary[] = [];
+    console.log(app);
+
+    let beneficiaries: Beneficiary[] = app.beneficiaries || [];
 
     return (
         <Formik validate={validateApplication}
             validateOnBlur={false}
             validateOnMount={false}
             validateOnChange={false}
-            initialValues={initialApplicationValues}
+            initialValues={app as any}
             onSubmit={(values): any => props.onSubmit({ ...values, beneficiaries })}>
             {({
                 values,
@@ -86,7 +88,7 @@ export const ApplicationBasicInfo: React.FunctionComponent<ApplicationBasicInfoP
                                         defaultValue={undefined}
                                         placeholder="United States"
                                     >
-                                        <option value={undefined} disabled selected key="-1">Select...</option>
+                                        <option value={undefined} disabled key="-1">Select...</option>
                                         {countries.map((option, index) =>
                                             <option key={index}
                                                 value={option.abbreviation}>{option.country}</option>
@@ -165,17 +167,17 @@ export const ApplicationBasicInfo: React.FunctionComponent<ApplicationBasicInfoP
                                 <div className="form-row">
                                     <div className="col-sm">
                                         <div className="form-group">
-                                            <label htmlFor="addrLine1">Street Address (Line 1)<span
+                                            <label htmlFor="address.line1">Street Address (Line 1)<span
                                                 className="text-danger">*</span></label>
-                                            <input className="input"
+                                            <Field className="input"
                                                 placeholder="100 Example Ave"
-                                                name="addrLine1"
-                                                value={values.addrLine1}
+                                                name="address.line1"
+                                                value={values.address.line1}
                                                 onChange={handleChange}
                                                 onBlur={handleBlur} />
-                                            {errors.addrLine1 &&
-                                                <small id="addrLine1"
-                                                    className="text-danger">{errors.addrLine1}</small>}
+                                            {errors?.address?.line1 &&
+                                                <small id="address.line1"
+                                                    className="text-danger">{errors.address.line1}</small>}
                                         </div>
                                     </div>
                                     <div className="col-sm-4">
@@ -184,7 +186,7 @@ export const ApplicationBasicInfo: React.FunctionComponent<ApplicationBasicInfoP
                                             <input className="input"
                                                 name="addrLine2"
                                                 placeholder="18B"
-                                                value={values.addrLine2}
+                                                value={values.address.line2}
                                                 onChange={handleChange}
                                                 onBlur={handleBlur} />
                                         </div>
@@ -194,9 +196,9 @@ export const ApplicationBasicInfo: React.FunctionComponent<ApplicationBasicInfoP
                                     <button onClick={showCityReasoning} className="btn purpleText btn-sm btn-link"
                                         type="button">Why can't I change my city?
                                     </button>
-                                    <span className="d-block text-muted not-allowed">{'City'},</span>
-                                    <span className="d-block text-muted not-allowed">&nbsp;{'State'}</span>
-                                    <span className="d-block text-muted not-allowed">&nbsp;{'92115'}</span>
+                                    <span className="d-block text-muted not-allowed">{values.address.city},</span>
+                                    <span className="d-block text-muted not-allowed">&nbsp;{values.address.state}</span>
+                                    <span className="d-block text-muted not-allowed">&nbsp;{values.address.zipCode}</span>
                                 </div>
                             </div>
                             <div className={cx(s['contact-info-group'], s['form-section'])}>
@@ -218,15 +220,10 @@ export const ApplicationBasicInfo: React.FunctionComponent<ApplicationBasicInfoP
                                 <div className="form-group">
                                     <label htmlFor="primaryPhone">Primary Phone<span
                                         className="text-danger">*</span></label>
-                                    <Cleave name="primaryPhone"
+                                    <Field name="primaryPhone"
                                         className="input"
                                         type="tel"
                                         placeholder="(123) 456-7890"
-                                        options={{
-                                            numericOnly: true,
-                                            blocks: [0, 3, 0, 3, 4],
-                                            delimiters: ['(', ')', ' ', '-']
-                                        }}
                                         onChange={handleChange}
                                         onBlur={handleBlur}
                                         value={values.primaryPhone}
@@ -241,7 +238,7 @@ export const ApplicationBasicInfo: React.FunctionComponent<ApplicationBasicInfoP
                                 <div className={s['beneficiaries-group']}>
                                     <h3>Beneficiaries</h3>
                                     <h4 className="text-muted">Who is covered if the plan goes into effect?</h4>
-                                    <BeneficiaryList onUpdate={(bens) => beneficiaries = bens} />
+                                    <BeneficiaryList initialValue={beneficiaries} onUpdate={(bens) => beneficiaries = bens} />
                                 </div>
                                 <div className={cx(s['payment-freq-group'], s['form-section'])}>
                                     <div className="d-flex align-items-center">
@@ -300,26 +297,26 @@ export const ApplicationBasicInfo: React.FunctionComponent<ApplicationBasicInfoP
                                             another life insurance plan.</label>
                                     </div>
                                     <div className="form-check">
-                                        <Field type="checkbox" checked={values.oiWillReplace}
-                                            className="form-check-input" id="cb-owr" name="oiWillReplace" />
+                                        <Field type="checkbox" checked={values.otherInsuranceWillReplace}
+                                            className="form-check-input" id="cb-owr" name="otherInsuranceWillReplace" />
                                         <label className="form-check-label" htmlFor="cb-owr">This policy will
                                             replace or change my other policy.</label>
                                     </div>
                                     <div className="form-check">
-                                        <Field type="checkbox" checked={values.oiPending}
-                                            className="form-check-input" id="cb-oip" name="oiPending" />
+                                        <Field type="checkbox" checked={values.otherInsurancePending}
+                                            className="form-check-input" id="cb-oip" name="otherInsurancePending" />
                                         <label className="form-check-label" htmlFor="cb-oip">I currently have
                                             another application pending with another insurance company.</label>
                                     </div>
                                     <div className="form-check">
-                                        <Field type="checkbox" checked={values.oiModified}
-                                            className="form-check-input" id="cb-oim" name="oiModified" />
+                                        <Field type="checkbox" checked={values.otherInsuranceModified}
+                                            className="form-check-input" id="cb-oim" name="otherInsuranceModified" />
                                         <label className="form-check-label" htmlFor="cb-oim">A previous application
                                             has been declined, postponed, or modified after applying.</label>
                                     </div>
                                     <div className="form-check">
-                                        <Field type="checkbox" checked={values.intendedParty}
-                                            className="form-check-input" id="cb-itp" name="intendedParty" />
+                                        <Field type="checkbox" checked={values.hasIntendedParty}
+                                            className="form-check-input" id="cb-itp" name="hasIntendedParty" />
                                         <label className="form-check-label" htmlFor="cb-itp">Another party, besides
                                             me, will obtain a right, title, or interest in any policy issued on the
                                             life of the proposed insured as a result of this application.</label>
@@ -358,16 +355,23 @@ const initialApplicationValues = {
     ssn: '',
     idState: undefined,
     idNum: undefined,
-    addrLine1: '',
-    addrLine2: '',
+    address: {
+        line1: '',
+        line2: '',
+        line3: '',
+        appt: '',
+        city: '',
+        state: '',
+        zipCode: '',
+    },
     primaryEmail: '',
     primaryPhone: '',
     paymentFrequency: PremiumMode.MONTHLY,
     otherLifeInsurance: false,
-    oiWillReplace: false,
-    oiPending: false,
-    oiModified: false,
-    intendedParty: false,
+    otherInsuranceWillReplace: false,
+    otherInsurancePending: false,
+    otherInsuranceModified: false,
+    hasIntendedParty: false,
     willFinance: false,
     willLiquidate: false,
 };

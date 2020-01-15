@@ -5,6 +5,7 @@ import { Route, RouteComponentProps, Switch } from 'react-router-dom';
 import { ApplicationService } from "../../services/application.service";
 import { Application as ApplicationModel, QuickTermQuoteResult } from "insuqo-shared";
 import { ApplicationPaymentInfo } from "../../components/application/ApplicationPaymentInfo/ApplicationPaymentInfo";
+import { ApplicationReview } from '../../components/application/ApplicationReview/ApplicationReview';
 
 interface ApplicationState {
     application: ApplicationModel | undefined;
@@ -50,19 +51,44 @@ class Application extends Component<RouteComponentProps<{ appId: string }>, Appl
         return (
             <Switch>
                 <Route path={`${this.props.match.path}/apply`} render={(props) =>
-                    <ApplicationBasicInfo {...props} onSubmit={this.submitApplication} application={application}
+                    <ApplicationBasicInfo {...props} onSubmit={this.updateBasicInfo} application={application}
                         chosenQuote={chosenQuote} />} />
                 <Route path={`${this.props.match.path}/payment`} render={(props) =>
                     <ApplicationPaymentInfo {...props} application={application}
-                        onSubmit={(paymentInfo) => console.log(paymentInfo)} />} />
+                        onSubmit={this.updatePaymentInfo} />} />
+                <Route path={`${this.props.match.path}/review`} render={(props) =>
+                    <ApplicationReview {...props} application={application}
+                        onSubmit={(a) => this.updateApplication(a, 'finish')} />} />
             </Switch>
         );
     };
 
-    private submitApplication = async (app: any) => {
+    private updateBasicInfo = async (app: any) => {
+        const appId = (this.state.application as any).id;
+        const updateResponse = await this.applicationService.updateBasicInfo(appId, app);
+        if (updateResponse) {
+            this.props.history.push(`/application/${appId}/payment`);
+        }
+    };
+
+    private updatePaymentInfo = async (paymentInfo: any) => {
+        const appId = (this.state.application as any).id;
+        const updateResponse = await this.applicationService.updatePaymentInfo(appId, paymentInfo);
+        if (updateResponse) {
+            this.props.history.push(`/application/${appId}/review`);
+        }
+    };
+
+    private updateApplication = async (app: any, continueTo: 'payment' | 'review' | 'finish') => {
         console.log(app);
-        // this.applicationService.submitApplication(app);
-        // on success
+        let application = await this.applicationService.updateApplication((this.state.application as any).id, app);
+        if (application && (application = await this.applicationService.getApplication(application.id))) {
+            this.setState({ application }, () => this.props.history.push(this.props.match.path + '/' + continueTo));
+        }
+    };
+
+    private submitApplication = async (app: ApplicationModel) => {
+        console.log(app);
     };
 }
 

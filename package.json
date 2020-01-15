@@ -21,7 +21,7 @@
     "filepond-plugin-image-preview": "^4.6.0",
     "formik": "^2.0.3",
     "grommet": "^2.7.11",
-    "insuqo-shared": "npm:@bit/christop406.insuqo.shared@0.0.19",
+    "insuqo-shared": "npm:@bit/christop406.insuqo.shared@0.0.22",
     "moment": "^2.24.0",
     "node-sass": "^4.13.0",
     "password-validator": "^5.0.3",
