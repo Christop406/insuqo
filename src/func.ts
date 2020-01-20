@@ -1,5 +1,5 @@
-export function reduceQuote(quote) {
-    var q = {};
+export function reduceQuote(quote: any) {
+    var q: any = {};
     q.recID = quote.recID;
     q.companyID = quote.companyID;
     q.term = quote.term;
@@ -7,12 +7,12 @@ export function reduceQuote(quote) {
     q.amBest = quote.amBest;
 }
 
-export function formatCovAmount(x) {
+export function formatCovAmount(x: number | string) {
     if(x === undefined) return '';
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
-export function logoImageForCompanyID(id) {
+export function logoImageForCompanyID(id: number | string | undefined) {
     switch(id) {
         case 54: return 'https://www.aig.com/content/dam/global/site-level-elements/logo/aig-logo.svg';
         case 93: return 'https://static.lgamerica.com/assets/images/ui/lga-logo-98x83-2x.png';
@@ -22,7 +22,7 @@ export function logoImageForCompanyID(id) {
     }
 }
 
-export function splitPrice(price) {
+export function splitPrice(price: number | string) {
     if(price == null) {
         return ['0', '00'];
     }
@@ -40,13 +40,13 @@ export function splitPrice(price) {
     return splitString;
 }
 
-export function fillStoreFromLocalStorage(store) {
+export function fillStoreFromLocalStorage(store: any) {
     return new Promise(function(resolve, reject) {
         if(localStorage.getItem("store_persisted") === "true") {
             Object.assign(store.state, localStorage);
             Object.assign(store.state, {
-                quote: JSON.parse(localStorage.getItem('quote')),
-                quotes: JSON.parse(localStorage.getItem('quotes'))
+                quote: JSON.parse(localStorage.getItem('quote') || '{}'),
+                quotes: JSON.parse(localStorage.getItem('quotes') || '{}')
             });
             resolve(store.state);
         }
@@ -64,7 +64,7 @@ export function makeid() {
     return text;
 }
 
-export function validateEmail(email) {
+export function validateEmail(email: string) {
     var re = /[^\s@]+@[^\s@]+\.[^\s@]+/;
     return re.test(email);
 }

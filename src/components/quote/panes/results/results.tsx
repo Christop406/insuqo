@@ -7,10 +7,11 @@ import {QuoteService} from '../../../../services/quote.service';
 import Spinner from 'react-spinkit';
 import {Store as S} from 'undux';
 import {History, LocationState} from 'history';
-import {QuickTermQuoteResult} from 'insuqo-shared';
+import {QuickTermQuoteResult, Address} from 'insuqo-shared';
 import {AuthenticationService} from "../../../../services/authentication.service";
 import {ClientAuthentication} from "../../../../controllers/sign-up/ClientAuthentication";
 import {CognitoUser} from "amazon-cognito-identity-js";
+import { ApplicationService } from '../../../../services/application.service';
 
 interface ResultsProps {
     store: S<any>;
@@ -47,6 +48,10 @@ class Results extends Component<ResultsProps> {
         freqLabel: 'Monthly',
         showAuthModal: false,
     };
+    private applicationService = new ApplicationService();
+
+    private location?: Partial<Address>;
+    private birthDate?: string;
 
     getQuotes = () => {
         const store = this.props.store;
@@ -70,6 +75,7 @@ class Results extends Component<ResultsProps> {
     };
 
     componentDidMount = async () => {
+        const { store } = this.props;
         let quoteKey = localStorage.getItem('quoteKey');
         if (quoteKey) {
             const quotes = await new QuoteService().getQuotesByKey(quoteKey);
@@ -87,6 +93,13 @@ class Results extends Component<ResultsProps> {
                 throw error;
             }
         }
+        this.location = {
+            city: store.get('city'),
+            state: store.get('stateCode'),
+            zipCode: store.get('zipCode')
+        }
+
+        this.birthDate = store.get('birthdate');
     };
 
     formatRider = (quote: QuickTermQuoteResult) => {
@@ -226,9 +239,14 @@ class Results extends Component<ResultsProps> {
         try {
             const userSession = await AuthenticationService.getCurrentSession();
             if (userSession.isValid()) {
-                this.props.store.set('quote')(quote);
-                localStorage.setItem('quote', JSON.stringify(quote));
-                this.props.history.push('/application');
+                const app = await this.applicationService.createApplication(quote.id, quote.RecID, this.birthDate!, this.location!);
+                // this.props.store.set('quote')(quote);
+                // localStorage.setItem('quote', JSON.stringify(quote));
+                if (app && app.id) {
+                    this.props.history.push(`/application/${app.id}/apply`);
+                } else {
+                    throw new Error('There was an error creating the application');
+                }
             } else {
                 throw new Error('Session is invalid');
             }

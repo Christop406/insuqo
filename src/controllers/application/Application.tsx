@@ -75,7 +75,7 @@ class Application extends Component<RouteComponentProps<{ appId: string }>, Appl
         const appId = (this.state.application as any).id;
         const updateResponse = await this.applicationService.updatePaymentInfo(appId, paymentInfo);
         if (updateResponse) {
-            this.props.history.push(`/application/${appId}/review`);
+            this.setState({ application: updateResponse }, () => this.props.history.push(`/application/${appId}/review`));
         }
     };
 

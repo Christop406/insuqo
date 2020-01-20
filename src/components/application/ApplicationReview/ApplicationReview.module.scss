@@ -1,0 +1,118 @@
+@import "../../../style/variables";
+
+p {
+  margin-bottom: 0;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  align-items: center;
+}
+
+.reviewContainer, .actionButtonContainer {
+  max-width: 840px;
+  padding: 0 20px;
+}
+
+.reviewSection {
+  padding: 10px 5px;
+  word-break: break-all;
+
+  &:not(:last-child) {
+    border-bottom: 1px solid rgba(#bbb, 1);
+  }
+}
+
+.fieldRow {
+  display: block;
+  margin-left: -5px;
+  margin-right: -5px;
+
+  .field {
+    display: inline-block;
+    width: unset;
+    margin-left: 5px;
+    margin-right: 5px;
+  }
+}
+
+.field {
+  display: block;
+  padding: 5px 10px;
+  border-radius: 5px;
+  background-color: rgba(#f4f4f4, 1);
+
+  .label {
+    font-size: 10px;
+    text-transform: uppercase;
+    vertical-align: middle;
+    font-weight: 600;
+    cursor: default;
+
+    transition: all 0.2s ease;
+  }
+
+  &:hover {
+    .label {
+      color: $color-primary;
+    }
+  }
+
+  &.disabled {
+    cursor: not-allowed;
+    color: rgba(#ccc, 1);
+    transition: all 0.2s ease;
+
+    &:hover {
+      color: rgba(#666, 1);
+    }
+  }
+}
+
+.quoteContainer {
+    display: flex;
+    flex-direction: row;
+
+    .companyImage {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        max-width: 150px;
+        padding: 10px;
+        margin-right: 10px;
+        margin-bottom: 10px;
+        border-right: 1px solid rgba(#AAA, 1);
+
+        img {
+            width: 100%;
+        }
+    }
+}
+
+.beneficiaryItem {
+    // border-radius: 10px;
+    // border-color: rgba(#888, 0.8);
+    // border-style: dashed;
+    // border-width: 1px;
+
+    padding: 10px 0;
+}
+
+.paymentImage {
+  width: 50%;
+  max-height: 150px;
+  object-fit: contain;
+}
+
+.actionButtonContainer {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-top: 15px;
+    padding-bottom: 15px;
+}

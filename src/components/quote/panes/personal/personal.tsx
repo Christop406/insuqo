@@ -37,15 +37,15 @@ class Personal extends Component<IPersonalProps> {
     };
 
     updateBirthday = (event: any) => {
-        console.log(event.target.value);
+        // console.log(event.target.value);
         let bd = moment(event.target.value, "MM/DD/YYYY");
         let now = moment();
         let val = event.target.value;
         if (val.length > 8 && now.isBefore(bd)) {
-            console.log('after today');
+            // console.log('after today');
             this.setState({birthday: val, bdError: true, bdErrMsg: "Please input a valid birthdate."});
         } else if (val.length > 8 && now.subtract(18, "years").isBefore(bd)) {
-            console.log('not 18');
+            // console.log('not 18');
             this.setState({
                 birthday: val,
                 bdError: true,
@@ -101,7 +101,7 @@ class Personal extends Component<IPersonalProps> {
         if (this.validateBirthdate()) {
             const store = this.props.store;
             const {birthday, sex, tobacco, cannabis} = this.state;
-            store.set('birthdate')(birthday);
+            store.set('birthdate')(moment(birthday, 'MM/DD/YYYY').format('YYYY-MM-DD'));
             store.set('sex')(sex);
             store.set('tobacco')(tobacco);
             store.set('cannabis')(cannabis);

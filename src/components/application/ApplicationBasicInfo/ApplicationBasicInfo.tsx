@@ -14,7 +14,7 @@ import { Validator } from '../../../services/Validator';
 interface ApplicationBasicInfoProps {
     application?: Application;
     chosenQuote?: QuickTermQuoteResult;
-    onSubmit: (application: typeof initialApplicationValues & { beneficiaries: Beneficiary[] }) => any;
+    onSubmit: (application: Application & { beneficiaries: Beneficiary[] }) => any;
 }
 
 export const ApplicationBasicInfo: React.FunctionComponent<ApplicationBasicInfoProps> = (props) => {
@@ -32,8 +32,8 @@ export const ApplicationBasicInfo: React.FunctionComponent<ApplicationBasicInfoP
             validateOnBlur={false}
             validateOnMount={false}
             validateOnChange={false}
-            initialValues={app as any}
-            onSubmit={(values): any => props.onSubmit({ ...values, beneficiaries })}>
+            initialValues={getInitialValues(app)}
+            onSubmit={(values): any => props.onSubmit({ ...values, beneficiaries } as any)}>
             {({
                 values,
                 errors,
@@ -85,7 +85,7 @@ export const ApplicationBasicInfo: React.FunctionComponent<ApplicationBasicInfoP
                                         onChange={handleChange}
                                         onBlur={handleBlur}
                                         value={values.countryOfBirth}
-                                        defaultValue={undefined}
+                                        defaultValue={'US'}
                                         placeholder="United States"
                                     >
                                         <option value={undefined} disabled key="-1">Select...</option>
@@ -172,12 +172,12 @@ export const ApplicationBasicInfo: React.FunctionComponent<ApplicationBasicInfoP
                                             <Field className="input"
                                                 placeholder="100 Example Ave"
                                                 name="address.line1"
-                                                value={values.address.line1}
+                                                value={values.address?.line1}
                                                 onChange={handleChange}
                                                 onBlur={handleBlur} />
-                                            {errors?.address?.line1 &&
+                                            {errors?.address &&
                                                 <small id="address.line1"
-                                                    className="text-danger">{errors.address.line1}</small>}
+                                                    className="text-danger">{errors.address}</small>}
                                         </div>
                                     </div>
                                     <div className="col-sm-4">
@@ -186,7 +186,7 @@ export const ApplicationBasicInfo: React.FunctionComponent<ApplicationBasicInfoP
                                             <input className="input"
                                                 name="addrLine2"
                                                 placeholder="18B"
-                                                value={values.address.line2}
+                                                value={values.address?.line2}
                                                 onChange={handleChange}
                                                 onBlur={handleBlur} />
                                         </div>
@@ -196,9 +196,9 @@ export const ApplicationBasicInfo: React.FunctionComponent<ApplicationBasicInfoP
                                     <button onClick={showCityReasoning} className="btn purpleText btn-sm btn-link"
                                         type="button">Why can't I change my city?
                                     </button>
-                                    <span className="d-block text-muted not-allowed">{values.address.city},</span>
-                                    <span className="d-block text-muted not-allowed">&nbsp;{values.address.state}</span>
-                                    <span className="d-block text-muted not-allowed">&nbsp;{values.address.zipCode}</span>
+                                    <span className="d-block text-muted not-allowed">{values.address?.city},</span>
+                                    <span className="d-block text-muted not-allowed">&nbsp;{values.address?.state}</span>
+                                    <span className="d-block text-muted not-allowed">&nbsp;{values.address?.zipCode}</span>
                                 </div>
                             </div>
                             <div className={cx(s['contact-info-group'], s['form-section'])}>
@@ -281,9 +281,9 @@ export const ApplicationBasicInfo: React.FunctionComponent<ApplicationBasicInfoP
                                         </div>
                                         <div className={cx('col', s['frequency-display'])}>
                                             <span
-                                                className={cx('purpleText', s['price-label'])}>${getPaymentByTerm(values.paymentFrequency, props.chosenQuote)}</span>
+                                                className={cx('purpleText', s['price-label'])}>${getPaymentByTerm(values.paymentFrequency!, props.chosenQuote)}</span>
                                             <span
-                                                className="d-block purpleText">every <b>{getPaymentTerm(values.paymentFrequency)}</b></span>
+                                                className="d-block purpleText">every <b>{getPaymentTerm(values.paymentFrequency!)}</b></span>
                                         </div>
                                     </div>
                                 </div>
@@ -348,35 +348,39 @@ export const ApplicationBasicInfo: React.FunctionComponent<ApplicationBasicInfoP
     );
 };
 
-const initialApplicationValues = {
-    firstName: '',
-    lastName: '',
-    countryOfBirth: undefined,
-    ssn: '',
-    idState: undefined,
-    idNum: undefined,
-    address: {
-        line1: '',
-        line2: '',
-        line3: '',
-        appt: '',
-        city: '',
-        state: '',
-        zipCode: '',
-    },
-    primaryEmail: '',
-    primaryPhone: '',
-    paymentFrequency: PremiumMode.MONTHLY,
-    otherLifeInsurance: false,
-    otherInsuranceWillReplace: false,
-    otherInsurancePending: false,
-    otherInsuranceModified: false,
-    hasIntendedParty: false,
-    willFinance: false,
-    willLiquidate: false,
-};
+const getInitialValues = (a: Application): Partial<Application> => {
+    return {
+        firstName: a.firstName || '',
+        lastName: a.lastName || '',
+        countryOfBirth: a.countryOfBirth || 'US',
+        ssn: a.ssn || '',
+        idState: a.idState || undefined,
+        idNum: a.idNum || undefined,
+        address: a.address || {
+            line1: '',
+            line2: '',
+            line3: '',
+            appt: '',
+            city: '',
+            state: '',
+            zipCode: '',
+        },
+        primaryEmail: a.primaryEmail || '',
+        primaryPhone: a.primaryPhone || '',
+        otherEmail: a.otherEmail || '',
+        otherPhone: a.otherPhone || '',
+        paymentFrequency: a.paymentFrequency || PremiumMode.MONTHLY,
+        otherLifeInsurance: a.otherLifeInsurance || false,
+        otherInsuranceWillReplace: a.otherInsuranceWillReplace || false,
+        otherInsurancePending: a.otherInsurancePending || false,
+        otherInsuranceModified: a.otherInsuranceModified || false,
+        hasIntendedParty: a.hasIntendedParty || false,
+        willFinance: a.willFinance || false,
+        willLiquidate: a.willLiquidate || false,
+    };
+}
 
-const validateApplication = (values: typeof initialApplicationValues) => {
+const validateApplication = (values: Partial<Application>) => {
     const errors: typeof values | any = {};
 
     if (!values.firstName || values.firstName.length < 2) {

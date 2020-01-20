@@ -1,4 +1,4 @@
-import { Application, ApplicationStatus } from 'insuqo-shared';
+import { Application, ApplicationStatus, Address } from 'insuqo-shared';
 import { ApiBaseService, RequestConfig } from './api-base.service';
 
 export class ApplicationService extends ApiBaseService {
@@ -7,9 +7,17 @@ export class ApplicationService extends ApiBaseService {
         return statusResponse.data && statusResponse.data.status;
     }
 
+    public async createApplication(quoteId: string, quoteRecId: number, birthDate: string, address: Partial<Address>): Promise<Application | undefined> {
+        return (await this.authenticatedPut<Application>('/applications/new', { quoteId, quoteRecId, address, birthDate })).data;
+    }
+
     public async getApplication(id: string): Promise<Application | undefined> {
         const applicationRes = await this.authenticatedGet<Application>('/applications?id=' + encodeURIComponent(id));
         return applicationRes.data;
+    }
+
+    public async getImageUrl(appId: string, imageKey: string): Promise<string | undefined> {
+        return (await this.authenticatedGet<string>(`/applications/${appId}/image-url/${imageKey}`)).data;
     }
 
     public async updateBasicInfo(applicationId: string, application: Application): Promise<Application | undefined> {
@@ -24,6 +32,10 @@ export class ApplicationService extends ApiBaseService {
         console.log(application);
         const res = await this.authenticatedPut<Application>(`/applications/${applicationId}/update`, application);
         return res.data;
+    }
+
+    public async submitApplication(applicationId: string): Promise<Application | undefined> {
+        return (await this.authenticatedPut<Application>(`/applications/${applicationId}/submit`)).data;
     }
 
     public async getSignedUploadUrl(applicationId: string, config?: RequestConfig): Promise<SignedUrlResponse | undefined> {

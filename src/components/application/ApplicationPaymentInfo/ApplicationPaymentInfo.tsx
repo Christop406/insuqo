@@ -55,24 +55,28 @@ export const ApplicationPaymentInfo: React.FunctionComponent<PaymentInfoProps> =
                                 <label>Check Picture</label>
                                 <FilePond ref={(ref) => setFilepond(ref)} server={{
                                     process: async (fieldName, file, metadata, load, error, progress, abort) => {
-                                        const urls = await applicationService.getSignedUploadUrl(props.application!.id, {
-                                            headers: {
-                                                'X-Mime-Type': file.type,
-                                            }
-                                        });
-                                        if (urls) {
-                                            await axios.put(urls.put, file, {
+                                        try {
+                                            const urls = await applicationService.getSignedUploadUrl(props.application!.id, {
                                                 headers: {
-                                                    'Content-Type': file.type
+                                                    'X-Mime-Type': file.type,
                                                 }
                                             });
-                                            fileUrlLookup.set(urls.id, {
-                                                put: urls.put,
-                                                delete: urls.delete,
-                                            });
-                                            load(urls.id);
-                                        } else {
-                                            error('Could not sign URLs for upload');
+                                            if (urls) {
+                                                await axios.put(urls.put, file, {
+                                                    headers: {
+                                                        'Content-Type': file.type
+                                                    }
+                                                });
+                                                fileUrlLookup.set(urls.id, {
+                                                    put: urls.put,
+                                                    delete: urls.delete,
+                                                });
+                                                load(urls.id);
+                                            } else {
+                                                error('Could not sign URLs for upload');
+                                            }
+                                        } catch (err) {
+                                            error(err);
                                         }
 
                                     },
