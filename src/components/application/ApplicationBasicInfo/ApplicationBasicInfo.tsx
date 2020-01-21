@@ -12,7 +12,7 @@ import cx from 'classnames';
 import { Validator } from '../../../services/Validator';
 
 interface ApplicationBasicInfoProps {
-    application?: Application;
+    application: Application;
     chosenQuote?: QuickTermQuoteResult;
     onSubmit: (application: Application & { beneficiaries: Beneficiary[] }) => any;
 }

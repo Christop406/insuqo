@@ -168,7 +168,7 @@ const getQuotePrice = (quote: QuickTermQuoteResult, paymentFrequency?: PremiumMo
 };
 
 interface ApplicationReviewProps {
-    application?: Application;
+    application: Application;
     onSubmit: (application: Application) => any;
 }
 

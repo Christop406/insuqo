@@ -1,0 +1,18 @@
+$header-height: 70px;
+
+.topNav {
+    width: 100%;
+    height: $header-height;
+    position: fixed;
+    z-index: 100;
+}
+
+.quotingToolContainer {
+
+}
+
+.quoteFormContainer {
+    padding-top: $header-height;
+    min-height: 100vh;
+}
+

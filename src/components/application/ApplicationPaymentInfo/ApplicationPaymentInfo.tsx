@@ -16,7 +16,7 @@ registerPlugin(FilePondPluginImagePreview);
 
 interface PaymentInfoProps {
     onSubmit: (output: any) => any;
-    application?: Application;
+    application: Application;
 }
 
 export const ApplicationPaymentInfo: React.FunctionComponent<PaymentInfoProps> = (props) => {

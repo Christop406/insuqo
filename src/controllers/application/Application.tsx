@@ -3,9 +3,12 @@ import Store from '../../ApplicationStore';
 import { ApplicationBasicInfo } from "../../components/application/ApplicationBasicInfo/ApplicationBasicInfo";
 import { Route, RouteComponentProps, Switch } from 'react-router-dom';
 import { ApplicationService } from "../../services/application.service";
-import { Application as ApplicationModel, QuickTermQuoteResult } from "insuqo-shared";
+import { Application as ApplicationModel, QuickTermQuoteResult, ApplicationStatus as Status } from "insuqo-shared";
 import { ApplicationPaymentInfo } from "../../components/application/ApplicationPaymentInfo/ApplicationPaymentInfo";
 import { ApplicationReview } from '../../components/application/ApplicationReview/ApplicationReview';
+import { ApplicationStatusView } from '../../components/application/ApplicationStatusView/ApplicationStatusView';
+import Spinner from 'react-spinkit';
+import s from './Application.module.scss';
 
 interface ApplicationState {
     application: ApplicationModel | undefined;
@@ -31,6 +34,16 @@ class Application extends Component<RouteComponentProps<{ appId: string }>, Appl
                     return quote.RecID === application.quoteRecId;
                 }) as any);
                 if (chosenQuote) {
+
+                    switch(application.status) {
+                        case Status.New:
+                            this.props.history.push(`/application/${application.id}/apply`);
+                            break;
+                        case Status.Submitted:
+                            this.props.history.push(`/application/${application.id}/status`);
+                            break;
+                    }
+
                     this.setState({
                         application,
                         chosenQuote
@@ -48,17 +61,26 @@ class Application extends Component<RouteComponentProps<{ appId: string }>, Appl
 
     render = () => {
         const { application, chosenQuote } = this.state;
+
+        if (!application) {
+            return <div className={s.loadingContainer}>
+                <Spinner name="folding-cube" fadeIn="none" color="#9c37f2" />
+            </div>;
+        }
+
         return (
             <Switch>
                 <Route path={`${this.props.match.path}/apply`} render={(props) =>
-                    <ApplicationBasicInfo {...props} onSubmit={this.updateBasicInfo} application={application}
+                    <ApplicationBasicInfo {...props} onSubmit={this.updateBasicInfo} application={application!}
                         chosenQuote={chosenQuote} />} />
                 <Route path={`${this.props.match.path}/payment`} render={(props) =>
-                    <ApplicationPaymentInfo {...props} application={application}
+                    <ApplicationPaymentInfo {...props} application={application!}
                         onSubmit={this.updatePaymentInfo} />} />
                 <Route path={`${this.props.match.path}/review`} render={(props) =>
-                    <ApplicationReview {...props} application={application}
+                    <ApplicationReview {...props} application={application!}
                         onSubmit={(a) => this.updateApplication(a, 'finish')} />} />
+                <Route path={`${this.props.match.path}/status`} render={(props) =>
+                    <ApplicationStatusView {...props} application={application!} />} />
             </Switch>
         );
     };

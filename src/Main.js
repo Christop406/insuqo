@@ -2,7 +2,7 @@ import React, { Component }  from 'react';
 import Store from './ApplicationStore';
 import Quote  from './controllers/quote/Quote';
 import Application from './controllers/application/Application';
-import AppStatus from './controllers/application-status/application-status';
+// import AppStatus from './controllers/application-status/application-status';
 import { fadeInUpBig } from 'react-animations';
 import Radium, {StyleRoot} from 'radium';
 import {Box, Grommet} from 'grommet';
@@ -14,18 +14,12 @@ import Agent from './controllers/agent/Agent';
 import Client from './controllers/client/Client';
 import ClientLogin from './controllers/login/ClientLogin';
 import {ClientAuthentication} from './controllers/sign-up/ClientAuthentication';
-// import AgentLogin from "./controllers/login/AgentLogin";
+import s from './Main.module.scss';
 
 const styles = {
     fadeInUpBig: {
         animation: 'x 1s',
         animationName: Radium.keyframes(fadeInUpBig, 'fadeInUpBig')
-    },
-    topNav: {
-        width: '100%',
-        height: '70px',
-        position: 'fixed',
-        zIndex: 100
     },
     mainLogo: {
         float: 'left',
@@ -75,13 +69,13 @@ class Main extends Component {
 class QuotingTool extends Component {
     render() {
         return (
-            <Box style={{height: '100%'}} fill={true} /*animation="fadeIn"*/>
-                <nav style={styles.topNav}>
+            <div className={s.quotingToolContainer}>
+                <nav className={s.topNav}>
                     <Box fill style={{backgroundColor: 'white'}}>
                         <img src={img} alt="iq-logo" style={styles.mainLogo}/>
                     </Box>
                 </nav>
-                <Box className="quote-form-content" style={{paddingTop: 70}} direction="row" fill="horizontal">
+                <div className={s.quoteFormContainer}>
                     <Switch>
                         <Route path="/client" component={Client}/>
                         <Route path="/agent" component={Agent}/>
@@ -89,8 +83,8 @@ class QuotingTool extends Component {
                         <Route path="/quote" component={Quote}/>
                         <Redirect to="/quote"/>
                     </Switch>
-                </Box>
-            </Box>
+                </div>
+            </div>
         );
     }
 }
