@@ -1,16 +1,16 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import Store from '../../../../ApplicationStore';
-import {Accordion, AccordionPanel, Anchor, Box, Button, Heading, Paragraph} from 'grommet';
+import { Accordion, AccordionPanel, Anchor, Box, Button, Heading, Paragraph } from 'grommet';
 import moment from 'moment';
-import {formatCovAmount, logoImageForCompanyID, splitPrice} from '../../../../func';
-import {QuoteService} from '../../../../services/quote.service';
+import { formatCovAmount, logoImageForCompanyID, splitPrice } from '../../../../func';
+import { QuoteService } from '../../../../services/quote.service';
 import Spinner from 'react-spinkit';
-import {Store as S} from 'undux';
-import {History, LocationState} from 'history';
-import {QuickTermQuoteResult, Address} from 'insuqo-shared';
-import {AuthenticationService} from "../../../../services/authentication.service";
-import {ClientAuthentication} from "../../../../controllers/sign-up/ClientAuthentication";
-import {CognitoUser} from "amazon-cognito-identity-js";
+import { Store as S } from 'undux';
+import { History, LocationState } from 'history';
+import { QuickTermQuoteResult, Address } from 'insuqo-shared';
+import { AuthenticationService } from "../../../../services/authentication.service";
+import { ClientAuthentication } from "../../../../controllers/sign-up/ClientAuthentication";
+import { CognitoUser } from "amazon-cognito-identity-js";
 import { ApplicationService } from '../../../../services/application.service';
 
 interface ResultsProps {
@@ -33,10 +33,10 @@ const styles = {
 };
 
 const frequencies = [
-    {val: 'month', name: 'Monthly'},
-    {val: 'quarter', name: 'Quarterly'},
-    {val: 'semiannual', name: 'Semi-annually'},
-    {val: 'annual', name: 'Annually'}];
+    { val: 'month', name: 'Monthly' },
+    { val: 'quarter', name: 'Quarterly' },
+    { val: 'semiannual', name: 'Semi-annually' },
+    { val: 'annual', name: 'Annually' }];
 
 class Results extends Component<ResultsProps> {
 
@@ -79,14 +79,14 @@ class Results extends Component<ResultsProps> {
         let quoteKey = localStorage.getItem('quoteKey');
         if (quoteKey) {
             const quotes = await new QuoteService().getQuotesByKey(quoteKey);
-            this.setState({quotes, loading: false});
+            this.setState({ quotes, loading: false });
             // if (q !== undefined && q !== null) this.setState({loading: false, quotes: JSON.parse(q!)});
         } else {
             try {
                 const newQuotes = await this.getQuotes();
                 console.log(newQuotes);
                 quoteKey = newQuotes.data!.key;
-                this.setState({loading: false, quoteKey, quotes: newQuotes.data!.quotes});
+                this.setState({ loading: false, quoteKey, quotes: newQuotes.data!.quotes });
                 // localStorage.setItem('quoteKey', quoteKey);
             } catch (error) {
                 console.error(error);
@@ -130,9 +130,9 @@ class Results extends Component<ResultsProps> {
     };
 
     formatQuotes = (freq: string) => {
-        const {quotes} = this.state;
+        const { quotes } = this.state;
         if (quotes === undefined || quotes.length === 0) {
-            return <div/>;
+            return <div />;
         }
         return quotes.map((quote, index) => {
             return (
@@ -144,32 +144,32 @@ class Results extends Component<ResultsProps> {
     };
 
     formatQuoteBody = (quote: QuickTermQuoteResult, index: number, freq: string) => {
-        const {active} = this.state;
+        const { active } = this.state;
         return (
             <Box>
-                <Box style={{backgroundColor: '#F5F5F5', padding: 10}}>
+                <Box style={{ backgroundColor: '#F5F5F5', padding: 10 }}>
                     <Box direction="row-responsive">
-                        <Box style={{width: '50%'}}>
+                        <Box style={{ width: '50%' }}>
                             <Heading level={3}>Provider<Paragraph
-                                style={{color: '#9c37f2'}}>{quote.CompanyName}</Paragraph></Heading>
+                                style={{ color: '#9c37f2' }}>{quote.CompanyName}</Paragraph></Heading>
                             <Heading level={3}>Coverage<Paragraph
-                                style={{color: '#9c37f2'}}>$ {formatCovAmount(quote.FaceAmount)}</Paragraph></Heading>
+                                style={{ color: '#9c37f2' }}>$ {formatCovAmount(quote.FaceAmount)}</Paragraph></Heading>
                             <Heading level={3}>Product Name<Paragraph
-                                style={{color: '#9c37f2'}}>{quote.ProductName}</Paragraph></Heading>
+                                style={{ color: '#9c37f2' }}>{quote.ProductName}</Paragraph></Heading>
                         </Box>
-                        <Box style={{width: '50%', marginTop: 10, paddingRight: 10}}>
+                        <Box style={{ width: '50%', marginTop: 10, paddingRight: 10 }}>
                             <Heading level={3}>Term Length<Paragraph
-                                style={{color: '#9c37f2'}}>{quote.Term} Years</Paragraph></Heading>
-                            <Heading level={3}>AMBest Rating <Anchor label="(?)"/><Paragraph
-                                style={{color: '#9c37f2'}}>{quote.AMBest}</Paragraph></Heading>
+                                style={{ color: '#9c37f2' }}>{quote.Term} Years</Paragraph></Heading>
+                            <Heading level={3}>AMBest Rating <Anchor label="(?)" /><Paragraph
+                                style={{ color: '#9c37f2' }}>{quote.AMBest}</Paragraph></Heading>
                             <Heading level={3}>Features<Paragraph
-                                style={{color: '#9c37f2'}}>{this.formatRider(quote)}</Paragraph></Heading>
+                                style={{ color: '#9c37f2' }}>{this.formatRider(quote)}</Paragraph></Heading>
                         </Box>
                     </Box>
-                    <Box style={{width: '100%', maxWidth: 300}} alignSelf="center">
+                    <Box style={{ width: '100%', maxWidth: 300 }} alignSelf="center">
                         <Button primary={active === index} onClick={(event: any) => {
                             this.apply(quote, event);
-                        }} fill={false} hoverIndicator="#EAC4FF" label="APPLY"/>
+                        }} fill={false} hoverIndicator="#EAC4FF" label="APPLY" />
                     </Box>
                 </Box>
             </Box>
@@ -191,12 +191,12 @@ class Results extends Component<ResultsProps> {
         return (
             <Box direction="row-responsive" fill="horizontal" align="stretch" margin="small" alignSelf="stretch">
                 <Heading
-                    style={{maxWidth: 'none'}}
+                    style={{ maxWidth: 'none' }}
                     level={3}>
                     <Box direction="row" alignSelf="stretch">
-                        <Box fill="horizontal" align="center" style={{minWidth: 150}}>
+                        <Box fill="horizontal" align="center" style={{ minWidth: 150 }}>
                             <img
-                                style={{marginTop: 10}}
+                                style={{ marginTop: 10 }}
                                 alt={'logo-' + quote.CompanyID}
                                 height={60}
                                 src={logoImageForCompanyID(quote.CompanyID)}
@@ -205,13 +205,13 @@ class Results extends Component<ResultsProps> {
                     </Box>
                 </Heading>
                 <Box fill="horizontal" justify="center" align="center">
-                    <Heading style={{width: '100%'}} truncate level={3} margin="none">{quote.CompanyName}</Heading>
+                    <Heading style={{ width: '100%' }} truncate level={3} margin="none">{quote.CompanyName}</Heading>
                 </Box>
                 <Box fill="horizontal">
                     <Box fill="vertical" direction="row" align="center" justify="center">
-                        <Box direction="row" style={{height: 50}} align="center">
+                        <Box direction="row" style={{ height: 50 }} align="center">
                             <span>$</span>
-                            <span style={{fontSize: 40, fontWeight: 'bold'}}>{splitPremium[0]}</span>
+                            <span style={{ fontSize: 40, fontWeight: 'bold' }}>{splitPremium[0]}</span>
                             <span style={{
                                 fontSize: 20,
                                 verticalAlign: 'top',
@@ -231,7 +231,7 @@ class Results extends Component<ResultsProps> {
     };
 
     updateActiveIndex = (active: any) => {
-        this.setState({active: active[0]});
+        this.setState({ active: active[0] });
     };
 
     apply = async (quote: QuickTermQuoteResult, event: any) => {
@@ -251,45 +251,46 @@ class Results extends Component<ResultsProps> {
                 throw new Error('Session is invalid');
             }
         } catch (err) {
-            this.setState({showAuthModal: true});
+            this.setState({ showAuthModal: true });
         }
     };
 
     handleAuthentication = (user: CognitoUser) => {
+        this.setState({ showAuthModal: false });
         // save user?
         // Persist quotes to the user
     };
 
     updateFreq = (newFreq: any) => {
-        this.setState({freq: newFreq.target.value});
+        this.setState({ freq: newFreq.target.value });
     };
 
     render = () => {
-        const {active, loading, freq, showAuthModal} = this.state;
+        const { active, loading, freq, showAuthModal } = this.state;
         return (
             <Box fill>
                 {loading ?
-                    <Box fill align="center" justify="center" style={{visibility: loading ? 'visible' : 'hidden'}}>
-                        <Spinner style={{marginTop: '45%'}} name='folding-cube' color="#9c37f2"/>
+                    <Box fill align="center" justify="center" style={{ visibility: loading ? 'visible' : 'hidden' }}>
+                        <Spinner style={{ marginTop: '45%' }} name='folding-cube' color="#9c37f2" />
                     </Box> :
                     <Box>
                         <Heading margin="xsmall" level={1} color="#9c37f2">Here are your quotes</Heading>
                         <Heading margin="xsmall" style={styles.quoteSubtitle} color="dark-4" level={3}>Click on each for
                             more info.</Heading>
-                        <Box background={{color: '#FFFFFF'}} direction="row-responsive" justify="end" align="center">
+                        <Box background={{ color: '#FFFFFF' }} direction="row-responsive" justify="end" align="center">
                             <Heading margin="xsmall" level={5}>Choose payment frequency: </Heading>
                             <select value={freq} onChange={this.updateFreq}
-                                    children={frequencies.map((option, index) => <option value={option.val}
-                                                                                         key={index}>{option.name}</option>)}/>
+                                children={frequencies.map((option, index) => <option value={option.val}
+                                    key={index}>{option.name}</option>)} />
                         </Box>
-                        <Box style={{paddingLeft: 5, paddingRight: 5}}>
+                        <Box style={{ paddingLeft: 5, paddingRight: 5 }}>
                             <Accordion animate={false} onActive={this.updateActiveIndex}
-                                       activeIndex={loading ? undefined : active}>
+                                activeIndex={loading ? undefined : active}>
                                 {this.formatQuotes(freq)}
                             </Accordion>
                         </Box>
                         {showAuthModal &&
-						<ClientAuthentication type="signup" onAuthenticate={this.handleAuthentication}/>}
+                            <ClientAuthentication type="signup" onAuthenticate={this.handleAuthentication} />}
                     </Box>
                 }
             </Box>
