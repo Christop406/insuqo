@@ -71,7 +71,8 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "heroku-postbuild": "npm run build",
-    "analyze": "source-map-explorer 'build/static/js/*.js'"
+    "analyze": "source-map-explorer 'build/static/js/*.js'",
+    "preinstall": "export BIT_TOKEN=$(bit config get user.token)"
   },
   "eslintConfig": {
     "extends": "react-app"
