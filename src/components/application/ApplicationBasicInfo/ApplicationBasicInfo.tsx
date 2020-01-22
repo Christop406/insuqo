@@ -19,8 +19,11 @@ interface ApplicationBasicInfoProps {
 
 export const ApplicationBasicInfo: React.FunctionComponent<ApplicationBasicInfoProps> = (props) => {
     const app = props.application;
+    let ssnAlreadyFilled = false;
     if (!app) {
         return <></>;
+    } else if (app.ssn) {
+        ssnAlreadyFilled = true;
     }
 
     console.log(app);
@@ -102,14 +105,15 @@ export const ApplicationBasicInfo: React.FunctionComponent<ApplicationBasicInfoP
                                         className="text-danger">*</span></label>
                                     <Cleave placeholder="123-45-6789"
                                         name="ssn"
+                                        disabled={ssnAlreadyFilled}
                                         className="input"
                                         onChange={handleChange}
                                         onBlur={handleBlur}
                                         value={values.ssn}
                                         options={{
-                                            numericOnly: true,
+                                            numericOnly: !ssnAlreadyFilled,
                                             delimiter: '-',
-                                            blocks: [3, 2, 4]
+                                            blocks: [3, 2, 4],
                                         }}
                                     />
                                     {errors.ssn ?
@@ -336,8 +340,8 @@ export const ApplicationBasicInfo: React.FunctionComponent<ApplicationBasicInfoP
                                 </div>
                             </div>
                             <div className={s['submit-section']}>
-                                <button type="submit" disabled={isSubmitting} className="button primary">Submit
-                                    Application
+                                <button type="submit" disabled={isSubmitting} className="button primary">
+                                    Continue
                                 </button>
                             </div>
                         </form>

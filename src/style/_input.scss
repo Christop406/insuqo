@@ -15,4 +15,8 @@
     color: $text-dark;
     box-shadow: $input-shadow;
   }
+
+  &:disabled {
+    background-color: rgba(#000, .09);
+  }
 }

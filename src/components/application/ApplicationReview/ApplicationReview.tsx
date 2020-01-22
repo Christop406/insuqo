@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Application, QuickTermQuoteResult, PremiumMode } from 'insuqo-shared';
+import { Application, QuickTermQuoteResult, PremiumMode, ApplicationStatus } from 'insuqo-shared';
 import s from './ApplicationReview.module.scss';
 import cx from 'classnames';
 import { ApplicationService } from '../../../services/application.service';
-import { logoImageForCompanyID } from '../../../func';
+import { logoImageForCompanyID, formatCovAmount } from '../../../func';
+import { RouteComponentProps } from 'react-router-dom';
 
 const applicationService = new ApplicationService();
 
-export const ApplicationReview: React.FC<ApplicationReviewProps> = (props) => {
+export const ApplicationReview: React.FC<RouteComponentProps & ApplicationReviewProps> = (props) => {
     const { application } = props;
 
     const [image1, setImage1] = useState<string>();
@@ -27,10 +28,12 @@ export const ApplicationReview: React.FC<ApplicationReviewProps> = (props) => {
     if (!application) {
         return <></>;
     }
-
     const chosenQuote = application.quotes?.find((q) => q.id === application.quoteId && q.RecID === application.quoteRecId);
 
-    // console.log(image1, image2);
+    const submitApplication = async () => {
+        props.onSubmit(application.id);
+    };
+
     return (
         <div className={s.container}>
             <div className={s.reviewContainer}>
@@ -44,8 +47,8 @@ export const ApplicationReview: React.FC<ApplicationReviewProps> = (props) => {
                         <div>
                             <p className={s.field}><span className={s.label}>Company</span> {chosenQuote?.CompanyName}</p>
                             <p className={s.field}><span className={s.label}>Product</span> {chosenQuote?.ProductName}</p>
-                            <p className={s.field}><span className={s.label}>Coverage</span> {chosenQuote?.FaceAmount}</p>
-                            <p className={s.field}><span className={s.label}>Term</span> {chosenQuote?.GuaranteedTerm}</p>
+                            <p className={s.field}><span className={s.label}>Coverage</span> ${formatCovAmount(chosenQuote?.FaceAmount)}</p>
+                            <p className={s.field}><span className={s.label}>Term</span> {chosenQuote?.GuaranteedTerm} years</p>
                             <p className={s.field}><span className={s.label}>Payment</span> ${getQuotePrice(chosenQuote!, application.paymentFrequency)}</p>
                         </div>
                     </div>
@@ -142,7 +145,7 @@ export const ApplicationReview: React.FC<ApplicationReviewProps> = (props) => {
                 </div> */}
             </div>
             <div className={s.actionButtonContainer}>
-                <button onClick={() => applicationService.submitApplication(application.id)} className="primary button">Submit</button>
+                <button onClick={submitApplication} className="primary button">Submit</button>
             </div>
         </div>
     );
@@ -169,7 +172,7 @@ const getQuotePrice = (quote: QuickTermQuoteResult, paymentFrequency?: PremiumMo
 
 interface ApplicationReviewProps {
     application: Application;
-    onSubmit: (application: Application) => any;
+    onSubmit: (appId: string) => any;
 }
 
 const BooleanDisplay: React.FC<BooleanDisplayProps> = (props) => {

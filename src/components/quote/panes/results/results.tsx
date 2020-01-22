@@ -63,7 +63,7 @@ class Results extends Component<ResultsProps> {
         const rider = store.get('rider');
 
         const now = moment();
-        const birthTime = moment(birthdate, 'MM/DD/YYYY');
+        const birthTime = moment(birthdate, 'YYYY-MM-DD');
         const actualAge = now.diff(birthTime, 'years');
         const nearestAge = Math.round(now.diff(birthTime, 'years', true));
 
@@ -87,7 +87,7 @@ class Results extends Component<ResultsProps> {
                 console.log(newQuotes);
                 quoteKey = newQuotes.data!.key;
                 this.setState({loading: false, quoteKey, quotes: newQuotes.data!.quotes});
-                localStorage.setItem('quoteKey', quoteKey);
+                // localStorage.setItem('quoteKey', quoteKey);
             } catch (error) {
                 console.error(error);
                 throw error;

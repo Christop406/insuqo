@@ -7,7 +7,7 @@ export function reduceQuote(quote: any) {
     q.amBest = quote.amBest;
 }
 
-export function formatCovAmount(x: number | string) {
+export function formatCovAmount(x: number | string | undefined) {
     if(x === undefined) return '';
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }

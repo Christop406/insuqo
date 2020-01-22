@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import Store from '../../ApplicationStore';
 import { ApplicationBasicInfo } from "../../components/application/ApplicationBasicInfo/ApplicationBasicInfo";
-import { Route, RouteComponentProps, Switch } from 'react-router-dom';
+import { Route, RouteComponentProps, Switch, Redirect } from 'react-router-dom';
 import { ApplicationService } from "../../services/application.service";
-import { Application as ApplicationModel, QuickTermQuoteResult, ApplicationStatus as Status } from "insuqo-shared";
+import { Application as ApplicationModel, QuickTermQuoteResult, ApplicationStatus as Status, ApplicationStatus } from "insuqo-shared";
 import { ApplicationPaymentInfo } from "../../components/application/ApplicationPaymentInfo/ApplicationPaymentInfo";
 import { ApplicationReview } from '../../components/application/ApplicationReview/ApplicationReview';
 import { ApplicationStatusView } from '../../components/application/ApplicationStatusView/ApplicationStatusView';
@@ -28,14 +28,20 @@ class Application extends Component<RouteComponentProps<{ appId: string }>, Appl
         document.title = 'Application | INSUQO';
         console.log(this.props);
         try {
-            const application = await this.applicationService.getApplication(this.props.match.params.appId);
+            const appId = this.props.match.params.appId;
+            if (!appId) {
+                console.warn('No application ID');
+                this.props.history.push('/');
+                return;
+            }
+            const application = await this.applicationService.getApplication(appId);
             if (application && application.quotes) {
                 const chosenQuote = application.quotes.find<QuickTermQuoteResult>(((quote: QuickTermQuoteResult) => {
                     return quote.RecID === application.quoteRecId;
                 }) as any);
                 if (chosenQuote) {
 
-                    switch(application.status) {
+                    switch (application.status) {
                         case Status.New:
                             this.props.history.push(`/application/${application.id}/apply`);
                             break;
@@ -78,9 +84,10 @@ class Application extends Component<RouteComponentProps<{ appId: string }>, Appl
                         onSubmit={this.updatePaymentInfo} />} />
                 <Route path={`${this.props.match.path}/review`} render={(props) =>
                     <ApplicationReview {...props} application={application!}
-                        onSubmit={(a) => this.updateApplication(a, 'finish')} />} />
+                        onSubmit={this.submitApplication} />} />
                 <Route path={`${this.props.match.path}/status`} render={(props) =>
                     <ApplicationStatusView {...props} application={application!} />} />
+                <Redirect to={`${this.props.match.path}/${this.getDefaultStep(application)}`} />
             </Switch>
         );
     };
@@ -101,16 +108,28 @@ class Application extends Component<RouteComponentProps<{ appId: string }>, Appl
         }
     };
 
-    private updateApplication = async (app: any, continueTo: 'payment' | 'review' | 'finish') => {
-        console.log(app);
-        let application = await this.applicationService.updateApplication((this.state.application as any).id, app);
-        if (application && (application = await this.applicationService.getApplication(application.id))) {
-            this.setState({ application }, () => this.props.history.push(this.props.match.path + '/' + continueTo));
+    private submitApplication = async (applicationId: string) => {
+        const updated = await this.applicationService.submitApplication(applicationId);
+        if (updated?.status === ApplicationStatus.Submitted) {
+            // success
+            this.setState({ application: updated }, () => this.props.history.push(`/application/${updated.id}/status`));
+        } else {
+            // failure
+            // TODO: Show eror
         }
-    };
+    }
 
-    private submitApplication = async (app: ApplicationModel) => {
-        console.log(app);
+    private getDefaultStep = (app?: ApplicationModel) => {
+        switch (app?.status) {
+            case Status.New:
+                return 'apply';
+            case Status.AwaitingPayment:
+                return 'payment';
+            case Status.Draft: // change?
+                return 'review';
+            default:
+                return 'status';
+        }
     };
 }
 
