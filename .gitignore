@@ -33,5 +33,5 @@ amplify/backend/awscloudformation
 build/
 dist/
 node_modules/
-aws-exports.js
+# aws-exports.js # This is supposed to be ignored but i can't get it to work...
 awsconfiguration.json
