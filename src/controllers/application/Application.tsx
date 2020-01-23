@@ -9,10 +9,13 @@ import { ApplicationReview } from '../../components/application/ApplicationRevie
 import { ApplicationStatusView } from '../../components/application/ApplicationStatusView/ApplicationStatusView';
 import Spinner from 'react-spinkit';
 import s from './Application.module.scss';
+import { ClientAuthentication } from '../sign-up/ClientAuthentication';
+import { AuthenticationService } from '../../services/authentication.service';
 
 interface ApplicationState {
     application: ApplicationModel | undefined;
     chosenQuote: QuickTermQuoteResult | undefined;
+    showAuthModal: boolean;
 }
 
 class Application extends Component<RouteComponentProps<{ appId: string }>, ApplicationState> {
@@ -20,75 +23,61 @@ class Application extends Component<RouteComponentProps<{ appId: string }>, Appl
     public state = {
         application: undefined,
         chosenQuote: undefined,
+        showAuthModal: false,
     };
 
     private applicationService: ApplicationService = new ApplicationService();
 
     public componentDidMount = async () => {
         document.title = 'Application | INSUQO';
-        console.log(this.props);
+        // console.log(this.props);
         try {
-            const appId = this.props.match.params.appId;
-            if (!appId) {
-                console.warn('No application ID');
-                this.props.history.push('/');
-                return;
-            }
-            const application = await this.applicationService.getApplication(appId);
-            if (application && application.quotes) {
-                const chosenQuote = application.quotes.find<QuickTermQuoteResult>(((quote: QuickTermQuoteResult) => {
-                    return quote.RecID === application.quoteRecId;
-                }) as any);
-                if (chosenQuote) {
-
-                    switch (application.status) {
-                        case Status.New:
-                            this.props.history.push(`/application/${application.id}/apply`);
-                            break;
-                        case Status.Submitted:
-                            this.props.history.push(`/application/${application.id}/status`);
-                            break;
-                    }
-
-                    this.setState({
-                        application,
-                        chosenQuote
-                    });
+            if ((await AuthenticationService.getCurrentSession()).isValid()) {
+                const appId = this.props.match.params.appId;
+                if (!appId) {
+                    console.warn('No application ID');
+                    this.props.history.push('/');
+                    return;
                 }
+                await this.loadApplication();
             } else {
-                // error
+                throw new Error('Invalid session');
             }
 
         } catch (error) {
-            console.log(error);
+            console.error(error);
+            this.setState({ showAuthModal: true });
         }
 
     };
 
     render = () => {
-        const { application, chosenQuote } = this.state;
+        const { application, chosenQuote, showAuthModal } = this.state;
 
         if (!application) {
             return <div className={s.loadingContainer}>
                 <Spinner name="folding-cube" fadeIn="none" color="#9c37f2" />
+                {showAuthModal && <ClientAuthentication type="login" onAuthenticate={this.handleAuthentication} />}
             </div>;
         }
 
         return (
-            <Switch>
-                <Route path={`${this.props.match.path}/apply`} render={(props) =>
-                    <ApplicationBasicInfo {...props} onSubmit={this.updateBasicInfo} application={application!}
-                        chosenQuote={chosenQuote} />} />
-                <Route path={`${this.props.match.path}/payment`} render={(props) =>
-                    <ApplicationPaymentInfo {...props} application={application!}
-                        onSubmit={this.updatePaymentInfo} />} />
-                <Route path={`${this.props.match.path}/review`} render={(props) =>
-                    <ApplicationReview {...props} application={application!}
-                        onSubmit={this.submitApplication} />} />
-                <Route path={`${this.props.match.path}/status`} render={(props) =>
-                    <ApplicationStatusView {...props} application={application!} />} />
-                <Redirect to={`${this.props.match.path}/${this.getDefaultStep(application)}`} />
-            </Switch>
+            <>
+                <Switch>
+                    <Route path={`${this.props.match.path}/apply`} render={(props) =>
+                        <ApplicationBasicInfo {...props} onSubmit={this.updateBasicInfo} application={application!}
+                            chosenQuote={chosenQuote} />} />
+                    <Route path={`${this.props.match.path}/payment`} render={(props) =>
+                        <ApplicationPaymentInfo {...props} application={application!}
+                            onSubmit={this.updatePaymentInfo} />} />
+                    <Route path={`${this.props.match.path}/review`} render={(props) =>
+                        <ApplicationReview {...props} application={application!}
+                            onSubmit={this.submitApplication} />} />
+                    <Route path={`${this.props.match.path}/status`} render={(props) =>
+                        <ApplicationStatusView {...props} application={application!} />} />
+                    <Redirect to={`${this.props.match.path}/${this.getDefaultStep(application)}`} />
+                </Switch>
+            </>
         );
     };
 
@@ -129,6 +118,38 @@ class Application extends Component<RouteComponentProps<{ appId: string }>, Appl
                 return 'review';
             default:
                 return 'status';
+        }
+    };
+
+    private handleAuthentication = async () => {
+        this.setState({showAuthModal: false});
+        await this.loadApplication();
+    };
+
+    private loadApplication = async () => {
+        const appId = this.props.match.params.appId;
+        const application = await this.applicationService.getApplication(appId);
+        if (application && application.quotes) {
+            const chosenQuote = application.quotes.find<QuickTermQuoteResult>(((quote: QuickTermQuoteResult) => {
+                return quote.RecID === application.quoteRecId;
+            }) as any);
+            if (chosenQuote) {
+                switch (application.status) {
+                    case Status.New:
+                        this.props.history.push(`/application/${application.id}/apply`);
+                        break;
+                    case Status.Submitted:
+                        this.props.history.push(`/application/${application.id}/status`);
+                        break;
+                }
+
+                this.setState({
+                    application,
+                    chosenQuote
+                });
+            }
+        } else {
+            // error
         }
     };
 }
