@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import Store from '../../ApplicationStore';
-import {Anchor, Box, Button, Image, Text, TextInput} from "grommet";
-import logo from '../../assets/img/insuqo-logo.png';
 import {login} from "../../api";
 import constants from '../../util/constants';
 import './ClientLogin.scss';

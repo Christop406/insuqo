@@ -9,7 +9,6 @@ import {Box, Grommet} from 'grommet';
 import { grommet } from 'grommet/themes';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import img from './assets/img/insuqo-logo.png';
-import {fillStoreFromLocalStorage} from './func';
 import Agent from './controllers/agent/Agent';
 import Client from './controllers/client/Client';
 import ClientLogin from './controllers/login/ClientLogin';

@@ -10,7 +10,6 @@ interface PasswordSecurityProps {
 }
 
 export const PasswordSecurity: React.FunctionComponent<PasswordSecurityProps> = ({ requirements, valid }) => {
-    let untouched = true;
 
     let min = true;
     let max = true;
@@ -19,7 +18,6 @@ export const PasswordSecurity: React.FunctionComponent<PasswordSecurityProps> = 
     let digits = true;
     let symbols = true;
     if (requirements) {
-        untouched = false;
         requirements.forEach((req: string) => {
             switch (req) {
                 case 'min':

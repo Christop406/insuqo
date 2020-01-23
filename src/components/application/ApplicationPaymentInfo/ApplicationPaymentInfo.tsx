@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Field, Formik } from 'formik';
 import { Application } from 'insuqo-shared';
 import { FilePond, registerPlugin } from 'react-filepond';
@@ -20,8 +20,6 @@ interface PaymentInfoProps {
 }
 
 export const ApplicationPaymentInfo: React.FunctionComponent<PaymentInfoProps> = (props) => {
-    const [filepond, setFilepond] = useState<FilePond | null>(null);
-
     if (!props.application) {
         return <></>;
     }
@@ -53,7 +51,7 @@ export const ApplicationPaymentInfo: React.FunctionComponent<PaymentInfoProps> =
                             </div>
                             <div className="form-group">
                                 <label>Check Picture</label>
-                                <FilePond ref={(ref) => setFilepond(ref)} server={{
+                                <FilePond server={{
                                     process: async (fieldName, file, metadata, load, error, progress, abort) => {
                                         try {
                                             const urls = await applicationService.getSignedUploadUrl(props.application!.id, {
@@ -108,12 +106,6 @@ export const ApplicationPaymentInfo: React.FunctionComponent<PaymentInfoProps> =
             }
         </Formik>
     );
-};
-
-const initialFormValues = {
-    nameOnAccount: '',
-    accountNumber: '',
-    routingNumber: ''
 };
 
 function iteratorToArray<T>(iterator: IterableIterator<T>): T[] {

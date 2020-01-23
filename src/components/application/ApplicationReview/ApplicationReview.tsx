@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Application, QuickTermQuoteResult, PremiumMode, ApplicationStatus } from 'insuqo-shared';
+import { Application, QuickTermQuoteResult, PremiumMode } from 'insuqo-shared';
 import s from './ApplicationReview.module.scss';
 import cx from 'classnames';
 import { ApplicationService } from '../../../services/application.service';
@@ -42,7 +42,7 @@ export const ApplicationReview: React.FC<RouteComponentProps & ApplicationReview
                     <h2>Chosen Quote</h2>
                     <div className={s.quoteContainer}>
                         <div className={s.companyImage}>
-                            <img src={logoImageForCompanyID(chosenQuote?.CompanyID)} />
+                            <img alt={`Logo for ${chosenQuote?.CompanyName}`} src={logoImageForCompanyID(chosenQuote?.CompanyID)} />
                         </div>
                         <div>
                             <p className={s.field}><span className={s.label}>Company</span> {chosenQuote?.CompanyName}</p>
@@ -118,8 +118,8 @@ export const ApplicationReview: React.FC<RouteComponentProps & ApplicationReview
                         <p className={s.field}><span className={s.label}>Account Number</span> <span className="code">{application.accountNumber}</span></p>
                         <p className={s.field}><span className={s.label}>Routing Number</span> <span className="code">{application.routingNumber}</span></p>
                     </div>
-                    <img className={s.paymentImage} src={image1}></img>
-                    <img className={s.paymentImage} src={image2}></img>
+                    <img alt="Front of check" className={s.paymentImage} src={image1}></img>
+                    <img alt="Back of check" className={s.paymentImage} src={image2}></img>
                 </div>
                 <div className={s.reviewSection}>
                     <h2>Other Plan Options</h2>
