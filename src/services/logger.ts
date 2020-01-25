@@ -12,39 +12,63 @@ class IQLogger {
         return this._instance;
     }
 
-    public error(message: any, ...optionalParams: any[]): void {
+    public error(message: any, ...optionalParams: any): void {
         if (this._enabled) {
-            console.error(message, optionalParams);
+            if (optionalParams && optionalParams.length > 0) {
+                console.error(message, optionalParams);
+            } else {
+                console.error(message);
+            }
         }
     }
 
-    public info(message: any, ...optionalParams: any[]): void {
+    public info(message: any, ...optionalParams: any): void {
         if (this._enabled) {
-            console.info(message, optionalParams);
+            if (optionalParams && optionalParams.length > 0) {
+                console.info(message, optionalParams);
+            } else {
+                console.info(message);
+            }
         }
     }
 
-    public log(message: any, ...optionalParams: any[]): void {
+    public log(message: any, ...optionalParams: any): void {
         if (this._enabled) {
-            console.log(message, optionalParams);
+            if (optionalParams && optionalParams.length > 0) {
+                console.log(message, optionalParams);
+            } else {
+                console.log(message);
+            }
         }
     }
 
-    public debug(message: any, ...optionalParams: any[]): void {
+    public debug(message: any, ...optionalParams: any): void {
         if (this._enabled) {
-            console.debug(message, optionalParams);
+            if (optionalParams && optionalParams.length > 0) {
+                console.debug(message, optionalParams);
+            } else {
+                console.debug(message);
+            }
         }
     }
 
-    public warn(message: any, ...optionalParams: any[]): void {
+    public warn(message: any, ...optionalParams: any): void {
         if (this._enabled) {
-            console.warn(message, optionalParams);
+            if (optionalParams && optionalParams.length > 0) {
+                console.warn(message, optionalParams);
+            } else {
+                console.warn(message);
+            }
         }
     }
 
     public trace(message: any, ...optionalParams: any[]): void {
         if (this._enabled) {
-            console.trace(message, optionalParams);
+            if (optionalParams && optionalParams.length > 0) {
+                console.trace(message, optionalParams);
+            } else {
+                console.trace(message);
+            }
         }
     }
 }

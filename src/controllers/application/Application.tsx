@@ -122,7 +122,7 @@ class Application extends Component<RouteComponentProps<{ appId: string }>, Appl
     };
 
     private handleAuthentication = async () => {
-        this.setState({showAuthModal: false});
+        this.setState({ showAuthModal: false });
         await this.loadApplication();
     };
 
@@ -139,10 +139,19 @@ class Application extends Component<RouteComponentProps<{ appId: string }>, Appl
                         this.props.history.push(`/application/${application.id}/apply`);
                         break;
                     case Status.Submitted:
+                    case Status.InProgress:
+                    case Status.Done: // change?
+                    case Status.New:
+                    case Status.Problem:
                         this.props.history.push(`/application/${application.id}/status`);
                         break;
+                    case Status.AwaitingPayment:
+                        if (this.props.location.pathname.includes('status')) {
+                            this.props.history.push(`/application/${application.id}/payment`);
+                        }
+                        break;
                 }
-
+                Logger.info(application);
                 this.setState({
                     application,
                     chosenQuote
@@ -150,6 +159,7 @@ class Application extends Component<RouteComponentProps<{ appId: string }>, Appl
             }
         } else {
             // error
+            Logger.error('No Application Found');
         }
     };
 }

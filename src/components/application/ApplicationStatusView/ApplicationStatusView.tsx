@@ -33,11 +33,11 @@ const getGradient = (status: ApplicationStatus): { start: string; end: string } 
 
 export const ApplicationStatusView: React.FunctionComponent<StatusViewProps> = (props) => {
     const application = props.application;
-
+    Logger.info(application);
     if (!application) {
         return <></>;
     }
-    Logger.debug(application.status);
+    Logger.info(application.status);
     const info = statusInfo.get(application.status) || { name: 'Not Found', percent: 0, description: 'You have entered an invalid application ID.' };
     const gradient = getGradient(application.status);
     return (
