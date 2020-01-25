@@ -6,8 +6,9 @@ import * as serviceWorker from './serviceWorker';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Amplify from 'aws-amplify';
 import awsconfig from './aws-exports';
+import { Logger } from './services/logger';
 
-console.log(process.env);
+Logger.log(process.env);
 Amplify.configure(awsconfig);
 
 ReactDOM.render(<App />, document.getElementById('root'));

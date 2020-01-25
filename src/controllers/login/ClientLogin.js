@@ -4,6 +4,7 @@ import {login} from "../../api";
 import constants from '../../util/constants';
 import './ClientLogin.scss';
 import {ClientAuthentication} from '../sign-up/ClientAuthentication';
+import { Logger } from '../../services/logger';
 
 class ClientLogin extends Component {
 
@@ -17,7 +18,7 @@ class ClientLogin extends Component {
     }
 
     login = () => {
-        console.log('logging in');
+        Logger.debug('logging in');
         login(constants.userTypes.client, this.state.email, this.state.password).then(res => {
             console.log(res.data);
             localStorage.setItem("lt", res.data.data.tok);
@@ -37,7 +38,7 @@ class ClientLogin extends Component {
     render() {
         return (
             <div>
-                <ClientAuthentication type="login" onAuthenticate={(usr) => console.log(usr)}/>
+                <ClientAuthentication type="login" onAuthenticate={(usr) => Logger.log(usr)}/>
             </div>
         );
     }

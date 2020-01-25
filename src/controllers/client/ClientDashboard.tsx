@@ -10,7 +10,6 @@ class ClientDashboard extends Component<IClientDashboardProps> {
 
     componentDidMount = () => {
         if(this.props.client !== undefined && this.props.client.applicationId !== undefined) {
-            console.log('need to get the application');
             getApplication(this.props.client.applicationId);
         }
     };

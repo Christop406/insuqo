@@ -9,6 +9,7 @@ import { Col, Row } from "react-bootstrap";
 import { Beneficiary } from "insuqo-shared";
 import { Store as S } from 'undux';
 import Cleave from "cleave.js/react";
+import { Logger } from '../../services/logger';
 
 declare type IBeneficiaryListProps = {
     onUpdate: (beneficiaries: Beneficiary[]) => void;
@@ -44,7 +45,7 @@ class BeneficiaryList extends Component<IBeneficiaryListProps, IBeneficiaryListS
     };
 
     deleteBeneficiary = (index: number) => {
-        console.log('deleted');
+        Logger.log('deleted');
         let oldBens = this.state.beneficiaries.map(value => value);
         oldBens.splice(index, 1);
         this.setState({ beneficiaries: oldBens }, this.updateParent.bind(this));

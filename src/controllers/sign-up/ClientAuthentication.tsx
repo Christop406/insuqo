@@ -1,11 +1,12 @@
 import React from 'react';
 import s from './ClientAuthentication.module.scss';
-import {AuthenticationForm} from "../../components/authentication/AuthenticationForm";
-import {AuthenticationService} from "../../services/authentication.service";
-import {CognitoUser} from "amazon-cognito-identity-js";
-import {AuthChallengeName} from "insuqo-shared/types/auth-challenge-name";
-import {Auth} from "aws-amplify";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import { AuthenticationForm } from "../../components/authentication/AuthenticationForm";
+import { AuthenticationService } from "../../services/authentication.service";
+import { CognitoUser } from "amazon-cognito-identity-js";
+import { AuthChallengeName } from "insuqo-shared/types/auth-challenge-name";
+import { Auth } from "aws-amplify";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Logger } from '../../services/logger';
 
 interface ClientAuthenticationProps {
     onAuthenticate: (user: CognitoUser) => unknown;
@@ -21,13 +22,14 @@ interface ClientAuthenticationState {
     title: string;
     description?: string;
     formErrorText?: string;
+    savedUserInfo?: { email: string, password: string };
 }
 
 export class ClientAuthentication extends React.Component<ClientAuthenticationProps, ClientAuthenticationState> {
 
     private cognitoUser?: CognitoUser = undefined;
 
-    state = {
+    state: ClientAuthenticationState = {
         paneType: this.props.type || 'login',
         userNeedsConfirmation: false,
         authChallengeRequired: false,
@@ -39,14 +41,15 @@ export class ClientAuthentication extends React.Component<ClientAuthenticationPr
 
     public signUp = async (email: string, password: string) => {
         const signUpRes = await AuthenticationService.signUp(email, password);
-        this.setState({userNeedsConfirmation: !signUpRes.userConfirmed, email});
+        this.setState({ userNeedsConfirmation: !signUpRes.userConfirmed, email, savedUserInfo: { email, password } });
 
         if (signUpRes.userConfirmed && this.props.onAuthenticate) {
+            await this.logIn(email, password);
             this.props.onAuthenticate(signUpRes.user);
         }
     };
 
-    public logIn = async (email: string, password: string) => {
+    public logIn = async (email: string, password: string, authenticate: boolean = true) => {
         try {
             const loginRes = await AuthenticationService.login(email, password);
             this.cognitoUser = loginRes;
@@ -57,23 +60,23 @@ export class ClientAuthentication extends React.Component<ClientAuthenticationPr
                     authChallengeName: loginRes.challengeName
                 });
             } else {
-                if (this.props.onAuthenticate) {
+                if (authenticate && this.props.onAuthenticate) {
                     this.props.onAuthenticate(this.cognitoUser);
                 }
             }
         } catch (error) {
-            this.setState({formErrorText: error.message});
+            this.setState({ formErrorText: error.message });
         }
     };
 
     public answerAuthChallenge = async (answer: string) => {
-        const {authChallengeName} = this.state;
+        const { authChallengeName, savedUserInfo } = this.state;
         switch (authChallengeName as unknown as AuthChallengeName) {
             case AuthChallengeName.SoftwareTokenMFA:
             case AuthChallengeName.SmsMFA:
-                this.cognitoUser = await Auth.confirmSignIn(this.cognitoUser, answer, authChallengeName);
+                this.cognitoUser = await Auth.confirmSignIn(this.cognitoUser, answer, authChallengeName as any);
                 break;
-            case AuthChallengeName.MFARequired: // MFA_SETUP
+            case AuthChallengeName.MFARequired: // MFA_SETUP (should not be needed)
                 break;
             case AuthChallengeName.NewPasswordRequired:
                 this.cognitoUser = await Auth.completeNewPassword(this.cognitoUser, answer, undefined);
@@ -85,19 +88,29 @@ export class ClientAuthentication extends React.Component<ClientAuthenticationPr
         if ((this.cognitoUser as any).challengeName) {
             throw new Error('User needed to answer another challenge but that functionality is not implemented.');
         }
+
+        if (savedUserInfo) {
+            await this.logIn(savedUserInfo.email, savedUserInfo.password, false);
+        }
+
         if (this.props.onAuthenticate) {
             this.props.onAuthenticate(this.cognitoUser);
         }
     };
 
     public sendConfirmation = async (confirmationCode: string) => {
-        const res = await AuthenticationService.confirmSignUp(this.state.email, confirmationCode);
-        console.log(res);
-        // continue with application after user is signed in
+        await AuthenticationService.confirmSignUp(this.state.email, confirmationCode);
+        const { savedUserInfo } = this.state;
+
+        if (savedUserInfo) {
+            await this.logIn(savedUserInfo.email, savedUserInfo.password, false);
+        }
+
+        this.props.onAuthenticate(this.cognitoUser!);
     };
 
     public switchPaneType = () => {
-        const {paneType} = this.state;
+        const { paneType } = this.state;
         const isLogin = paneType === 'login';
         this.setState({
             paneType: isLogin ? 'signup' : 'login',
@@ -106,21 +119,21 @@ export class ClientAuthentication extends React.Component<ClientAuthenticationPr
     };
 
     public render = (): React.ReactElement | any => {
-        const {paneType, userNeedsConfirmation, authChallengeRequired, authChallengeName, title, formErrorText} = this.state;
+        const { paneType, userNeedsConfirmation, authChallengeRequired, authChallengeName, title, formErrorText } = this.state;
         return (
             <div className={s['modal-container']}>
                 <div className={s['auth-container']}>
                     <h2>{title}</h2>
-                    {formErrorText && <span className={s['form-error']}><FontAwesomeIcon className={s['error-icon']} icon="exclamation-circle"/>{formErrorText}</span>}
+                    {formErrorText && <span className={s['form-error']}><FontAwesomeIcon className={s['error-icon']} icon="exclamation-circle" />{formErrorText}</span>}
                     {paneType === 'signup' &&
-					<AuthenticationForm
-						type={userNeedsConfirmation ? 'challenge' : 'signup'}
-						onSubmit={userNeedsConfirmation ? this.sendConfirmation : this.signUp}/>}
+                        <AuthenticationForm
+                            type={userNeedsConfirmation ? 'challenge' : 'signup'}
+                            onSubmit={userNeedsConfirmation ? this.sendConfirmation : this.signUp} />}
                     {paneType === 'login' &&
-					<AuthenticationForm
-						onSubmit={authChallengeRequired ? this.answerAuthChallenge : this.logIn}
-						challengeName={authChallengeName}
-						type={authChallengeRequired ? 'challenge' : 'login'}/>}
+                        <AuthenticationForm
+                            onSubmit={authChallengeRequired ? this.answerAuthChallenge : this.logIn}
+                            challengeName={authChallengeName}
+                            type={authChallengeRequired ? 'challenge' : 'login'} />}
                     <button className={`${s['mode-switcher']} full primary text button`} onClick={this.switchPaneType}>Switch
                         to {paneType === 'login' ? 'Sign Up' : 'Log In'}</button>
                 </div>

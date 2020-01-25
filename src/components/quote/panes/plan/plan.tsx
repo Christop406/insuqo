@@ -40,7 +40,6 @@ class Plan extends Component<IPlanProps> {
     };
 
     formatTermLength = (len: string) => {
-        //console.log(typeof len);
         if(len === '25') return '10';
         if(len === '50') return '15';
         if(len === '75') return '20';

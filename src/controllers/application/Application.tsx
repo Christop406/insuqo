@@ -11,6 +11,7 @@ import Spinner from 'react-spinkit';
 import s from './Application.module.scss';
 import { ClientAuthentication } from '../sign-up/ClientAuthentication';
 import { AuthenticationService } from '../../services/authentication.service';
+import { Logger } from '../../services/logger';
 
 interface ApplicationState {
     application: ApplicationModel | undefined;
@@ -30,12 +31,11 @@ class Application extends Component<RouteComponentProps<{ appId: string }>, Appl
 
     public componentDidMount = async () => {
         document.title = 'Application | INSUQO';
-        // console.log(this.props);
         try {
             if ((await AuthenticationService.getCurrentSession()).isValid()) {
                 const appId = this.props.match.params.appId;
                 if (!appId) {
-                    console.warn('No application ID');
+                    Logger.warn('No application ID');
                     this.props.history.push('/');
                     return;
                 }
@@ -45,7 +45,7 @@ class Application extends Component<RouteComponentProps<{ appId: string }>, Appl
             }
 
         } catch (error) {
-            console.error(error);
+            Logger.error(error);
             this.setState({ showAuthModal: true });
         }
 

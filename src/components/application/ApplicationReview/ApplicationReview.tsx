@@ -98,7 +98,7 @@ export const ApplicationReview: React.FC<RouteComponentProps & ApplicationReview
                 <div className={s.reviewSection}>
                     <h2>Beneficiaries</h2>
                     {application.beneficiaries?.map((b, i) => (
-                        <div className={s.beneficiaryItem}>
+                        <div className={s.beneficiaryItem} key={i}>
                             <h5>Beneficiary {i + 1}</h5>
                             <div className={s.fieldRow}>
                                 <p className={s.field}><span className={s.label}>First Name</span> {b.firstName}</p>

@@ -3,6 +3,7 @@ import { ApplicationStatus, Application } from 'insuqo-shared';
 import 'react-step-progress-bar/styles.css';
 import { ProgressBar } from 'react-step-progress-bar';
 import './ApplicationStatusView.scss';
+import { Logger } from '../../../services/logger';
 
 
 interface StatusViewProps {
@@ -36,7 +37,7 @@ export const ApplicationStatusView: React.FunctionComponent<StatusViewProps> = (
     if (!application) {
         return <></>;
     }
-    console.log(application.status);
+    Logger.debug(application.status);
     const info = statusInfo.get(application.status) || { name: 'Not Found', percent: 0, description: 'You have entered an invalid application ID.' };
     const gradient = getGradient(application.status);
     return (

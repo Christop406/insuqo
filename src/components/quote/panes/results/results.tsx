@@ -12,10 +12,21 @@ import { AuthenticationService } from "../../../../services/authentication.servi
 import { ClientAuthentication } from "../../../../controllers/sign-up/ClientAuthentication";
 import { CognitoUser } from "amazon-cognito-identity-js";
 import { ApplicationService } from '../../../../services/application.service';
+import { Logger } from '../../../../services/logger';
 
 interface ResultsProps {
     store: S<any>;
     history: History<LocationState>;
+}
+
+interface ResultsState {
+    loading: boolean;
+    quotes: QuickTermQuoteResult[];
+    active: number;
+    freq: string;
+    freqLabel: string;
+    showAuthModal: boolean;
+    selectedQuote?: QuickTermQuoteResult;
 }
 
 const styles = {
@@ -38,9 +49,9 @@ const frequencies = [
     { val: 'semiannual', name: 'Semi-annually' },
     { val: 'annual', name: 'Annually' }];
 
-class Results extends Component<ResultsProps> {
+class Results extends Component<ResultsProps, ResultsState> {
 
-    state = {
+    state: ResultsState = {
         loading: true,
         quotes: [],
         active: 0,
@@ -76,23 +87,16 @@ class Results extends Component<ResultsProps> {
 
     componentDidMount = async () => {
         const { store } = this.props;
-        let quoteKey = localStorage.getItem('quoteKey');
-        if (quoteKey) {
-            const quotes = await new QuoteService().getQuotesByKey(quoteKey);
-            this.setState({ quotes, loading: false });
-            // if (q !== undefined && q !== null) this.setState({loading: false, quotes: JSON.parse(q!)});
-        } else {
-            try {
-                const newQuotes = await this.getQuotes();
-                console.log(newQuotes);
-                quoteKey = newQuotes.data!.key;
-                this.setState({ loading: false, quoteKey, quotes: newQuotes.data!.quotes });
-                // localStorage.setItem('quoteKey', quoteKey);
-            } catch (error) {
-                console.error(error);
-                throw error;
-            }
+
+        try {
+            const newQuotes = await this.getQuotes();
+            Logger.debug(newQuotes);
+            this.setState({ loading: false, quotes: newQuotes.data!.quotes });
+        } catch (error) {
+            Logger.error(error);
+            throw error;
         }
+
         this.location = {
             city: store.get('city'),
             state: store.get('stateCode'),
@@ -136,7 +140,7 @@ class Results extends Component<ResultsProps> {
         }
         return quotes.map((quote, index) => {
             return (
-                <AccordionPanel key={index} label={this.formatQuoteHeading(quote, index, freq)}>
+                <AccordionPanel key={index} label={this.formatQuoteHeading(quote, freq)}>
                     {this.formatQuoteBody(quote, index, freq)}
                 </AccordionPanel>
             );
@@ -176,7 +180,7 @@ class Results extends Component<ResultsProps> {
         );
     };
 
-    formatQuoteHeading = (quote: QuickTermQuoteResult, index: number, freq: string) => {
+    formatQuoteHeading = (quote: QuickTermQuoteResult, freq: string) => {
         const splitPremium = splitPrice(
             freq === 'month' ?
                 quote.MonthlyTotalPremium :
@@ -239,26 +243,32 @@ class Results extends Component<ResultsProps> {
         try {
             const userSession = await AuthenticationService.getCurrentSession();
             if (userSession.isValid()) {
-                const app = await this.applicationService.createApplication(quote.id, quote.RecID, this.birthDate!, this.location!);
-                // this.props.store.set('quote')(quote);
-                // localStorage.setItem('quote', JSON.stringify(quote));
-                if (app && app.id) {
-                    this.props.history.push(`/application/${app.id}/apply`);
-                } else {
-                    throw new Error('There was an error creating the application');
-                }
+                await this.createApplication(quote);
             } else {
                 throw new Error('Session is invalid');
             }
         } catch (err) {
-            this.setState({ showAuthModal: true });
+            this.setState({ showAuthModal: true, selectedQuote: quote });
         }
     };
 
-    handleAuthentication = (user: CognitoUser) => {
+    private createApplication = async (quote: QuickTermQuoteResult) => {
+        const app = await this.applicationService.createApplication(quote.id, quote.RecID, this.birthDate!, this.location!);
+
+        if (app && app.id) {
+            this.props.history.push(`/application/${app.id}/apply`);
+        } else {
+            throw new Error('There was an error creating the application');
+        }
+    };
+
+    handleAuthentication = async (user: CognitoUser) => {
         this.setState({ showAuthModal: false });
-        // save user?
-        // Persist quotes to the user
+        const { selectedQuote } = this.state;
+
+        if (selectedQuote) {
+            await this.createApplication(selectedQuote);
+        }
     };
 
     updateFreq = (newFreq: any) => {

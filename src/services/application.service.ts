@@ -1,5 +1,6 @@
 import { Application, ApplicationStatus, Address } from 'insuqo-shared';
 import { ApiBaseService, RequestConfig } from './api-base.service';
+import { Logger } from './logger';
 
 export class ApplicationService extends ApiBaseService {
     public async getStatus(sk: string): Promise<ApplicationStatus | undefined> {
@@ -29,7 +30,7 @@ export class ApplicationService extends ApiBaseService {
     }
 
     public async updateApplication(applicationId: string, application: Application): Promise<Application | undefined> {
-        console.log(application);
+        Logger.log(application);
         const res = await this.authenticatedPut<Application>(`/applications/${applicationId}/update`, application);
         return res.data;
     }

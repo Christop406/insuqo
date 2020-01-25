@@ -10,6 +10,7 @@ import { Text } from 'grommet';
 import BeneficiaryList from '../../beneficiary-list/BeneficiaryList';
 import cx from 'classnames';
 import { Validator } from '../../../services/Validator';
+import { Logger } from '../../../services/logger';
 
 interface ApplicationBasicInfoProps {
     application: Application;
@@ -26,7 +27,7 @@ export const ApplicationBasicInfo: React.FunctionComponent<ApplicationBasicInfoP
         ssnAlreadyFilled = true;
     }
 
-    console.log(app);
+    Logger.debug(app);
 
     let beneficiaries: Beneficiary[] = app.beneficiaries || [];
 
@@ -399,7 +400,7 @@ const validateApplication = (values: Partial<Application>) => {
     if (!values.ssn || values.ssn.replace(/-/g, '').length < 9) {
         errors.ssn = 'Please enter a valid social security number.';
     }
-    console.log(values.idState, values.idNum);
+    Logger.debug(values.idState, values.idNum);
     if (values.idState && !values.idNum) {
         errors.idNum = 'ID number must be specified if state is specified.';
     }
@@ -411,7 +412,7 @@ const validateApplication = (values: Partial<Application>) => {
         errors.primaryEmail = 'Please enter a valid email address';
     }
 
-    console.log(errors, values);
+    Logger.debug(errors, values);
 
     return errors;
 };

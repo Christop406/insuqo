@@ -37,22 +37,18 @@ class Personal extends Component<IPersonalProps> {
     };
 
     updateBirthday = (event: any) => {
-        // console.log(event.target.value);
         let bd = moment(event.target.value, "MM/DD/YYYY");
         let now = moment();
         let val = event.target.value;
         if (val.length > 8 && now.isBefore(bd)) {
-            // console.log('after today');
             this.setState({birthday: val, bdError: true, bdErrMsg: "Please input a valid birthdate."});
         } else if (val.length > 8 && now.subtract(18, "years").isBefore(bd)) {
-            // console.log('not 18');
             this.setState({
                 birthday: val,
                 bdError: true,
                 bdErrMsg: "You must be 18 years or older to use this service."
             });
         } else {
-            console.log('ok');
             this.setState({birthday: val, bdError: false, bdErrMsg: ""});
         }
     };
