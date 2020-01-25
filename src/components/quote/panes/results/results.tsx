@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Store from '../../../../ApplicationStore';
 import { Accordion, AccordionPanel, Anchor, Box, Button, Heading, Paragraph } from 'grommet';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { formatCovAmount, logoImageForCompanyID, splitPrice } from '../../../../func';
 import { QuoteService } from '../../../../services/quote.service';
 import Spinner from 'react-spinkit';
@@ -73,10 +73,10 @@ class Results extends Component<ResultsProps, ResultsState> {
         const termLength = store.get('termLength');
         const rider = store.get('rider');
 
-        const now = moment();
-        const birthTime = moment(birthdate, 'YYYY-MM-DD');
-        const actualAge = now.diff(birthTime, 'years');
-        const nearestAge = Math.round(now.diff(birthTime, 'years', true));
+        const now = dayjs();
+        const birthTime = dayjs(birthdate, 'YYYY-MM-DD');
+        const actualAge = now.diff(birthTime, 'year');
+        const nearestAge = Math.round(now.diff(birthTime, 'year', true));
 
         const tobacco = store.get('tobacco');
         const cannabis = store.get('cannabis');

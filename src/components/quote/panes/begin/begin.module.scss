@@ -1,5 +1,15 @@
+@import "../../../../style/variables";
+
 .attributionContainer {
   display: flex;
   justify-content: flex-end;
   padding: 8px 0 0 0;
+}
+
+.paneHeader {
+  color: $color-primary;
+}
+
+.errorText {
+  color: #f03434;
 }

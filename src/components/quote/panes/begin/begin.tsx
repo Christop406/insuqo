@@ -1,22 +1,17 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { Component, KeyboardEvent } from 'react';
 import Store from '../../../../ApplicationStore';
-import { Button, Heading, MaskedInput, Paragraph, Text } from "grommet";
 import { localizeZip } from "../../../../api";
 import { Store as S } from 'undux';
 import { History, LocationState } from 'history';
 import s from './begin.module.scss';
+import Cleave from 'cleave.js/react';
+import { Logger } from '../../../../services/logger';
 
 interface IBeginProps {
     store: S<any>;
     history: History<LocationState>;
 }
-
-const styles = {
-    quoteSubtitle: {
-        marginTop: '-10px'
-    }
-};
 
 class Begin extends Component<IBeginProps> {
 
@@ -24,14 +19,24 @@ class Begin extends Component<IBeginProps> {
         zipCode: '',
         readyToContinue: false,
         loading: false,
-        zipInvalid: false
+        zipInvalid: false,
+        triedSubmit: false,
+    };
+
+    validateZipCode = (zipCode: string) => {
+        const yes = /^[0-9]{5}(\-[0-9]{4})?$/.test(zipCode);
+        Logger.info(yes);
+        return yes;
     };
 
     updateZipCode = (event: any) => {
-        if (event.target.value.length < 5) {
-            this.setState({ readyToContinue: false, zipCode: event.target.value, zipInvalid: false })
+        const value = typeof event === 'string' ? event : event.target.value;
+        const { triedSubmit } = this.state;
+        // Logger.log(this.validateZipCode(value));
+        if (this.validateZipCode(value)) {
+            this.setState({ readyToContinue: true, zipCode: value, zipInvalid: false });
         } else {
-            this.setState({ readyToContinue: true, zipCode: event.target.value, zipInvalid: false })
+            this.setState({ readyToContinue: false, zipCode: value, zipInvalid: triedSubmit });
         }
     };
 
@@ -39,7 +44,12 @@ class Begin extends Component<IBeginProps> {
         const store = this.props.store;
         const { zipCode } = this.state;
         let that = this;
-        if (zipCode.length < 5) return;
+
+        if (!this.validateZipCode(zipCode)) {
+            this.updateZipCode(zipCode);
+            return;
+        }
+
         this.setState({ loading: true });
         localizeZip(zipCode).then(res => {
             if (res.data) {
@@ -60,52 +70,53 @@ class Begin extends Component<IBeginProps> {
 
     handleKeyPress = (e: KeyboardEvent<HTMLElement>) => {
         if (e.key === 'Enter') {
-            this.submitZip();
+            this.handleSubmit();
         }
+    };
+
+    handleSubmit = () => {
+        this.setState({ triedSubmit: true }, this.submitZip);
     };
 
     componentDidMount = () => {
         const zip = localStorage.getItem("zipCode");
         if (zip != null && zip !== '') {
-            this.setState({ zipCode: zip, readyToContinue: zip.length === 5 });
+            this.setState({ zipCode: zip, readyToContinue: zip.length === 5 || zip.length === 9 });
         }
     };
 
     render = () => {
-        const { zipCode, readyToContinue, loading, zipInvalid } = this.state;
+        const { readyToContinue, loading, zipInvalid } = this.state;
         return (
             <div style={{ maxWidth: 650 }}>
-                <Heading margin="xsmall" color="#9c37f2" level={1}>Looking for life insurance?</Heading>
-                <Heading margin="xsmall" style={styles.quoteSubtitle} color="black" level={2}>You've come to the right
-                    place.</Heading>
-                <Paragraph margin="small">
+                <h1 className={s.paneHeader}>Looking for life insurance?</h1>
+                <h2>You've come to the right place.</h2>
+                <p>
                     Please begin by entering your ZIP code below, so we can get you the most accurate quotes.
-                </Paragraph>
-                <Heading margin="xsmall" level={3} color="#9c37f2">ZIP Code</Heading>
+                </p>
+                <label htmlFor="zipCode">ZIP Code</label>
                 <div style={{ marginBottom: 20 }}>
-                    <MaskedInput
-                        value={zipCode}
-                        onChange={this.updateZipCode}
-                        onKeyPress={this.handleKeyPress}
+                    <Cleave
                         className="input"
+                        name="zipCode"
+                        placeholder="Enter Here"
                         style={{ borderColor: zipInvalid ? '#f03434' : undefined }}
-                        mask={[
-                            {
-                                length: 5,
-                                regexp: /^[0-9]{1,5}$/,
-                                placeholder: "94041"
-                            }
-                        ]} />
-                    {zipInvalid ? <Text color="#f03434">ZIP code invalid, please try again.</Text> : ""}
+                        options={{
+                            blocks: [5, 4],
+                            stripLeadingZeroes: false,
+                            numericOnly: true,
+                            delimiter: '-',
+                            delimiterLazyShow: true,
+                        }} onChange={this.updateZipCode} onKeyPress={this.handleKeyPress} />
+                    {zipInvalid ? <span className={s.errorText}>ZIP code invalid, please try again.</span> : ""}
                     <div className={s.attributionContainer}>
                         <img alt="Powered by Google logo"
                             src="https://developers.google.com/maps/documentation/images/powered_by_google_on_white.png" />
                     </div>
                 </div>
 
-                <Button onClick={this.submitZip} color="#9c37f2" fill style={{ maxHeight: 40 }}
-                    label={loading ? "Loading..." : "Let's Get Started!"} primary
-                    disabled={!readyToContinue || (readyToContinue && loading)} />
+                <button onClick={this.handleSubmit} color="#9c37f2" className="button full primary" style={{ maxHeight: 40 }}
+                    disabled={!readyToContinue || (readyToContinue && loading)}>{loading ? "Loading..." : "Let's Get Started!"}</button>
             </div>
         );
     };

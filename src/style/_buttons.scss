@@ -19,6 +19,17 @@
   &.primary:not(.outline):not(.text) {
     background-color: $color-primary;
     color: $text-light;
+    &:not(:disabled) {
+      &:hover, &:focus {
+        box-shadow: $input-shadow;
+        outline: none;
+        transform: scale(1.01);
+      }
+    }
+    &:disabled {
+      background-color: lighten($color-primary, 20);
+      transform: scale(0.98);
+    }
   }
 
   &.primary.outline {
@@ -33,7 +44,21 @@
     }
   }
 
-  &.primary.text {
-    color: $color-primary;
+  &.text {
+    padding: 0;
+    margin: 0;
+    &:hover, &:focus {
+      outline: none;
+    }
+
+    &:not(.primary) {
+      &:hover, &:focus {
+        color: $color-primary;
+      }
+    }
+
+    &.primary {
+      color: $color-primary;
+    }
   }
 }
