@@ -5,8 +5,8 @@ import countries from '../../../util/country-by-abbreviation.json';
 import states from 'insuqo-shared/constants/states.json';
 import Cleave from 'cleave.js/react';
 import { Application, Beneficiary, PremiumMode, QuickTermQuoteResult } from 'insuqo-shared';
-import { Modal } from 'antd';
-import { Text } from 'grommet';
+import Modal from 'antd/es/modal';
+import 'antd/es/modal/style/css';
 import BeneficiaryList from '../../beneficiary-list/BeneficiaryList';
 import cx from 'classnames';
 import { Validator } from '../../../services/Validator';
@@ -420,9 +420,9 @@ const validateApplication = (values: Partial<Application>) => {
 const showCityReasoning = () => {
     Modal.info({
         title: 'Why can\'t I change my city/state?',
-        content: <Text>We do not allow you to change your city or state because a change in this information
+        content: <p>We do not allow you to change your city or state because a change in this information
             may affect your quoted amount.<br /><br />If you would like to change your address, please re-run our
-            quoting tool with your correct address.</Text>,
+            quoting tool with your correct address.</p>,
         centered: true
     });
 };
@@ -430,13 +430,13 @@ const showCityReasoning = () => {
 const showFreqInfo = () => {
     Modal.info({
         title: 'Why the different prices?',
-        content: <Text>A lot like any other kind of subscription,
+        content: <p>A lot like any other kind of subscription,
             a vendor will reward up-front payment with a discounted rate.
             It is the same for life insurance. If you decide to pay on
             an annual pay schedule, your overall rate will be somewhat lower
             than on a monthly schedule.<br /><br />
             To see the different rates, click each radio button to change your payment frequency.
-        </Text>,
+        </p>,
         centered: true
     });
 };

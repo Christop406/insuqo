@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
 import Store from '../../../../ApplicationStore';
-import {Anchor, Box, Button, Heading, Paragraph, RadioButton, RangeInput} from "grommet";
-import {formatCovAmount} from "../../../../func";
-import {Modal} from "antd";
+import { formatCovAmount } from "../../../../func";
+import Modal from "antd/es/modal";
+import 'antd/es/modal/style/css';
 import PlanInfoModal from "./plan-info-modal";
 import RiderInfoModal from "./rider-info-modal";
-import {Store as S} from "undux";
-import {History, LocationState} from "history";
+import { Store as S } from "undux";
+import { History, LocationState } from "history";
+import s from './plan.module.scss';
+import { Slider } from '../../../forms/Slider/Slider';
+import { RadioOption, RadioGroup } from '../../../forms/RadioGroup/RadioGroup';
 
 interface IPlanProps {
     store: S<any>;
@@ -23,33 +26,34 @@ class Plan extends Component<IPlanProps> {
 
     state = {
         covAmount: 500000,
-        termLength: '75',
+        termLength: 20,
         rider: 'none'
     };
 
-    updateCovAmount = (event: any) => {
-        this.setState({covAmount: event.target.value});
+    private riderOptions: RadioOption<string>[] = [
+        { name: 'Accidental Death', value: 'accidental_death' },
+        { name: 'Waiver of Premium', value: 'waiver_premium' },
+        { name: 'Return of Premium', value: 'return_premium' },
+        { name: 'Child Rider', value: 'child' },
+        { name: 'None', value: 'none' }
+    ];
+
+    updateCovAmount = (covAmount: number) => {
+        this.setState({ covAmount });
     };
 
-    updateTermLength = (event: any) => {
-        this.setState({termLength: event.target.value});
+    updateTermLength = (termLength: number) => {
+        this.setState({ termLength });
     };
 
-    updateRider = (event: any) => {
-        this.setState({rider: event.target.name});
-    };
-
-    formatTermLength = (len: string) => {
-        if(len === '25') return '10';
-        if(len === '50') return '15';
-        if(len === '75') return '20';
-        if(len === '100') return '30';
+    updateRider = (rider: string) => {
+        this.setState({ rider });
     };
 
     showHelpMeChoose = () => {
         Modal.info({
             title: 'How to choose the right coverage',
-            content: <PlanInfoModal/>,
+            content: <PlanInfoModal />,
             centered: true
         });
     };
@@ -57,7 +61,7 @@ class Plan extends Component<IPlanProps> {
     showRiderInfo = () => {
         Modal.info({
             title: 'More on Riders',
-            content: <RiderInfoModal/>,
+            content: <RiderInfoModal />,
             centered: true
         });
     };
@@ -66,7 +70,7 @@ class Plan extends Component<IPlanProps> {
         const store = this.props.store;
         const { covAmount, termLength, rider } = this.state;
         store.set('covAmount')(covAmount);
-        store.set('termLength')(Number(this.formatTermLength(termLength)));
+        store.set('termLength')(termLength);
         store.set('rider')(rider);
         this.props.history.push('/quote/results');
     };
@@ -75,59 +79,59 @@ class Plan extends Component<IPlanProps> {
         let cA = localStorage.getItem('covAmount');
         let tL = localStorage.getItem('termLength');
         let rd = localStorage.getItem('rider');
-        if(cA == null) {
+        if (cA == null) {
             cA = JSON.stringify(500000);
         }
-        if(tL === null || tL === undefined || tL.length === 0) {
-           // todo: implement
+        if (tL === null || tL === undefined || tL.length === 0) {
+            // todo: implement
         }
 
-        if(rd == null || rd.length === 0) {
+        if (rd == null || rd.length === 0) {
             rd = 'none';
         }
 
-        this.setState({covAmount: cA, rider: rd});
+        this.setState({ covAmount: cA, rider: rd });
     };
 
     render = () => {
         const { covAmount, termLength, rider } = this.state;
-        return(
-            <Box animation="fadeIn">
-                <Heading margin="xsmall" level={1} color="#9c37f2">Choose your coverage.</Heading>
-                <Heading margin="small" style={styles.quoteSubtitle} color="dark-4" level={3}>You can change these values later.</Heading>
-                <Paragraph style={{maxWidth: '600px'}} margin="small">
-                    These values help insurers calculate how much you need to pay for your insurance. <Anchor onClick={this.showHelpMeChoose} label="Help me choose!"/>
-                </Paragraph>
-                <Heading margin="small" level={3} color="#9c37f2">Coverage Amount</Heading>
-                <Box align="end" margin="small">
-                    <RangeInput name="covAmount" onChange={this.updateCovAmount} step={100000} min={100000} max={2000000} value={covAmount}/>
-                    <Heading margin="xsmall" level={2} color="#9c37f2">$ {formatCovAmount(covAmount)}</Heading>
-                </Box>
-                <Heading margin="small" level={3} color="#9c37f2">Term Length</Heading>
-                <Box align="end" margin="small">
-                    <RangeInput name="covAmount" onChange={this.updateTermLength} step={25} min={25} max={100} value={termLength}/>
-                    <Heading margin="xsmall" level={2} color="#9c37f2">{this.formatTermLength(termLength)} Years</Heading>
-                </Box>
-                <Box margin="small">
-                    <Heading margin="xsmall" level={2} color="#9c37f2">Other Options</Heading>
-                    <Heading margin="small" level={3} color="#9c37f2">Riders</Heading>
-                    <Anchor margin="small" style={{marginTop: -10}} color="dark-4" onClick={this.showRiderInfo} label="What are these?"/>
-                    <span style={{height: '10px'}}/>
-                    <Box margin="small">
-                        <RadioButton checked={rider === 'accidental_death'} name="accidental_death" onChange={this.updateRider} label="Accidental Death"/>
-                        <span style={{display: 'block', height: 20}}/>
-                        <RadioButton checked={rider === 'waiver_premium'} name="waiver_premium" onChange={this.updateRider} label="Waiver of Premium"/>
-                        <span style={{height: 20}}/>
-                        <RadioButton checked={rider === 'return_premium'} name="return_premium" onChange={this.updateRider} label="Return of Premium"/>
-                        <span style={{height: 20}}/>
-                        <RadioButton checked={rider === 'child'} name="child" onChange={this.updateRider} label="Child Rider"/>
-                        <span style={{height: 20}}/>
-                        <RadioButton checked={rider === 'none'} name="none" onChange={this.updateRider} label="None"/>
-                        <span style={{height: 30}}/>
-                    </Box>
-                </Box>
-                <Button onClick={this.submitPlanInfo} color="#9c37f2" label="Get Quotes" primary />
-            </Box>
+        return (
+            <div>
+                <h1 className={s.paneHeader}>Choose your coverage.</h1>
+                <h3 style={styles.quoteSubtitle}>You can change these values later.</h3>
+                <p style={{ maxWidth: '600px' }}>
+                    These values help insurers calculate how much you need to pay for your insurance. <a onClick={this.showHelpMeChoose}>Help me choose!</a>
+                </p>
+                <h3 className={s.paneHeader}>Coverage Amount</h3>
+                <div className={s.slider}>
+                    <Slider name="covAmount"
+                        initialValue={500000}
+                        stepSize={10000}
+                        min={100000}
+                        max={2000000}
+                        onChange={this.updateCovAmount}
+                    />
+                    <h2>$ {formatCovAmount(covAmount)}</h2>
+                </div>
+                <h3 className={s.paneHeader}>Term Length</h3>
+                <div className={s.slider}>
+                    <Slider name="termLength"
+                        initialValue={20}
+                        stepSize={5}
+                        min={5}
+                        max={30}
+                        onChange={this.updateTermLength}
+                    />
+                    <h2>{termLength} Years</h2>
+                </div>
+                <div>
+                    <h2 className={s.paneHeader}>Other Options</h2>
+                    <h3 className={s.paneHeader}>Riders</h3>
+                    <p><a style={{ marginTop: -10 }} onClick={this.showRiderInfo}>What are these?</a></p>
+                    <RadioGroup name="rider" value={rider} options={this.riderOptions} onChange={this.updateRider} />
+                </div>
+                <button onClick={this.submitPlanInfo} className="button primary full">Get Quotes</button>
+            </div>
         );
     };
 }

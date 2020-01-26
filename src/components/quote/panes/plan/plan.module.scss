@@ -1,0 +1,11 @@
+@import "../../../../style/variables";
+
+.paneHeader {
+    color: $color-primary;
+}
+
+.slider {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}

@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
 import Store from '../../../../ApplicationStore';
-import { Anchor, Box, CheckBox, Heading, Paragraph, RadioButton, Text } from "grommet";
 import Cleave from 'cleave.js/react'
 import dayjs from "dayjs";
-import { Modal } from "antd";
+import Modal from "antd/es/modal";
+import 'antd/es/modal/style/css';
 import SmokingPopover from "./smoking-popover";
 import { Store as S } from 'undux';
 import { History, LocationState } from 'history';
 import classes from './personal.module.scss';
+import { Checkbox } from '../../../forms/Checkbox/Checkbox';
+import { RadioOption, RadioGroup } from '../../../forms/RadioGroup/RadioGroup';
 
 interface IPersonalProps {
     store: S<any>;
@@ -37,6 +39,11 @@ class Personal extends Component<IPersonalProps> {
         sModalVisible: false
     };
 
+    private sexOptions: RadioOption<string>[] = [
+        { name: 'Male', value: 'male' },
+        { name: 'Female', value: 'female' }
+    ];
+
     updateBirthday = (event: any) => {
         let bd = dayjs(event.target.value, "MM/DD/YYYY");
         let now = dayjs();
@@ -54,8 +61,8 @@ class Personal extends Component<IPersonalProps> {
         }
     };
 
-    updateSex = (event: any) => {
-        this.setState({ sex: event.target.name });
+    updateSex = (sex: string) => {
+        this.setState({ sex });
     };
 
     updateTobacco = () => {
@@ -85,9 +92,9 @@ class Personal extends Component<IPersonalProps> {
         Modal.info({
             title: 'Why can I only choose male or female?',
             centered: true,
-            content: <Text>For insurance purposes, and estimation of quotes,
+            content: <p>For insurance purposes, and estimation of quotes,
                 we can only use either male or female. If you do not identify as
-                    male or female, please use your sex at birth instead.</Text>
+                    male or female, please use your sex at birth instead.</p>
         }
         );
     };
@@ -133,7 +140,7 @@ class Personal extends Component<IPersonalProps> {
         const { store } = this.props;
         const { birthday, sex, tobacco, cannabis, bdError, bdErrMsg } = this.state;
         return (
-            <Box animation="fadeIn">
+            <div>
                 <h1 className={classes.paneHeader} color="#9c37f2">The weather's fine
                     in {store.get('stateName') ? store.get('stateName') : 'XXXX'}!</h1>
                 <h3 style={styles.quoteSubtitle}>(Because we've got you covered!)</h3>
@@ -154,34 +161,35 @@ class Personal extends Component<IPersonalProps> {
                             value={birthday}
                         />
                     </div>
-                    {bdError ? <Text color="#f03434">{bdErrMsg}</Text> : ""}
+                    {bdError ? <span className={classes.errorMessage}>{bdErrMsg}</span> : ""}
                 </div>
                 <div>
-                    <label>Sex</label>
+                    <label htmlFor="sex">Sex</label>
                     <button className="button text" color="dark-4" onClick={this.showGenderModal}>Why are there only two options?</button>
-                    <Box style={styles.sexButtons}>
-                        <RadioButton checked={sex === 'male'} onChange={this.updateSex} name="male" label="Male" />
-                        <span style={{ height: '10px' }} />
-                        <RadioButton checked={sex === 'female'} onChange={this.updateSex} name="female" label="Female" />
-                    </Box>
+                    <RadioGroup name="sex" value={sex} options={this.sexOptions} onChange={this.updateSex} />
                 </div>
-                <Box margin="xsmall">
-                    <Heading level={3} color="#9c37f2">Lifestyle</Heading>
-                    <Paragraph style={{ marginTop: -8, maxWidth: 'none' }}>
-                        Select any of the answers below, if they apply to you.
-                        <Anchor margin="xsmall" label="Why?" onClick={this.showSmokingModal} />
-                    </Paragraph>
-                    <Box style={{ marginBottom: 20 }} margin="xsmall">
-                        <CheckBox onChange={this.updateTobacco} checked={tobacco} name="tobacco"
-                            label="I regularly smoke tobacco products." />
-                        <div style={{ height: '10px', display: 'block' }} />
-                        <CheckBox onChange={this.updateCannabis} checked={cannabis} name="cannabis"
-                            label="I regularly use cannabis products." />
-                    </Box>
-                </Box>
+                <div>
+                    <label htmlFor="substance-cb">Lifestyle</label>
+                    <p>
+                        Select any of the answers below, if they apply to you.&nbsp;
+                        <a className="text-primary" onClick={this.showSmokingModal}>Why?</a>
+                    </p>
+                    <div id="substance-cb" style={{ marginBottom: 20 }}>
+                        <Checkbox
+                            label="I regularly smoke tobacco products"
+                            onChange={this.updateTobacco}
+                            name="tobacco"
+                        />
+                        <Checkbox
+                            label="I regularly use cannabis products"
+                            onChange={this.updateCannabis}
+                            name="cannabis"
+                        />
+                    </div>
+                </div>
                 <button onClick={this.submitPersonalInfo} className="button primary full"
                     disabled={birthday.length < 10 || bdError || sex === 'none'}>Continue</button>
-            </Box>
+            </div>
         );
     };
 }

@@ -1,13 +1,13 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import Store from '../../ApplicationStore';
 import Begin from '../../components/quote/panes/begin/begin';
 import Personal from '../../components/quote/panes/personal/personal';
 import Plan from '../../components/quote/panes/plan/plan';
 import Results from '../../components/quote/panes/results/results';
-import {Box} from 'grommet';
-import {Redirect, Route, Switch} from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import QuoteHelp from '../../components/quote/quote-help';
-import './Quote.scss';
+import s from './Quote.module.scss';
+import cx from 'classnames';
 
 class Quote extends Component<any, any> {
 
@@ -20,34 +20,26 @@ class Quote extends Component<any, any> {
         }
     };
 
-    getAlignment = () => {
-        return 'start';
-    };
-
     render = () => {
         return (
-            <Box direction="row" style={{height: '100%'}} fill="horizontal">
-                <Box className="form-content" alignSelf="stretch" fill={true} align={this.getAlignment() as any}>
-                    <Box align="center" fill>
-                        <Box round={false} className="quote-container"
-                            style={{}}
-                            pad="large" fill>
-                            <Switch>
-                                <Route path={this.props.match.path + '/begin'} component={Begin}/>
-                                <Route path={this.props.match.path + '/personal'} component={Personal}/>
-                                <Route path={this.props.match.path + '/plan'} component={Plan}/>
-                                <Route path={this.props.match.path + '/results'} component={Results}/>
-                                <Redirect to="/quote/begin"/>
-                            </Switch>
-                        </Box>
-                    </Box>
-                </Box>
-                <Box className="hideOnSmallScreens" style={{height: '100%'}} alignSelf="stretch" fill={true}>
+            <div className={s.quoteContainer}>
+                <div className="form-content">
+                    <div className={s.formContainer}>
+                        <Switch>
+                            <Route path={this.props.match.path + '/begin'} component={Begin} />
+                            <Route path={this.props.match.path + '/personal'} component={Personal} />
+                            <Route path={this.props.match.path + '/plan'} component={Plan} />
+                            <Route path={this.props.match.path + '/results'} component={Results} />
+                            <Redirect to="/quote/begin" />
+                        </Switch>
+                    </div>
+                </div>
+                <div className={cx(s.quoteHelpContainer, 'hideOnSmallScreens')}>
                     <Switch>
-                        <Route path="/quote" component={QuoteHelp}/>
+                        <Route path="/quote" component={QuoteHelp} />
                     </Switch>
-                </Box>
-            </Box>
+                </div>
+            </div>
         );
     }
 }
