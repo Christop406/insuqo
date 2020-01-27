@@ -7,12 +7,14 @@ import { QuoteService } from '../../../../services/quote.service';
 import Spinner from 'react-spinkit';
 import { Store as S } from 'undux';
 import { History, LocationState } from 'history';
-import { QuickTermQuoteResult, Address } from 'insuqo-shared';
+import { QuickTermQuoteResult, Address, PremiumMode } from 'insuqo-shared';
 import { AuthenticationService } from "../../../../services/authentication.service";
 import { ClientAuthentication } from "../../../../controllers/sign-up/ClientAuthentication";
 import { CognitoUser } from "amazon-cognito-identity-js";
 import { ApplicationService } from '../../../../services/application.service';
 import { Logger } from '../../../../services/logger';
+import qs from 'query-string';
+import s from './results.module.scss';
 
 interface ResultsProps {
     store: S<any>;
@@ -23,7 +25,7 @@ interface ResultsState {
     loading: boolean;
     quotes: QuickTermQuoteResult[];
     active: number;
-    freq: string;
+    freq: PremiumMode;
     freqLabel: string;
     showAuthModal: boolean;
     selectedQuote?: QuickTermQuoteResult;
@@ -55,11 +57,13 @@ class Results extends Component<ResultsProps, ResultsState> {
         loading: true,
         quotes: [],
         active: 0,
-        freq: 'month',
+        freq: PremiumMode.MONTHLY,
         freqLabel: 'Monthly',
         showAuthModal: false,
     };
+
     private applicationService = new ApplicationService();
+    private quoteService = new QuoteService();
 
     private location?: Partial<Address>;
     private birthDate?: string;
@@ -82,16 +86,36 @@ class Results extends Component<ResultsProps, ResultsState> {
         const cannabis = store.get('cannabis');
         const healthType = tobacco || cannabis ? 'preferred_smoker' : 'preferred_non_smoker';
 
-        return (new QuoteService()).runQuotes(stateCode, actualAge, nearestAge, covAmount, termLength, healthType, sex, rider, 10);
+        return this.quoteService.runQuotes(stateCode, actualAge, nearestAge, covAmount, termLength, healthType, sex, rider, 10);
     };
 
     componentDidMount = async () => {
+        window.scrollTo({top: 0});
         const { store } = this.props;
+        const { freq } = this.state;
+        const { search } = this.props.history.location;
+        Logger.log(search);
+        if (search) {
+            const query = qs.parse(search.slice(1), {});
+            console.log(query);
+            if (query.id) {
+                query.id = Array.isArray(query.id) ? query.id[0] : query.id;
+                const retrievedQuotes = await this.quoteService.getQuotesByKey(query.id);
+                retrievedQuotes?.sort((a, b) => qutoeSortValue(a, b, freq));
+                if (retrievedQuotes) {
+                    this.setState({ loading: false, quotes: retrievedQuotes });
+                    return;
+                } else {
+                    this.props.history.push({ search: '' });
+                }
+            }
+        }
 
         try {
             const newQuotes = await this.getQuotes();
             Logger.debug(newQuotes);
             this.setState({ loading: false, quotes: newQuotes.data!.quotes });
+            this.props.history.push({ search: qs.stringify({ id: newQuotes.data?.key }) });
         } catch (error) {
             Logger.error(error);
             throw error;
@@ -104,19 +128,6 @@ class Results extends Component<ResultsProps, ResultsState> {
         }
 
         this.birthDate = store.get('birthdate');
-    };
-
-    formatRider = (quote: QuickTermQuoteResult) => {
-        if (Number(quote.AnnualADBPremium) !== 0) {
-            return 'Accidental Death Rider';
-        } else if (Number(quote.AnnualChildRiderPremium) !== 0) {
-            return 'Child Rider';
-        } else if (Number(quote.AnnualReturnOfPremiumPremium) !== 0) {
-            return 'Return of Premium';
-        } else if (Number(quote.AnnualWaiverOfPremiumPremium) !== 0) {
-            return 'Waiver of Premium';
-        }
-        return 'None';
     };
 
     formatShortFreqType = (freq: string) => {
@@ -167,13 +178,13 @@ class Results extends Component<ResultsProps, ResultsState> {
                             <Heading level={3}>AMBest Rating <Anchor label="(?)" /><Paragraph
                                 style={{ color: '#9c37f2' }}>{quote.AMBest}</Paragraph></Heading>
                             <Heading level={3}>Features<Paragraph
-                                style={{ color: '#9c37f2' }}>{this.formatRider(quote)}</Paragraph></Heading>
+                                style={{ color: '#9c37f2' }}>{formatRider(quote)}</Paragraph></Heading>
                         </Box>
                     </Box>
                     <Box style={{ width: '100%', maxWidth: 300 }} alignSelf="center">
-                        <Button primary={active === index} onClick={(event: any) => {
+                        <button className="button primary full" onClick={(event: any) => {
                             this.apply(quote, event);
-                        }} fill={false} hoverIndicator="#EAC4FF" label="APPLY" />
+                        }}>APPLY</button>
                     </Box>
                 </Box>
             </Box>
@@ -193,24 +204,17 @@ class Results extends Component<ResultsProps, ResultsState> {
                             0.00
         );
         return (
-            <Box direction="row-responsive" fill="horizontal" align="stretch" margin="small" alignSelf="stretch">
-                <Heading
-                    style={{ maxWidth: 'none' }}
-                    level={3}>
-                    <Box direction="row" alignSelf="stretch">
-                        <Box fill="horizontal" align="center" style={{ minWidth: 150 }}>
-                            <img
-                                style={{ marginTop: 10 }}
-                                alt={'logo-' + quote.CompanyID}
-                                height={60}
-                                src={logoImageForCompanyID(quote.CompanyID)}
-                            />
-                        </Box>
-                    </Box>
-                </Heading>
-                <Box fill="horizontal" justify="center" align="center">
-                    <Heading style={{ width: '100%' }} truncate level={3} margin="none">{quote.CompanyName}</Heading>
-                </Box>
+            <div className={s.quoteHeader}>
+                <div className={s.companyImageContainer}>
+                    <img
+                        className={s.companyImage}
+                        style={{ marginTop: 10 }}
+                        alt={'logo-' + quote.CompanyID}
+                        height={60}
+                        src={logoImageForCompanyID(quote.CompanyID)}
+                    />
+                </div>
+                <span className={s.companyName}>{quote.CompanyName}</span>
                 <Box fill="horizontal">
                     <Box fill="vertical" direction="row" align="center" justify="center">
                         <Box direction="row" style={{ height: 50 }} align="center">
@@ -230,7 +234,7 @@ class Results extends Component<ResultsProps, ResultsState> {
                         </Box>
                     </Box>
                 </Box>
-            </Box>
+            </div>
         );
     };
 
@@ -272,40 +276,73 @@ class Results extends Component<ResultsProps, ResultsState> {
     };
 
     updateFreq = (newFreq: any) => {
-        this.setState({ freq: newFreq.target.value });
+        const oldQuotes = this.state.quotes;
+        const freq = newFreq.target.value;
+
+        let quotes: QuickTermQuoteResult[] = [];
+        quotes = quotes.concat(oldQuotes).sort((a, b) => qutoeSortValue(a, b, freq));
+
+        this.setState({ freq, quotes });
     };
 
     render = () => {
         const { active, loading, freq, showAuthModal } = this.state;
         return (
-            <Box fill>
+            <>
                 {loading ?
-                    <Box fill align="center" justify="center" style={{ visibility: loading ? 'visible' : 'hidden' }}>
-                        <Spinner style={{ marginTop: '45%' }} name='folding-cube' color="#9c37f2" />
-                    </Box> :
-                    <Box>
-                        <Heading margin="xsmall" level={1} color="#9c37f2">Here are your quotes</Heading>
-                        <Heading margin="xsmall" style={styles.quoteSubtitle} color="dark-4" level={3}>Click on each for
-                            more info.</Heading>
-                        <Box background={{ color: '#FFFFFF' }} direction="row-responsive" justify="end" align="center">
-                            <Heading margin="xsmall" level={5}>Choose payment frequency: </Heading>
-                            <select value={freq} onChange={this.updateFreq}
+                    <div className={s.loadingContainer} style={{ visibility: loading ? 'visible' : 'hidden' }}>
+                        <Spinner fadeIn="none" name='folding-cube' color="#9c37f2" />
+                    </div> :
+                    <>
+                        <h1 className="text-primary">Here are your quotes</h1>
+                        <h3 style={styles.quoteSubtitle}>Click on each for more info.</h3>
+                        <div className={s.paymentFrequencyContainer}>
+                            <h5 className={s.frequencyLabel}>Payment Frequency </h5>
+                            <select className="input select inline" value={freq} onChange={this.updateFreq}
                                 children={frequencies.map((option, index) => <option value={option.val}
                                     key={index}>{option.name}</option>)} />
-                        </Box>
-                        <Box style={{ paddingLeft: 5, paddingRight: 5 }}>
-                            <Accordion animate={false} onActive={this.updateActiveIndex}
-                                activeIndex={loading ? undefined : active}>
-                                {this.formatQuotes(freq)}
-                            </Accordion>
-                        </Box>
+                        </div>
+                        <Accordion animate onActive={this.updateActiveIndex}
+                            activeIndex={loading ? undefined : active}>
+                            {this.formatQuotes(freq)}
+                        </Accordion>
                         {showAuthModal &&
                             <ClientAuthentication type="signup" onAuthenticate={this.handleAuthentication} />}
-                    </Box>
+                    </>
                 }
-            </Box>
+            </>
         );
     };
 }
+
+const formatRider = (quote: QuickTermQuoteResult) => {
+    if (Number(quote.AnnualADBPremium) !== 0) {
+        return 'Accidental Death Rider';
+    } else if (Number(quote.AnnualChildRiderPremium) !== 0) {
+        return 'Child Rider';
+    } else if (Number(quote.AnnualReturnOfPremiumPremium) !== 0) {
+        return 'Return of Premium';
+    } else if (Number(quote.AnnualWaiverOfPremiumPremium) !== 0) {
+        return 'Waiver of Premium';
+    }
+    return 'None';
+};
+
+const qutoeSortValue = (a: QuickTermQuoteResult, b: QuickTermQuoteResult, paymentFreq: PremiumMode): number => {
+    let property: keyof QuickTermQuoteResult = 'MonthlyTotalPremium';
+    switch (paymentFreq) {
+        case PremiumMode.QUARTERLY:
+            property = 'QuarterlyTotalPremium';
+            break;
+        case PremiumMode.SEMI_ANNUALLY:
+            property = 'SemiAnnualTotalPremium';
+            break;
+        case PremiumMode.ANNUAL:
+            property = 'AnnualTotalPremium';
+            break;
+    }
+
+    return Number(a[property]) - Number(b[property]);
+};
 
 export default Store.withStore(Results);

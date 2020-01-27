@@ -76,6 +76,7 @@ class Plan extends Component<IPlanProps> {
     };
 
     componentDidMount = () => {
+        window.scrollTo({top: 0});
         let cA = localStorage.getItem('covAmount');
         let tL = localStorage.getItem('termLength');
         let rd = localStorage.getItem('rider');

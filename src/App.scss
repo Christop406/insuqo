@@ -96,7 +96,7 @@
     }
 }
 
-@media screen and (max-width: 810px) {
+@media screen and (max-width: 800px) {
     .hideOnSmallScreens {
         display: none !important;
     }
@@ -107,9 +107,10 @@
 
 }
 
-@media screen and (min-width: 810px) {
+@media screen and (min-width: 800px) {
     .form-content {
-        min-width: 820px
+        min-width: 820px;
+        overflow: scroll;
     }
 }
 

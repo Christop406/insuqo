@@ -8,11 +8,13 @@ $header-height: 70px;
 }
 
 .quotingToolContainer {
-
+    height: 100vh;
+    overflow: hidden;
 }
 
 .quoteFormContainer {
-    padding-top: $header-height;
-    min-height: 100vh;
+    overflow: scroll;
+    margin-top: $header-height;
+    height: calc(100% - #{$header-height});
 }
 

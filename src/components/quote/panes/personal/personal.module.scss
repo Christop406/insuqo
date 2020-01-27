@@ -1,4 +1,5 @@
 @import "../../../../style/variables";
+@import "../../../../style/mixins";
 
 .paneHeader {
   color: $color-primary;
@@ -6,4 +7,11 @@
 
 .errorMessage {
     color: $color-red;
+}
+
+.birthdateContainer {
+    width: 100%;
+    @include tablet-min {
+        max-width: 300px;
+    }
 }

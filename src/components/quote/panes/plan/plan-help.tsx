@@ -7,7 +7,7 @@ const PlanHelp: React.FunctionComponent = () => {
             backgroundImage: "url(" + newYear + ")",
             backgroundRepeat: 'repeat',
             width: '100%',
-            height: '100vh'
+            height: '100%'
         }}>
         </div>
     );

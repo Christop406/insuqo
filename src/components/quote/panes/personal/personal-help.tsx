@@ -7,7 +7,7 @@ const PersonalHelp: React.FunctionComponent = () => {
             backgroundImage: "url(" + weather + ")",
             backgroundRepeat: 'repeat',
             width: '100%',
-            height: '100vh'
+            height: '100%'
         }}>
         </div>
     );

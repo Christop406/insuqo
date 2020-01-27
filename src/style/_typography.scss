@@ -11,6 +11,8 @@
   font-family: monospace;
 }
 
-.text-primary {
-  color: $color-primary;
+*, a, button, h1 {
+  &.text-primary {
+    color: $color-primary !important;
+  }
 }

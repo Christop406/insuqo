@@ -1,0 +1,20 @@
+@import "../../style/variables";
+
+.form-content {
+    label.qform-label {
+        font-size: 22px;
+        font-weight: 500;
+        &.primary {
+            color: $color-primary;
+        }
+
+        & + * {
+            margin-top: -5px;
+        }
+    }
+
+    .qform-group {
+        margin: 7px 0;
+    }
+
+}

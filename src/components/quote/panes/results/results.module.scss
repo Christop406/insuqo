@@ -1,0 +1,52 @@
+@import "../../../../style/mixins";
+
+.loadingContainer {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.paymentFrequencyContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+
+  .frequencyLabel {
+    margin: 0 10px 0 0;
+  }
+}
+
+.quoteHeader {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  @include tablet-min {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .companyName {
+    width: 100%;
+    text-align: center;
+    @include tablet-min {
+        text-align: left;
+    }
+  }
+
+  .companyImageContainer {
+    max-height: 100px;
+    @include tablet-min {
+      width: 130px;
+      max-height: 70px;
+      margin-right: 10px;
+    }
+    .companyImage {
+      width: 100%;
+      object-fit: contain;
+    }
+  }
+}

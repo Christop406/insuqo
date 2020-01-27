@@ -7,6 +7,7 @@ import Results from '../../components/quote/panes/results/results';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import QuoteHelp from '../../components/quote/quote-help';
 import s from './Quote.module.scss';
+import './Quote.common.scss';
 import cx from 'classnames';
 
 class Quote extends Component<any, any> {

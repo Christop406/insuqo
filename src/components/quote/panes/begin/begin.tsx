@@ -79,6 +79,7 @@ class Begin extends Component<IBeginProps> {
     };
 
     componentDidMount = () => {
+        window.scrollTo({top: 0});
         const zip = localStorage.getItem("zipCode");
         if (zip != null && zip !== '') {
             this.setState({ zipCode: zip, readyToContinue: zip.length === 5 || zip.length === 9 });

@@ -45,6 +45,7 @@ class Personal extends Component<IPersonalProps> {
     ];
 
     updateBirthday = (event: any) => {
+        console.log(event.target.value);
         let bd = dayjs(event.target.value, "MM/DD/YYYY");
         let now = dayjs();
         let val = event.target.value;
@@ -112,6 +113,7 @@ class Personal extends Component<IPersonalProps> {
     };
 
     componentDidMount = () => {
+        window.scrollTo({top: 0});
         let bd = localStorage.getItem('birthdate');
         let sex = localStorage.getItem('sex');
         let tob: string | boolean | null = localStorage.getItem('tobacco');
@@ -148,13 +150,13 @@ class Personal extends Component<IPersonalProps> {
                     Before we can find quotes, we need to know a bit more about you as a person - let's start with your
                     age and sex.
                 </p>
-                <div>
-                    <label htmlFor="birthDate">Birthdate</label>
-                    <div style={{ maxWidth: 300 }}>
+                <div className="qform-group">
+                    <label className="qform-label" htmlFor="birthDate">Birthdate</label>
+                    <div className={classes.birthdateContainer}>
                         <Cleave
                             name="birthDate"
                             style={{ borderColor: bdError ? '#f03434' : undefined }}
-                            placeholder="12/21/1997"
+                            placeholder="MM/DD/YYYY"
                             className="input"
                             options={{ date: true, datePattern: ['m', 'd', 'Y'] }}
                             onChange={this.updateBirthday}
@@ -163,13 +165,13 @@ class Personal extends Component<IPersonalProps> {
                     </div>
                     {bdError ? <span className={classes.errorMessage}>{bdErrMsg}</span> : ""}
                 </div>
-                <div>
-                    <label htmlFor="sex">Sex</label>
-                    <button className="button text" color="dark-4" onClick={this.showGenderModal}>Why are there only two options?</button>
+                <div className="qform-group">
+                    <label className="qform-label" htmlFor="sex">Sex</label>
+                    <button className="button text text-primary" color="dark-4" onClick={this.showGenderModal}>Why are there only two options?</button>
                     <RadioGroup name="sex" value={sex} options={this.sexOptions} onChange={this.updateSex} />
                 </div>
-                <div>
-                    <label htmlFor="substance-cb">Lifestyle</label>
+                <div className="qform-group">
+                    <label className="qform-label" htmlFor="substance-cb">Lifestyle</label>
                     <p>
                         Select any of the answers below, if they apply to you.&nbsp;
                         <a className="text-primary" onClick={this.showSmokingModal}>Why?</a>
