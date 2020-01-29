@@ -7,7 +7,7 @@ import { QuoteService } from '../../../../services/quote.service';
 import Spinner from 'react-spinkit';
 import { Store as S } from 'undux';
 import { History, LocationState } from 'history';
-import { QuickTermQuoteResult, Address, PremiumMode } from 'insuqo-shared';
+import { QuickTermQuoteResult, Address, PremiumMode } from '@insuqo/shared';
 import { AuthenticationService } from "../../../../services/authentication.service";
 import { ClientAuthentication } from "../../../../controllers/sign-up/ClientAuthentication";
 import { CognitoUser } from "amazon-cognito-identity-js";

@@ -1,6 +1,6 @@
 import {ApiBaseService} from "./api-base.service";
 import {DynamoQuote, QuoteInsertResponse} from "../model/dynamo-quote";
-import {ApiResponse} from "insuqo-shared/types/api-response";
+import {ApiResponse} from "@insuqo/shared/types/api-response";
 
 export class QuoteService extends ApiBaseService {
 

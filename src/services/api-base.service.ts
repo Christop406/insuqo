@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { AuthenticationService } from './authentication.service';
-import { ApiResponse } from 'insuqo-shared/types/api-response';
+import { ApiResponse } from '@insuqo/shared/types/api-response';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 

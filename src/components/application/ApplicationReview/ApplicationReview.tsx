@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Application, QuickTermQuoteResult, PremiumMode } from 'insuqo-shared';
+import { Application, QuickTermQuoteResult, PremiumMode } from '@insuqo/shared';
 import s from './ApplicationReview.module.scss';
 import cx from 'classnames';
 import { ApplicationService } from '../../../services/application.service';

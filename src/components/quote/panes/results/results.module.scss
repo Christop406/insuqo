@@ -27,6 +27,7 @@
   @include tablet-min {
     flex-direction: row;
     justify-content: space-between;
+    padding: 8px;
   }
 
   .companyName {

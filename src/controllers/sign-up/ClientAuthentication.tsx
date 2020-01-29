@@ -3,7 +3,7 @@ import s from './ClientAuthentication.module.scss';
 import { AuthenticationForm } from "../../components/authentication/AuthenticationForm";
 import { AuthenticationService } from "../../services/authentication.service";
 import { CognitoUser } from "amazon-cognito-identity-js";
-import { AuthChallengeName } from "insuqo-shared/types/auth-challenge-name";
+import { AuthChallengeName } from "@insuqo/shared/types/auth-challenge-name";
 import { Auth } from "aws-amplify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Logger } from '../../services/logger';

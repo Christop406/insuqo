@@ -2,7 +2,7 @@ import React from 'react';
 import s from './AuthenticationForm.module.scss';
 import {Formik, FormikErrors, FormikValues} from "formik";
 import {Validator} from "../../services/Validator";
-import {AuthChallengeName} from "insuqo-shared/types/auth-challenge-name";
+import {AuthChallengeName} from "@insuqo/shared/types/auth-challenge-name";
 import {PasswordSecurity} from "../password-security/PasswordSecurity";
 import * as Yup from 'yup';
 

@@ -3,7 +3,7 @@ import Store from '../../ApplicationStore';
 import { ApplicationBasicInfo } from "../../components/application/ApplicationBasicInfo/ApplicationBasicInfo";
 import { Route, RouteComponentProps, Switch, Redirect } from 'react-router-dom';
 import { ApplicationService } from "../../services/application.service";
-import { Application as ApplicationModel, QuickTermQuoteResult, ApplicationStatus as Status, ApplicationStatus } from "insuqo-shared";
+import { Application as ApplicationModel, QuickTermQuoteResult, ApplicationStatus as Status, ApplicationStatus } from "@insuqo/shared";
 import { ApplicationPaymentInfo } from "../../components/application/ApplicationPaymentInfo/ApplicationPaymentInfo";
 import { ApplicationReview } from '../../components/application/ApplicationReview/ApplicationReview';
 import { ApplicationStatusView } from '../../components/application/ApplicationStatusView/ApplicationStatusView';

@@ -1,5 +1,5 @@
 import React from 'react';
-import { ApplicationStatus, Application } from 'insuqo-shared';
+import { ApplicationStatus, Application } from '@insuqo/shared';
 import 'react-step-progress-bar/styles.css';
 import { ProgressBar } from 'react-step-progress-bar';
 import './ApplicationStatusView.scss';

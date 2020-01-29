@@ -1,6 +1,6 @@
 import React from 'react';
 import { Field, Formik } from 'formik';
-import { Application } from 'insuqo-shared';
+import { Application } from '@insuqo/shared';
 import { FilePond, registerPlugin } from 'react-filepond';
 // @ts-ignore
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview';

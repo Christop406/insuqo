@@ -1,6 +1,6 @@
 import {Auth} from 'aws-amplify';
 import {CognitoUser, CognitoUserSession, ISignUpResult} from "amazon-cognito-identity-js";
-import {AuthChallengeName} from "insuqo-shared/types/auth-challenge-name";
+import {AuthChallengeName} from "@insuqo/shared/types/auth-challenge-name";
 
 declare type LoginResponse = CognitoUser & { challengeName: AuthChallengeName };
 

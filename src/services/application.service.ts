@@ -1,4 +1,4 @@
-import { Application, ApplicationStatus, Address } from 'insuqo-shared';
+import { Application, ApplicationStatus, Address } from '@insuqo/shared';
 import { ApiBaseService, RequestConfig } from './api-base.service';
 import { Logger } from './logger';
 
