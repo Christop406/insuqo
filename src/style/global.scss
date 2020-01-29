@@ -1,7 +1,7 @@
-@import 'buttons';
-@import 'input';
-@import 'select';
-@import 'typography';
+@import "buttons";
+@import "input";
+@import "select";
+@import "typography";
 
 .not-allowed {
   cursor: not-allowed;
@@ -9,4 +9,21 @@
 
 p a {
   font-weight: bold;
+}
+
+button {
+  &:focus {
+    outline: none !important;
+  }
+}
+
+button.jxEXYf {
+  border-radius: 4px;
+  overflow: hidden;
+  transition: transform 0.2s ease;
+  &:focus {
+    border: none !important;
+    box-shadow: 0 0 2px 0 $color-primary;
+    transform: scale(1.01);
+  }
 }
