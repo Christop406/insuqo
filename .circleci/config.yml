@@ -1,0 +1,46 @@
+version: 2
+jobs:
+  Prepare:
+    working_directory: ~/deploy
+    docker:
+      - image: circleci/node:12
+    steps:
+      - checkout
+      - run:
+          name: Add NPM Configuration
+          command: |
+            echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > .npmrc
+      - persist_to_workspace:
+          root: .
+          paths:
+            - "*"
+  Deploy to GCP:
+    working_directory: ~/deploy
+    docker:
+      - image: google/cloud-sdk
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          name: Configure Google Cloud CLI
+          command: |
+            echo $GCLOUD_SERVICE_KEY | gcloud auth activate-service-account --key-file=-
+            gcloud --quiet config set project ${GOOGLE_PROJECT_ID}
+            gcloud --quiet config set compute/zone ${GOOGLE_COMPUTE_ZONE}
+            gcloud --quiet config set verbosity info
+      - run:
+          name: Deploy to Google Cloud
+          command: gcloud app deploy app.production.yaml
+
+workflows:
+  version: 2
+  "Prod to GCP":
+    jobs:
+      - Prepare
+      - Deploy to GCP:
+          requires:
+            - Prepare
+          filters:
+            branches:
+              only:
+                - master

@@ -2,7 +2,7 @@ import React from 'react';
 import { ApplicationStatus, Application } from '@insuqo/shared';
 import 'react-step-progress-bar/styles.css';
 import { ProgressBar } from 'react-step-progress-bar';
-import './ApplicationStatusView.scss';
+import s from './ApplicationStatusView.module.scss';
 import { Logger } from '../../../services/logger';
 
 
@@ -41,16 +41,19 @@ export const ApplicationStatusView: React.FunctionComponent<StatusViewProps> = (
     const info = statusInfo.get(application.status) || { name: 'Not Found', percent: 0, description: 'You have entered an invalid application ID.' };
     const gradient = getGradient(application.status);
     return (
-        <div className="status-view-container">
-            <div className="status-view">
+        <div className={s['status-view-container']}>
+            <div className={s['status-view']}>
                 <h1>{info.name}</h1>
-                <div className="app-progress">
+                <div className={s['app-progress']}>
                     <ProgressBar
                         percent={info.percent}
                         filledBackground={`linear-gradient(to right, #${gradient.start}, #${gradient.end})`}
                     />
                 </div>
-                <div className="progress-description">{info.description}</div>
+                <div className={s['progress-description']}>{info.description}</div>
+            </div>
+            <div className={s.historyContainer}>
+                <h2>Change History</h2>
             </div>
         </div>
     );
