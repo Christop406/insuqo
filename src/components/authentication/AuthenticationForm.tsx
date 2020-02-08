@@ -1,9 +1,9 @@
 import React from 'react';
 import s from './AuthenticationForm.module.scss';
-import {Formik, FormikErrors, FormikValues} from "formik";
-import {Validator} from "../../services/Validator";
-import {AuthChallengeName} from "@insuqo/shared/types/auth-challenge-name";
-import {PasswordSecurity} from "../password-security/PasswordSecurity";
+import {Formik, FormikErrors, FormikValues} from 'formik';
+import {Validator} from '../../services/Validator';
+import {AuthChallengeName} from '@insuqo/shared/types/auth-challenge-name';
+import {PasswordSecurity} from '../password-security/PasswordSecurity';
 import * as Yup from 'yup';
 
 interface AuthenticationFormProps {
@@ -36,14 +36,12 @@ const ChallengeForm: React.FunctionComponent<ChallengeFormProps> = (props) => {
     return (
         <Formik onSubmit={(values) => props.onSubmit(values.challengeResponse)} initialValues={{challengeResponse: ''}}>
             {({
-                  values,
-                  errors,
-                  touched,
-                  handleChange,
-                  handleBlur,
-                  handleSubmit,
-                  isSubmitting
-              }) =>
+                values,
+                handleChange,
+                handleBlur,
+                handleSubmit,
+                isSubmitting
+            }) =>
                 <form className="auth-container" onSubmit={handleSubmit}>
                     <span>Your Code</span>
                     <input
@@ -56,7 +54,7 @@ const ChallengeForm: React.FunctionComponent<ChallengeFormProps> = (props) => {
                         value={values.challengeResponse}
                     />
                     <button className={`${s['submit-button']} full primary button`} disabled={isSubmitting}
-                            type="submit">Submit
+                        type="submit">Submit
                     </button>
                 </form>
             }
@@ -96,15 +94,14 @@ const SignUpForm: React.FunctionComponent<SubFormProps> = (props) => {
             onSubmit={(values) => props.onSubmit(values.email, values.password)}
         >
             {({
-                  values,
-                  errors,
-                  touched,
-                  handleChange,
-                  handleBlur,
-                  handleSubmit,
-                  isSubmitting,
-                  isValid
-              }) =>
+                values,
+                errors,
+                handleChange,
+                handleBlur,
+                handleSubmit,
+                isSubmitting,
+                isValid
+            }) =>
                 <form className="auth-container" onSubmit={handleSubmit}>
                     <span className={s['form-label']}>Email Address</span>
                     <input
@@ -140,7 +137,7 @@ const SignUpForm: React.FunctionComponent<SubFormProps> = (props) => {
                     />
                     <span className="error-text">{errors && errors.passwordConf}</span>
                     <button className={`${s['submit-button']} full primary button`} disabled={isSubmitting}
-                            type="submit">Submit
+                        type="submit">Submit
                     </button>
                 </form>
             }
@@ -172,14 +169,13 @@ const LoginForm: React.FunctionComponent<SubFormProps> = (props) => {
             onSubmit={(values) => props.onSubmit(values.email, values.password)}
         >
             {({
-                  values,
-                  errors,
-                  touched,
-                  handleChange,
-                  handleBlur,
-                  handleSubmit,
-                  isSubmitting
-              }) =>
+                values,
+                errors,
+                handleChange,
+                handleBlur,
+                handleSubmit,
+                isSubmitting
+            }) =>
                 <form className="auth-container" onSubmit={handleSubmit}>
                     <span className={s['form-label']}>Email Address</span>
                     <input
@@ -204,7 +200,7 @@ const LoginForm: React.FunctionComponent<SubFormProps> = (props) => {
                     />
                     <span className="error-text">{errors && errors.password}</span>
                     <button className={`${s['submit-button']} full primary button`} disabled={isSubmitting}
-                            type="submit">Submit
+                        type="submit">Submit
                     </button>
                 </form>
             }

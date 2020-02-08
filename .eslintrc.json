@@ -1,7 +1,8 @@
 {
     "env": {
         "browser": true,
-        "es6": true
+        "es6": true,
+        "node": true
     },
     "extends": [
         "eslint:recommended",
@@ -25,6 +26,11 @@
         "react",
         "@typescript-eslint/eslint-plugin"
     ],
+    "settings": {
+        "react": {
+            "version": "detect"
+        }
+    },
     "rules": {
         "indent": [
             "error",
@@ -43,7 +49,7 @@
             "error",
             "always"
         ],
-        "no-unused-vars": "warn",
+        "no-unused-vars": "off",
         "@typescript-eslint/no-explicit-any": "off",
         "no-restricted-globals": "off",
         "react/prop-types": "off",

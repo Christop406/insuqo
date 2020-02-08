@@ -1,6 +1,6 @@
 import React from 'react';
 import s from './PasswordSecurity.module.scss';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import cx from 'classnames';
 import '../../style/transitions.scss';
 

@@ -1,7 +1,6 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { Component, KeyboardEvent } from 'react';
 import Store from '../../../../ApplicationStore';
-import { localizeZip } from "../../../../api";
+import { localizeZip } from '../../../../api';
 import { Store as S } from 'undux';
 import { History, LocationState } from 'history';
 import s from './begin.module.scss';
@@ -43,7 +42,6 @@ class Begin extends Component<IBeginProps> {
     submitZip = () => {
         const store = this.props.store;
         const { zipCode } = this.state;
-        let that = this;
 
         if (!this.validateZipCode(zipCode)) {
             this.updateZipCode(zipCode);
@@ -59,11 +57,11 @@ class Begin extends Component<IBeginProps> {
                 store.set('stateCode')(res.data.stateCode);
                 store.set('city')(res.data.cityName);
 
-                that.props.history.push('/quote/personal');
+                this.props.history.push('/quote/personal');
             }
         }).catch((err) => {
             if (err.response.status === 400) {
-                that.setState({ loading: false, zipInvalid: true });
+                this.setState({ loading: false, zipInvalid: true });
             }
         });
     };
@@ -80,7 +78,7 @@ class Begin extends Component<IBeginProps> {
 
     componentDidMount = () => {
         window.scrollTo({top: 0});
-        const zip = localStorage.getItem("zipCode");
+        const zip = localStorage.getItem('zipCode');
         if (zip != null && zip !== '') {
             this.setState({ zipCode: zip, readyToContinue: zip.length === 5 || zip.length === 9 });
         }
@@ -109,7 +107,7 @@ class Begin extends Component<IBeginProps> {
                             delimiter: '-',
                             delimiterLazyShow: true,
                         }} onChange={this.updateZipCode} onKeyPress={this.handleKeyPress} />
-                    {zipInvalid ? <span className={s.errorText}>ZIP code invalid, please try again.</span> : ""}
+                    {zipInvalid ? <span className={s.errorText}>ZIP code invalid, please try again.</span> : ''}
                     <div className={s.attributionContainer}>
                         <img alt="Powered by Google logo"
                             src="https://developers.google.com/maps/documentation/images/powered_by_google_on_white.png" />
@@ -117,7 +115,7 @@ class Begin extends Component<IBeginProps> {
                 </div>
 
                 <button onClick={this.handleSubmit} color="#9c37f2" className="button full primary" style={{ maxHeight: 40 }}
-                    disabled={!readyToContinue || (readyToContinue && loading)}>{loading ? "Loading..." : "Let's Get Started!"}</button>
+                    disabled={!readyToContinue || (readyToContinue && loading)}>{loading ? 'Loading...' : 'Let\'s Get Started!'}</button>
             </div>
         );
     };

@@ -11,6 +11,6 @@ const SmokingPopover: React.FunctionComponent = () => {
             </p>
         </div>
     );
-}
+};
 
 export default SmokingPopover;

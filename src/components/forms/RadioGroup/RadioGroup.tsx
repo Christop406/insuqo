@@ -20,7 +20,7 @@ export const RadioGroup: React.FC<RadioGroupProps> = ({ value, options, onChange
 
     const buildRadioButtons = (options: RadioOption[] = []) => {
         return options.map((o) =>
-            <label className={s.radio}>
+            <label key={o.value} className={s.radio}>
                 <input type="radio" checked={value === o.value} name={name} value={o.value} onChange={(e) => onChange && onChange(e.target.value)} />
                 {o.name}
             </label>

@@ -383,7 +383,7 @@ const getInitialValues = (a: Application): Partial<Application> => {
         willFinance: a.willFinance || false,
         willLiquidate: a.willLiquidate || false,
     };
-}
+};
 
 const validateApplication = (values: Partial<Application>) => {
     const errors: typeof values | any = {};

@@ -1,12 +1,11 @@
 import React from 'react';
 import s from './ClientAuthentication.module.scss';
-import { AuthenticationForm } from "../../components/authentication/AuthenticationForm";
-import { AuthenticationService } from "../../services/authentication.service";
-import { CognitoUser } from "amazon-cognito-identity-js";
-import { AuthChallengeName } from "@insuqo/shared/types/auth-challenge-name";
-import { Auth } from "aws-amplify";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Logger } from '../../services/logger';
+import { AuthenticationForm } from '../../components/authentication/AuthenticationForm';
+import { AuthenticationService } from '../../services/authentication.service';
+import { CognitoUser } from 'amazon-cognito-identity-js';
+import { AuthChallengeName } from '@insuqo/shared/types/auth-challenge-name';
+import { Auth } from 'aws-amplify';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 interface ClientAuthenticationProps {
     onAuthenticate: (user: CognitoUser) => unknown;
@@ -22,7 +21,7 @@ interface ClientAuthenticationState {
     title: string;
     description?: string;
     formErrorText?: string;
-    savedUserInfo?: { email: string, password: string };
+    savedUserInfo?: { email: string; password: string };
 }
 
 export class ClientAuthentication extends React.Component<ClientAuthenticationProps, ClientAuthenticationState> {
@@ -49,7 +48,7 @@ export class ClientAuthentication extends React.Component<ClientAuthenticationPr
         }
     };
 
-    public logIn = async (email: string, password: string, authenticate: boolean = true) => {
+    public logIn = async (email: string, password: string, authenticate = true) => {
         try {
             const loginRes = await AuthenticationService.login(email, password);
             this.cognitoUser = loginRes;

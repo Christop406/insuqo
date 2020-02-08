@@ -2,61 +2,61 @@ import axios from 'axios';
 import * as qs from 'query-string';
 import constants from './util/constants';
 import { Logger } from './services/logger';
-let apiUrl = process.env.REACT_APP_API_URL;
+const apiUrl = process.env.REACT_APP_API_URL;
 
 export function getApplication(app) {
-    return axios.get(apiUrl + "/application/" + app, {
+    return axios.get(apiUrl + '/application/' + app, {
         headers: {
-            "Authorization": getAuthHeader(localStorage.getItem("lt"))
+            'Authorization': getAuthHeader(localStorage.getItem('lt'))
         }
     });
 }
 
 export function newApplication(app) {
     Logger.log(app, JSON.stringify(app));
-    return axios.put(apiUrl + "/applications/new", JSON.stringify(app), {
+    return axios.put(apiUrl + '/applications/new', JSON.stringify(app), {
         headers: {
-            "Content-Type": 'application/json'
+            'Content-Type': 'application/json'
         }
     });
 }
 
 export function localizeZip(zip) {
     if (zip == null || zip.length < 5) {
-        return Promise.reject("zip_invalid")
+        return Promise.reject('zip_invalid');
     }
-    return axios.get(apiUrl + "/util/zip/lookup", {
+    return axios.get(apiUrl + '/util/zip/lookup', {
         params: {
             zip: zip
         }
-    })
+    });
 }
 
 export function login(type, email, password) {
-    if (email == null || password == null || (type !== constants.userTypes.client && type !== constants.userTypes.agent)) return Promise.reject("invalid username/password/type");
-    return axios.post(apiUrl + "/" + type + "/login", qs.stringify({
+    if (email == null || password == null || (type !== constants.userTypes.client && type !== constants.userTypes.agent)) return Promise.reject('invalid username/password/type');
+    return axios.post(apiUrl + '/' + type + '/login', qs.stringify({
         email,
         password
     }), {
         headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
+            'Content-Type': 'application/x-www-form-urlencoded',
         }
     });
 }
 
 export function getUserInfo(type) { // remove this
-    if (type !== constants.userTypes.client && type !== constants.userTypes.agent) return Promise.reject("invalid username/password/type");
+    if (type !== constants.userTypes.client && type !== constants.userTypes.agent) return Promise.reject('invalid username/password/type');
 
-    let tok = localStorage.getItem("lt");
+    const tok = localStorage.getItem('lt');
     console.log(tok);
     if (tok !== undefined) {
-        return axios.get(apiUrl + "/" + type + "/info", {
+        return axios.get(apiUrl + '/' + type + '/info', {
             headers: {
-                "Authorization": getAuthHeader(tok)
+                'Authorization': getAuthHeader(tok)
             }
         });
     } else {
-        return Promise.reject("no_jwt");
+        return Promise.reject('no_jwt');
     }
 }
 

@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import Store from '../../../../ApplicationStore';
-import Cleave from 'cleave.js/react'
-import dayjs from "dayjs";
-import Modal from "antd/es/modal";
+import Cleave from 'cleave.js/react';
+import dayjs from 'dayjs';
+import Modal from 'antd/es/modal';
 import 'antd/es/modal/style/css';
-import SmokingPopover from "./smoking-popover";
+import SmokingPopover from './smoking-popover';
 import { Store as S } from 'undux';
 import { History, LocationState } from 'history';
 import classes from './personal.module.scss';
@@ -35,7 +35,7 @@ class Personal extends Component<IPersonalProps> {
         tobacco: false,
         cannabis: false,
         bdError: false,
-        bdErrMsg: "",
+        bdErrMsg: '',
         sModalVisible: false
     };
 
@@ -46,19 +46,19 @@ class Personal extends Component<IPersonalProps> {
 
     updateBirthday = (event: any) => {
         console.log(event.target.value);
-        let bd = dayjs(event.target.value, "MM/DD/YYYY");
-        let now = dayjs();
-        let val = event.target.value;
+        const bd = dayjs(event.target.value, 'MM/DD/YYYY');
+        const now = dayjs();
+        const val = event.target.value;
         if (val.length > 8 && now.isBefore(bd)) {
-            this.setState({ birthday: val, bdError: true, bdErrMsg: "Please input a valid birthdate." });
+            this.setState({ birthday: val, bdError: true, bdErrMsg: 'Please input a valid birthdate.' });
         } else if (val.length > 8 && now.subtract(18, 'year').isBefore(bd)) {
             this.setState({
                 birthday: val,
                 bdError: true,
-                bdErrMsg: "You must be 18 years or older to use this service."
+                bdErrMsg: 'You must be 18 years or older to use this service.'
             });
         } else {
-            this.setState({ birthday: val, bdError: false, bdErrMsg: "" });
+            this.setState({ birthday: val, bdError: false, bdErrMsg: '' });
         }
     };
 
@@ -108,7 +108,7 @@ class Personal extends Component<IPersonalProps> {
             store.set('sex')(sex);
             store.set('tobacco')(tobacco);
             store.set('cannabis')(cannabis);
-            this.props.history.push("/quote/plan");
+            this.props.history.push('/quote/plan');
         }
     };
 
@@ -140,7 +140,7 @@ class Personal extends Component<IPersonalProps> {
 
     render = () => {
         const { store } = this.props;
-        const { birthday, sex, tobacco, cannabis, bdError, bdErrMsg } = this.state;
+        const { birthday, sex, bdError, bdErrMsg } = this.state;
         return (
             <div>
                 <h1 className={classes.paneHeader} color="#9c37f2">The weather's fine
@@ -163,7 +163,7 @@ class Personal extends Component<IPersonalProps> {
                             value={birthday}
                         />
                     </div>
-                    {bdError ? <span className={classes.errorMessage}>{bdErrMsg}</span> : ""}
+                    {bdError ? <span className={classes.errorMessage}>{bdErrMsg}</span> : ''}
                 </div>
                 <div className="qform-group">
                     <label className="qform-label" htmlFor="sex">Sex</label>

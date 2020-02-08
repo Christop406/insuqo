@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Store from '../../ApplicationStore';
-import AgentDashboard from "./AgentDashboard";
+import AgentDashboard from './AgentDashboard';
 import {Store as S } from 'undux';
 
 interface IAgentProps {

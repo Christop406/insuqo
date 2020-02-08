@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import Store from '../../ApplicationStore';
-import { Box, Button, Heading } from "grommet/es6/index";
+import { Box, Button, Heading } from 'grommet/es6/index';
 import { makeid } from '../../func';
 import relations from '@insuqo/shared/constants/relations.json';
-import { Text } from "grommet";
+import { Text } from 'grommet';
 import './beneficiary-list.scss';
-import { Col, Row } from "react-bootstrap";
-import { Beneficiary } from "@insuqo/shared";
+import { Col, Row } from 'react-bootstrap';
+import { Beneficiary } from '@insuqo/shared';
 import { Store as S } from 'undux';
-import Cleave from "cleave.js/react";
+import Cleave from 'cleave.js/react';
 import { Logger } from '../../services/logger';
 
 declare type IBeneficiaryListProps = {
@@ -46,7 +46,7 @@ class BeneficiaryList extends Component<IBeneficiaryListProps, IBeneficiaryListS
 
     deleteBeneficiary = (index: number) => {
         Logger.log('deleted');
-        let oldBens = this.state.beneficiaries.map(value => value);
+        const oldBens = this.state.beneficiaries.map(value => value);
         oldBens.splice(index, 1);
         this.setState({ beneficiaries: oldBens }, this.updateParent.bind(this));
     };
@@ -102,9 +102,10 @@ class BeneficiaryList extends Component<IBeneficiaryListProps, IBeneficiaryListS
                                 <Text className="field-label">Relationship to You<span className="text-danger">*</span></Text>
                                 <select placeholder="Choose" className="input select"
                                     value={value.relationship}
-                                    onChange={(event) => this.updateBenInfo(event, value, 'relationship')}
-                                    children={relations.map((option, index) => <option value={option.code}
-                                        key={index}>{option.name}</option>)} />
+                                    onChange={(event) => this.updateBenInfo(event, value, 'relationship')}>
+                                    {relations.map((option, index) => <option value={option.code}
+                                        key={index}>{option.name}</option>)}
+                                </select>
                             </Col>
                             <Col>
                                 <Text className="field-label">Percentage of Payout<span className="text-danger">*</span></Text>

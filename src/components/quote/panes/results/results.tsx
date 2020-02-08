@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Store from '../../../../ApplicationStore';
-import { Accordion, AccordionPanel, Anchor, Box, Button, Heading, Paragraph } from 'grommet';
+import { Accordion, AccordionPanel, Anchor, Box, Heading, Paragraph } from 'grommet';
 import dayjs from 'dayjs';
 import { formatCovAmount, logoImageForCompanyID, splitPrice } from '../../../../func';
 import { QuoteService } from '../../../../services/quote.service';
@@ -8,9 +8,8 @@ import Spinner from 'react-spinkit';
 import { Store as S } from 'undux';
 import { History, LocationState } from 'history';
 import { QuickTermQuoteResult, Address, PremiumMode } from '@insuqo/shared';
-import { AuthenticationService } from "../../../../services/authentication.service";
-import { ClientAuthentication } from "../../../../controllers/sign-up/ClientAuthentication";
-import { CognitoUser } from "amazon-cognito-identity-js";
+import { AuthenticationService } from '../../../../services/authentication.service';
+import { ClientAuthentication } from '../../../../controllers/sign-up/ClientAuthentication';
 import { ApplicationService } from '../../../../services/application.service';
 import { Logger } from '../../../../services/logger';
 import qs from 'query-string';
@@ -90,7 +89,7 @@ class Results extends Component<ResultsProps, ResultsState> {
     };
 
     componentDidMount = async () => {
-        window.scrollTo({top: 0});
+        window.scrollTo({ top: 0 });
         const { store } = this.props;
         const { freq } = this.state;
         const { search } = this.props.history.location;
@@ -125,7 +124,7 @@ class Results extends Component<ResultsProps, ResultsState> {
             city: store.get('city'),
             state: store.get('stateCode'),
             zipCode: store.get('zipCode')
-        }
+        };
 
         this.birthDate = store.get('birthdate');
     };
@@ -152,14 +151,13 @@ class Results extends Component<ResultsProps, ResultsState> {
         return quotes.map((quote, index) => {
             return (
                 <AccordionPanel key={index} label={this.formatQuoteHeading(quote, freq)}>
-                    {this.formatQuoteBody(quote, index, freq)}
+                    {this.formatQuoteBody(quote)}
                 </AccordionPanel>
             );
         });
     };
 
-    formatQuoteBody = (quote: QuickTermQuoteResult, index: number, freq: string) => {
-        const { active } = this.state;
+    formatQuoteBody = (quote: QuickTermQuoteResult) => {
         return (
             <Box>
                 <Box style={{ backgroundColor: '#F5F5F5', padding: 10 }}>
@@ -266,7 +264,7 @@ class Results extends Component<ResultsProps, ResultsState> {
         }
     };
 
-    handleAuthentication = async (user: CognitoUser) => {
+    handleAuthentication = async () => {
         this.setState({ showAuthModal: false });
         const { selectedQuote } = this.state;
 
@@ -298,9 +296,10 @@ class Results extends Component<ResultsProps, ResultsState> {
                         <h3 style={styles.quoteSubtitle}>Click on each for more info.</h3>
                         <div className={s.paymentFrequencyContainer}>
                             <h5 className={s.frequencyLabel}>Payment Frequency </h5>
-                            <select className="input select inline" value={freq} onChange={this.updateFreq}
-                                children={frequencies.map((option, index) => <option value={option.val}
-                                    key={index}>{option.name}</option>)} />
+                            <select className="input select inline" value={freq} onChange={this.updateFreq}>
+                                {frequencies.map((option, index) => <option value={option.val}
+                                    key={index}>{option.name}</option>)}
+                            </select>
                         </div>
                         <Accordion animate onActive={this.updateActiveIndex}
                             activeIndex={loading ? undefined : active}>

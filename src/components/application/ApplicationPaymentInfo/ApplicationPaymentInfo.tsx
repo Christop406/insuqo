@@ -2,7 +2,6 @@ import React from 'react';
 import { Field, Formik } from 'formik';
 import { Application } from '@insuqo/shared';
 import { FilePond, registerPlugin } from 'react-filepond';
-// @ts-ignore
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 import axios from 'axios';
 
@@ -24,11 +23,11 @@ export const ApplicationPaymentInfo: React.FunctionComponent<PaymentInfoProps> =
         return <></>;
     }
 
-    const fileUrlLookup: Map<string, { put: string, delete: string }> = new Map();
+    const fileUrlLookup: Map<string, { put: string; delete: string }> = new Map();
     const applicationService = new ApplicationService();
 
     return (
-        <Formik initialValues={props.application} onSubmit={(values, helpers) => props.onSubmit({ ...values, images: Object.keys(fileUrlLookup) })}>
+        <Formik initialValues={props.application} onSubmit={(values) => props.onSubmit({ ...values, images: Object.keys(fileUrlLookup) })}>
             {(form) =>
                 <div className={s.container}>
                     <div className={s.formContainer}>
@@ -52,7 +51,7 @@ export const ApplicationPaymentInfo: React.FunctionComponent<PaymentInfoProps> =
                             <div className="form-group">
                                 <label>Check Picture</label>
                                 <FilePond server={{
-                                    process: async (fieldName, file, metadata, load, error, progress, abort) => {
+                                    process: async (fieldName, file, metadata, load, error) => {
                                         try {
                                             const urls = await applicationService.getSignedUploadUrl(props.application!.id, {
                                                 headers: {
@@ -87,7 +86,7 @@ export const ApplicationPaymentInfo: React.FunctionComponent<PaymentInfoProps> =
                                                 error(err);
                                             }
                                         } else {
-                                            error('No URLs for fileId')
+                                            error('No URLs for fileId');
                                         }
                                         fileUrlLookup.delete(uniqueFileId);
                                         load();
@@ -110,4 +109,4 @@ export const ApplicationPaymentInfo: React.FunctionComponent<PaymentInfoProps> =
 
 function iteratorToArray<T>(iterator: IterableIterator<T>): T[] {
     return Array.from(iterator);
-};
+}

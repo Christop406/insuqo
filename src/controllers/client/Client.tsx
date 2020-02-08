@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import Store from '../../ApplicationStore';
-import ClientDashboard from "./ClientDashboard";
-import {Route, Switch, RouteComponentProps} from "react-router-dom";
-import {getUserInfo} from "../../api";
-import constants from "../../util/constants.json";
+import ClientDashboard from './ClientDashboard';
+import {Route, Switch, RouteComponentProps} from 'react-router-dom';
+import {getUserInfo} from '../../api';
+import constants from '../../util/constants.json';
 import { Store as S } from 'undux';
 
 declare type IClientProps = {
@@ -22,7 +22,7 @@ class Client extends Component<IClientProps> {
                 res = res.data;
                 this.setState({clientInfo: res.data.user});
             } else {
-                this.props.history.push("/client/login");
+                this.props.history.push('/client/login');
             }
         });
     }

@@ -61,7 +61,7 @@ class Main extends Component {
                     </Box>
                 </Grommet>
             </StyleRoot>
-        )
+        );
     };
 }
 

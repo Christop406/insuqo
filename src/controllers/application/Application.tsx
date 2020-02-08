@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import Store from '../../ApplicationStore';
-import { ApplicationBasicInfo } from "../../components/application/ApplicationBasicInfo/ApplicationBasicInfo";
+import { ApplicationBasicInfo } from '../../components/application/ApplicationBasicInfo/ApplicationBasicInfo';
 import { Route, RouteComponentProps, Switch, Redirect } from 'react-router-dom';
-import { ApplicationService } from "../../services/application.service";
-import { Application as ApplicationModel, QuickTermQuoteResult, ApplicationStatus as Status, ApplicationStatus } from "@insuqo/shared";
-import { ApplicationPaymentInfo } from "../../components/application/ApplicationPaymentInfo/ApplicationPaymentInfo";
+import { ApplicationService } from '../../services/application.service';
+import { Application as ApplicationModel, QuickTermQuoteResult, ApplicationStatus as Status, ApplicationStatus } from '@insuqo/shared';
+import { ApplicationPaymentInfo } from '../../components/application/ApplicationPaymentInfo/ApplicationPaymentInfo';
 import { ApplicationReview } from '../../components/application/ApplicationReview/ApplicationReview';
 import { ApplicationStatusView } from '../../components/application/ApplicationStatusView/ApplicationStatusView';
 import Spinner from 'react-spinkit';
@@ -141,7 +141,6 @@ class Application extends Component<RouteComponentProps<{ appId: string }>, Appl
                     case Status.Submitted:
                     case Status.InProgress:
                     case Status.Done: // change?
-                    case Status.New:
                     case Status.Problem:
                         this.props.history.push(`/application/${application.id}/status`);
                         break;
