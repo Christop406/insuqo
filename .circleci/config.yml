@@ -19,6 +19,8 @@ jobs:
     docker:
       - image: circleci/node:12
     steps:
+      - attach_workspace:
+          at: .
       - run:
           name: Build for deploy
           command: npm run build
