@@ -23,7 +23,7 @@ class Begin extends Component<IBeginProps> {
     };
 
     validateZipCode = (zipCode: string) => {
-        const yes = /^[0-9]{5}(\-[0-9]{4})?$/.test(zipCode);
+        const yes = /^[0-9]{5}(-[0-9]{4})?$/.test(zipCode);
         Logger.info(yes);
         return yes;
     };
