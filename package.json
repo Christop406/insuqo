@@ -67,8 +67,9 @@
     "typescript": "^3.7.4"
   },
   "scripts": {
-    "start": "node server.js",
+    "start": "react-scripts start",
     "dev": "react-scripts start",
+    "gcp-build": "npm run build",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
