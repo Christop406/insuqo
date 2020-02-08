@@ -1,5 +1,5 @@
 runtime: nodejs12
-service: iq-client
+service: default
 
 handlers:
   - url: /static/js/(.*)
