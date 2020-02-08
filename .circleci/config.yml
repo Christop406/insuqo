@@ -22,6 +22,9 @@ jobs:
       - attach_workspace:
           at: .
       - run:
+          name: Install Dependencies
+          command: npm install
+      - run:
           name: Build for deploy
           command: npm run build
       - persist_to_workspace:
