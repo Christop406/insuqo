@@ -70,13 +70,14 @@
   "scripts": {
     "start": "serve -s build",
     "dev": "react-scripts start",
-    "gcp-build": "npm run build",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "heroku-postbuild": "npm run build",
     "build-analyze": "npm run build && npm run analyze",
-    "analyze": "npx source-map-explorer \"build/static/js/*.js\""
+    "analyze": "npx source-map-explorer \"build/static/js/*.js\"",
+    "deploy:prod": "gcloud app deploy app.production.yaml",
+    "deploy:dev": "gcloud app deploy app.development.yaml"
   },
   "eslintConfig": {
     "extends": "react-app"

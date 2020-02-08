@@ -14,6 +14,18 @@ jobs:
           root: .
           paths:
             - "*"
+  Production Build:
+    working_directory: ~/deploy
+    docker:
+      - image: circleci/node:12
+    steps:
+      - run:
+          name: Build for deploy
+          command: npm run build
+      - persist_to_workspace:
+          root: .
+          paths:
+            - build
   Deploy to GCP:
     working_directory: ~/deploy
     docker:
@@ -36,9 +48,12 @@ workflows:
   "Prod to GCP":
     jobs:
       - Prepare
-      - Deploy to GCP:
+      - Production Build:
           requires:
             - Prepare
+      - Deploy to GCP:
+          requires:
+            - Production Build
           filters:
             branches:
               only:
