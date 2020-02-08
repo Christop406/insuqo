@@ -49,8 +49,8 @@ export const ApplicationPaymentInfo: React.FunctionComponent<PaymentInfoProps> =
                                 <Field className="input code" placeholder="011401533" name="routingNumber" />
                             </div>
                             <div className="form-group">
-                                <label>Check Picture</label>
-                                <FilePond server={{
+                                <label htmlFor='imageUploader'>Check Picture</label>
+                                <FilePond name='imageUploader' server={{
                                     process: async (fieldName, file, metadata, load, error) => {
                                         try {
                                             const urls = await applicationService.getSignedUploadUrl(props.application!.id, {

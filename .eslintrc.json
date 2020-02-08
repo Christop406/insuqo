@@ -8,7 +8,8 @@
         "eslint:recommended",
         "plugin:@typescript-eslint/eslint-recommended",
         "plugin:@typescript-eslint/recommended",
-        "plugin:react/recommended"
+        "plugin:react/recommended",
+        "plugin:jsx-a11y/recommended"
     ],
     "globals": {
         "Atomics": "readonly",
@@ -24,7 +25,8 @@
     },
     "plugins": [
         "react",
-        "@typescript-eslint/eslint-plugin"
+        "@typescript-eslint/eslint-plugin",
+        "jsx-a11y"
     ],
     "settings": {
         "react": {

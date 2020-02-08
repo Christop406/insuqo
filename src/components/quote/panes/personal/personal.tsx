@@ -174,7 +174,7 @@ class Personal extends Component<IPersonalProps> {
                     <label className="qform-label" htmlFor="substance-cb">Lifestyle</label>
                     <p>
                         Select any of the answers below, if they apply to you.&nbsp;
-                        <a className="text-primary" onClick={this.showSmokingModal}>Why?</a>
+                        <button className="text-primary" onClick={this.showSmokingModal}>Why?</button>
                     </p>
                     <div id="substance-cb" style={{ marginBottom: 20 }}>
                         <Checkbox

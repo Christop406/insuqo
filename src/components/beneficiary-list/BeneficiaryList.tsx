@@ -102,7 +102,7 @@ class BeneficiaryList extends Component<IBeneficiaryListProps, IBeneficiaryListS
                                 <Text className="field-label">Relationship to You<span className="text-danger">*</span></Text>
                                 <select placeholder="Choose" className="input select"
                                     value={value.relationship}
-                                    onChange={(event) => this.updateBenInfo(event, value, 'relationship')}>
+                                    onBlur={(event) => this.updateBenInfo(event, value, 'relationship')}>
                                     {relations.map((option, index) => <option value={option.code}
                                         key={index}>{option.name}</option>)}
                                 </select>

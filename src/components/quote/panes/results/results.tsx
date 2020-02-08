@@ -296,7 +296,7 @@ class Results extends Component<ResultsProps, ResultsState> {
                         <h3 style={styles.quoteSubtitle}>Click on each for more info.</h3>
                         <div className={s.paymentFrequencyContainer}>
                             <h5 className={s.frequencyLabel}>Payment Frequency </h5>
-                            <select className="input select inline" value={freq} onChange={this.updateFreq}>
+                            <select className="input select inline" value={freq} onBlur={this.updateFreq}>
                                 {frequencies.map((option, index) => <option value={option.val}
                                     key={index}>{option.name}</option>)}
                             </select>

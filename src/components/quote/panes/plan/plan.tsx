@@ -101,7 +101,7 @@ class Plan extends Component<IPlanProps> {
                 <h1 className={s.paneHeader}>Choose your coverage.</h1>
                 <h3 style={styles.quoteSubtitle}>You can change these values later.</h3>
                 <p style={{ maxWidth: '600px' }}>
-                    These values help insurers calculate how much you need to pay for your insurance. <a href="#" onClick={this.showHelpMeChoose}>Help me choose!</a>
+                    These values help insurers calculate how much you need to pay for your insurance. <button onClick={this.showHelpMeChoose}>Help me choose!</button>
                 </p>
                 <h3 className={s.paneHeader}>Coverage Amount</h3>
                 <div className={s.slider}>
@@ -128,7 +128,7 @@ class Plan extends Component<IPlanProps> {
                 <div>
                     <h2 className={s.paneHeader}>Other Options</h2>
                     <h3 className={s.paneHeader}>Riders</h3>
-                    <p><a style={{ marginTop: -10 }} onClick={this.showRiderInfo}>What are these?</a></p>
+                    <p><button style={{ marginTop: -10 }} onClick={this.showRiderInfo}>What are these?</button></p>
                     <RadioGroup name="rider" value={rider} options={this.riderOptions} onChange={this.updateRider} />
                 </div>
                 <button onClick={this.submitPlanInfo} className="button primary full">Get Quotes</button>
