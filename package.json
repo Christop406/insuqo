@@ -2,7 +2,7 @@
   "name": "iq-webapp",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://iq.insuqo.com/",
+  "homepage": "https://insuqo.com/iq",
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.25",
     "@fortawesome/free-regular-svg-icons": "^5.11.2",
