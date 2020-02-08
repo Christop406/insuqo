@@ -1,6 +1,6 @@
-import {ApiBaseService} from "./api-base.service";
-import {DynamoQuote, QuoteInsertResponse} from "../model/dynamo-quote";
-import {ApiResponse} from "@insuqo/shared/types/api-response";
+import {ApiBaseService} from './api-base.service';
+import {DynamoQuote, QuoteInsertResponse} from '../model/dynamo-quote';
+import {ApiResponse} from '@insuqo/shared/types/api-response';
 
 export class QuoteService extends ApiBaseService {
 
@@ -20,13 +20,13 @@ export class QuoteService extends ApiBaseService {
         showTop: any
     ): Promise<ApiResponse<QuoteInsertResponse>> => {
 
-        let requiredParams = [state, actualAge, nearestAge, amount, termLength, healthType, sex, rider, showTop];
+        const requiredParams = [state, actualAge, nearestAge, amount, termLength, healthType, sex, rider, showTop];
 
         if (requiredParams.some(el => el === undefined)) {
-            return Promise.reject("undefined_data");
+            return Promise.reject('undefined_data');
         }
 
-        return this.get("/quotes/run", {
+        return this.get('/quotes/run', {
             state: state,
             actualAge: actualAge,
             nearestAge: nearestAge,

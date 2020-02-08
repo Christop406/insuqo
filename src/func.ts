@@ -1,5 +1,5 @@
 export function reduceQuote(quote: any) {
-    var q: any = {};
+    const q: any = {};
     q.recID = quote.recID;
     q.companyID = quote.companyID;
     q.term = quote.term;
@@ -9,7 +9,7 @@ export function reduceQuote(quote: any) {
 
 export function formatCovAmount(x: number | string | undefined) {
     if(x === undefined) return '';
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
 
 export function logoImageForCompanyID(id: number | string | undefined) {
@@ -27,7 +27,7 @@ export function splitPrice(price: number | string) {
         return ['0', '00'];
     }
 
-    let splitString = String(price).split('.');
+    const splitString = String(price).split('.');
     if(splitString[0] === undefined) {
         splitString[0] = '0';
     }
@@ -42,7 +42,7 @@ export function splitPrice(price: number | string) {
 
 export function fillStoreFromLocalStorage(store: any) {
     return new Promise(function(resolve, reject) {
-        if(localStorage.getItem("store_persisted") === "true") {
+        if(localStorage.getItem('store_persisted') === 'true') {
             Object.assign(store.state, localStorage);
             Object.assign(store.state, {
                 quote: JSON.parse(localStorage.getItem('quote') || '{}'),
@@ -55,16 +55,16 @@ export function fillStoreFromLocalStorage(store: any) {
 }
 
 export function makeid() {
-    var text = "";
-    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    let text = '';
+    const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
-    for (var i = 0; i < 5; i++)
+    for (let i = 0; i < 5; i++)
         text += possible.charAt(Math.floor(Math.random() * possible.length));
 
     return text;
 }
 
 export function validateEmail(email: string) {
-    var re = /[^\s@]+@[^\s@]+\.[^\s@]+/;
+    const re = /[^\s@]+@[^\s@]+\.[^\s@]+/;
     return re.test(email);
 }

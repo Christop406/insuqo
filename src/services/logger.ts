@@ -1,5 +1,5 @@
 class IQLogger {
-    private _enabled: boolean = true;
+    private _enabled = true;
     private static _instance: IQLogger;
     private constructor() {
         this._enabled = process.env.NODE_ENV !== 'production';

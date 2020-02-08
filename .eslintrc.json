@@ -7,7 +7,7 @@
         "eslint:recommended",
         "plugin:@typescript-eslint/eslint-recommended",
         "plugin:@typescript-eslint/recommended",
-        "plugin:react/recommended",
+        "plugin:react/recommended"
     ],
     "globals": {
         "Atomics": "readonly",
@@ -23,7 +23,7 @@
     },
     "plugins": [
         "react",
-        "@typescript-eslint"
+        "@typescript-eslint/eslint-plugin"
     ],
     "rules": {
         "indent": [
@@ -51,6 +51,7 @@
         "@typescript-eslint/no-use-before-define":"off",
         "react/no-unescaped-entities": "off",
         "@typescript-eslint/explicit-function-return-type": "off",
-        "no-useless-escape": "off"
+        "no-useless-escape": "off",
+        "@typescript-eslint/interface-name-prefix": "off"
     }
 }

@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import Store from '../../../../ApplicationStore';
-import { formatCovAmount } from "../../../../func";
-import Modal from "antd/es/modal";
+import { formatCovAmount } from '../../../../func';
+import Modal from 'antd/es/modal';
 import 'antd/es/modal/style/css';
-import PlanInfoModal from "./plan-info-modal";
-import RiderInfoModal from "./rider-info-modal";
-import { Store as S } from "undux";
-import { History, LocationState } from "history";
+import PlanInfoModal from './plan-info-modal';
+import RiderInfoModal from './rider-info-modal';
+import { Store as S } from 'undux';
+import { History, LocationState } from 'history';
 import s from './plan.module.scss';
 import { Slider } from '../../../forms/Slider/Slider';
 import { RadioOption, RadioGroup } from '../../../forms/RadioGroup/RadioGroup';
@@ -78,7 +78,7 @@ class Plan extends Component<IPlanProps> {
     componentDidMount = () => {
         window.scrollTo({top: 0});
         let cA = localStorage.getItem('covAmount');
-        let tL = localStorage.getItem('termLength');
+        const tL = localStorage.getItem('termLength');
         let rd = localStorage.getItem('rider');
         if (cA == null) {
             cA = JSON.stringify(500000);
@@ -101,7 +101,7 @@ class Plan extends Component<IPlanProps> {
                 <h1 className={s.paneHeader}>Choose your coverage.</h1>
                 <h3 style={styles.quoteSubtitle}>You can change these values later.</h3>
                 <p style={{ maxWidth: '600px' }}>
-                    These values help insurers calculate how much you need to pay for your insurance. <a onClick={this.showHelpMeChoose}>Help me choose!</a>
+                    These values help insurers calculate how much you need to pay for your insurance. <a href="#" onClick={this.showHelpMeChoose}>Help me choose!</a>
                 </p>
                 <h3 className={s.paneHeader}>Coverage Amount</h3>
                 <div className={s.slider}>
