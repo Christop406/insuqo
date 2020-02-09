@@ -25,7 +25,7 @@
   }
 }
 
-.modal-container {
+.modalContainer {
   position: fixed;
   z-index: 10;
   top: 0;
@@ -36,7 +36,42 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: rgba(0, 0, 0, 0.69);
+  background-color: rgba(0, 0, 0, 0.23);
+
+  .authContainer {
+    display: flex;
+    background-color: white;
+    border-radius: 4px;
+
+    .left {
+      background-color: $color-primary;
+      background-image: url('../../assets/img/auth-background.png');
+      background-size: cover;
+      min-width: 275px;
+    }
+
+    .authForm {
+      min-width: 500px; // remove
+
+      @include tablet-min {
+        padding: 60px;
+      }
+
+      .iqLogo {
+        max-height: 50px;
+        max-width: 130px;
+        margin-bottom: 30px;
+      }
+
+      input, .formTitle {
+        margin-bottom: 18px;
+      }
+
+      .formHelp {
+        margin-bottom: 40px;
+      }
+    }
+  }
 
   .auth-container {
     width: 100%;
