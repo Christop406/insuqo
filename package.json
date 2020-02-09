@@ -2,7 +2,7 @@
   "name": "iq-webapp",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://insuqo.com/iq",
+  "homepage": "https://iq.insuqo.com/",
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.25",
     "@fortawesome/free-regular-svg-icons": "^5.11.2",
@@ -69,9 +69,10 @@
     "typescript": "^3.7.4"
   },
   "scripts": {
-    "start": "serve -s build",
+    "start": "serve -s \"build\"",
     "dev": "react-scripts start",
     "build": "react-scripts build",
+    "gcp-build": "npm i -g serve",
     "lint": "eslint 'src/**/*.{js,ts,tsx}' --fix",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",

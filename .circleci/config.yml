@@ -50,7 +50,7 @@ jobs:
 
 workflows:
   version: 2
-  "Prod to GCP":
+  "Web Client Prod Deploy":
     jobs:
       - Prepare
       - Production Build:
