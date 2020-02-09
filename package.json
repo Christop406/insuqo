@@ -21,6 +21,7 @@
     "express": "^4.17.1",
     "filepond": "^4.7.4",
     "filepond-plugin-image-preview": "^4.6.0",
+    "firebase": "^7.8.1",
     "formik": "^2.0.3",
     "grommet": "^2.7.11",
     "node-sass": "^4.13.0",
