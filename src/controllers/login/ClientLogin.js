@@ -5,6 +5,7 @@ import constants from '../../util/constants';
 import './ClientLogin.scss';
 import {ClientAuthentication} from '../sign-up/ClientAuthentication';
 import { Logger } from '../../services/logger';
+import { Auth } from '../../services/firebase';
 
 class ClientLogin extends Component {
 
@@ -13,8 +14,9 @@ class ClientLogin extends Component {
         password: ''
     };
 
-    componentDidMount() {
+    async componentDidMount() {
         document.title = 'Login | INSUQO';
+        console.log(await Auth.getCurrentUser());
     }
 
     login = () => {

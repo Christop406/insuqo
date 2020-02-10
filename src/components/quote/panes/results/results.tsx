@@ -8,10 +8,10 @@ import Spinner from 'react-spinkit';
 import { Store as S } from 'undux';
 import { History, LocationState } from 'history';
 import { QuickTermQuoteResult, Address, PremiumMode } from '@insuqo/shared';
-import { AuthenticationService } from '../../../../services/authentication.service';
 import { ClientAuthentication } from '../../../../controllers/sign-up/ClientAuthentication';
 import { ApplicationService } from '../../../../services/application.service';
 import { Logger } from '../../../../services/logger';
+import { Auth } from '../../../../services/firebase';
 import qs from 'query-string';
 import s from './results.module.scss';
 
@@ -242,24 +242,28 @@ class Results extends Component<ResultsProps, ResultsState> {
 
     apply = async (quote: QuickTermQuoteResult, event: any) => {
         event.preventDefault();
-        try {
-            const userSession = await AuthenticationService.getCurrentSession();
-            if (userSession.isValid()) {
+        console.log('apply');
+        Auth.onAuthStateChanged(async (user) => {
+            console.log('auth');
+            if (user) {
+                console.log('logged in');
                 await this.createApplication(quote);
             } else {
-                throw new Error('Session is invalid');
+                console.log('logged OUT');
+                this.setState({ showAuthModal: true, selectedQuote: quote });
             }
-        } catch (err) {
-            this.setState({ showAuthModal: true, selectedQuote: quote });
-        }
+        });
     };
 
     private createApplication = async (quote: QuickTermQuoteResult) => {
+        console.log('creating');
         const app = await this.applicationService.createApplication(quote.id, quote.RecID, this.birthDate!, this.location!);
-
+        console.log('created?');
         if (app && app.id) {
+            console.log(app);
             this.props.history.push(`/application/${app.id}/apply`);
         } else {
+            console.log('err');
             throw new Error('There was an error creating the application');
         }
     };

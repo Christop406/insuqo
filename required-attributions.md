@@ -1,0 +1,1 @@
+Map Data: https://simplemaps.com/data/us-zips (https://simplemaps.com/data/license).

@@ -1,11 +1,9 @@
 import React from 'react';
 import s from './ClientAuthentication.module.scss';
 import { AuthenticationForm } from '../../components/authentication/AuthenticationForm';
-import { AuthenticationService } from '../../services/authentication.service';
 import { AuthChallengeName } from '@insuqo/shared/types/auth-challenge-name';
-import { Auth } from 'aws-amplify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Firebase from '../../services/firebase';
+import { Auth } from '../../services/firebase';
 import { FirebaseError } from '../../model/auth';
 import { auth } from 'firebase';
 import iqLogo from '../../assets/img/insuqo-logo.png';
@@ -22,6 +20,7 @@ interface ClientAuthenticationState {
     authChallengeRequired: boolean;
     authChallengeName?: AuthChallengeName;
     email: string;
+    password: string;
     title: string;
     description?: string;
     formErrorText?: string;
@@ -38,16 +37,17 @@ export class ClientAuthentication extends React.Component<ClientAuthenticationPr
         authChallengeRequired: false,
         authChallengeName: undefined,
         email: '',
+        password: '',
         title: this.props.type === 'login' ? 'Log In' : 'Sign Up',
         formErrorText: undefined
     };
 
     public signUp = async (email: string, password: string) => {
         try {
-            const signUpRes = await Firebase.auth.createUserWithEmailAndPassword(email, password);
+            const signUpRes = await Auth.createUserWithEmailAndPassword(email, password);
             if (!signUpRes.user?.emailVerified) {
                 await signUpRes.user?.sendEmailVerification();
-                await Firebase.auth.signOut();
+                await Auth.signOut();
                 this.setState({ userNeedsConfirmation: true });
             }
             console.log(signUpRes);
@@ -69,9 +69,12 @@ export class ClientAuthentication extends React.Component<ClientAuthenticationPr
         }
     };
 
-    public logIn = async (email: string, password: string) => {
+    public logIn = async (email?: string, password?: string) => {
+        email = email || this.state.email;
+        password = password || this.state.password;
+
         try {
-            const user = await Firebase.auth.signInWithEmailAndPassword(email, password);
+            const user = await Auth.signInWithEmailAndPassword(email, password);
             console.log(user, user.user?.displayName);
             this.props.onAuthenticate(user);
         } catch (err) {
@@ -83,21 +86,21 @@ export class ClientAuthentication extends React.Component<ClientAuthenticationPr
                 case FirebaseError.WrongPassword:
                     formErrorText = 'Password is incorrect';
             }
-            this.setState({ formErrorText });
+            this.setState({ formErrorText, savedUserInfo: { email, password } });
         }
     };
 
-    public answerAuthChallenge = async (answer: string) => {
+    public answerAuthChallenge = async () => {
         const { authChallengeName, savedUserInfo } = this.state;
         switch (authChallengeName as unknown as AuthChallengeName) {
             case AuthChallengeName.SoftwareTokenMFA:
             case AuthChallengeName.SmsMFA:
-                this.user = await Auth.confirmSignIn(this.user, answer, authChallengeName as any);
+                // this.user = await Auth.confirmSignIn(this.user, answer, authChallengeName as any);
                 break;
             case AuthChallengeName.MFARequired: // MFA_SETUP (should not be needed)
                 break;
             case AuthChallengeName.NewPasswordRequired:
-                this.user = await Auth.completeNewPassword(this.user, answer, undefined);
+                // this.user = await Auth.completeNewPassword(this.user, answer, undefined);
                 break;
         }
         if (!this.user) {
@@ -117,14 +120,8 @@ export class ClientAuthentication extends React.Component<ClientAuthenticationPr
     };
 
     public sendConfirmation = async (confirmationCode: string) => {
-        await AuthenticationService.confirmSignUp(this.state.email, confirmationCode);
-        const { savedUserInfo } = this.state;
-
-        if (savedUserInfo) {
-            await this.logIn(savedUserInfo.email, savedUserInfo.password);
-        }
-
-        this.props.onAuthenticate(this.user!);
+        // TODO: Implement
+        console.log(confirmationCode);
     };
 
     public switchPaneType = () => {
@@ -136,8 +133,16 @@ export class ClientAuthentication extends React.Component<ClientAuthenticationPr
         });
     };
 
+    public updateEmail = (e: any) => {
+        this.setState({ email: e.target.value });
+    };
+
+    public updatePassword = (e: any) => {
+        this.setState({ password: e.target.value });
+    };
+
     public render = (): React.ReactElement | any => {
-        const { paneType, userNeedsConfirmation, authChallengeRequired, authChallengeName, title, formErrorText } = this.state;
+        const { title } = this.state;
         return (
             <div className={s.modalContainer}>
                 <div className={s.authContainer}>
@@ -145,10 +150,12 @@ export class ClientAuthentication extends React.Component<ClientAuthenticationPr
                     <div className={s.authForm}>
                         <img className={s.iqLogo} alt="INSUQO Logo" src={iqLogo} />
                         <div className={s.formTitle}>{title}</div>
-                        <input placeholder="Email Address" className="input"></input>
-                        <input placeholder="Password" type="password" className="input"></input>
-                        <span className={cx('form-help', s.formHelp)}><button className="button text">Forgot password?</button></span>
-                        <button className="button full primary">Continue</button>
+                        <form method="post" action="">
+                            <input placeholder="Email Address" onChange={this.updateEmail} className="input"></input>
+                            <input placeholder="Password" onChange={this.updatePassword} type="password" className="input"></input>
+                            <span className={cx('form-help', s.formHelp)}><button className="button text">Forgot password?</button></span>
+                            <button type="button" onClick={() => this.logIn()} className="button full primary">Continue</button>
+                        </form>
                     </div>
                 </div>
             </div>

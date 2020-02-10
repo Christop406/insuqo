@@ -53,13 +53,14 @@ class Begin extends Component<IBeginProps> {
             if (res.data) {
                 store.set('started')(true);
                 store.set('zipCode')(zipCode);
-                store.set('stateName')(res.data.stateName);
-                store.set('stateCode')(res.data.stateCode);
-                store.set('city')(res.data.cityName);
+                store.set('stateName')(res.data.data.stateName);
+                store.set('stateCode')(res.data.data.stateCode);
+                store.set('city')(res.data.data.cityName);
 
                 this.props.history.push('/quote/personal');
             }
         }).catch((err) => {
+            console.log(err);
             if (err.response.status === 400) {
                 this.setState({ loading: false, zipInvalid: true });
             }
@@ -108,10 +109,6 @@ class Begin extends Component<IBeginProps> {
                             delimiterLazyShow: true,
                         }} onChange={this.updateZipCode} onKeyPress={this.handleKeyPress} />
                     {zipInvalid ? <span className={s.errorText}>ZIP code invalid, please try again.</span> : ''}
-                    <div className={s.attributionContainer}>
-                        <img alt="Powered by Google logo"
-                            src="https://developers.google.com/maps/documentation/images/powered_by_google_on_white.png" />
-                    </div>
                 </div>
 
                 <button onClick={this.handleSubmit} color="#9c37f2" className="button full primary" style={{ maxHeight: 40 }}

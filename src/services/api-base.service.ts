@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { AuthenticationService } from './authentication.service';
 import { ApiResponse } from '@insuqo/shared/types/api-response';
+import { Auth } from '../services/firebase';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -29,7 +29,15 @@ export class ApiBaseService {
     }
 
     private static async getAuthHeader(): Promise<string> {
-        return `Bearer ${await AuthenticationService.getAccessToken()}`;
+        return new Promise((resolve, reject) => {
+            Auth.onAuthStateChanged((user) => {
+                if (user) {
+                    resolve(user.getIdToken());
+                } else {
+                    reject('No user is logged in');
+                }
+            });
+        });
     }
 
     private static buildURL(endpoint: string): string {

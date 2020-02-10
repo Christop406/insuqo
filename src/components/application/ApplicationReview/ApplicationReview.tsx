@@ -8,7 +8,7 @@ import { RouteComponentProps } from 'react-router-dom';
 
 const applicationService = new ApplicationService();
 
-export const ApplicationReview: React.FC<RouteComponentProps & ApplicationReviewProps> = (props) => {
+const ApplicationReview: React.FC<RouteComponentProps & ApplicationReviewProps> = (props) => {
     const { application } = props;
 
     const [image1, setImage1] = useState<string>();
@@ -187,3 +187,5 @@ interface BooleanDisplayProps {
     value: boolean | undefined;
     label: string;
 }
+
+export default ApplicationReview;

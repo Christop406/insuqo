@@ -1,14 +1,15 @@
-import React, { Component } from 'react';
+import React, { Component, Suspense } from 'react';
 import Store from '../../ApplicationStore';
-import Begin from '../../components/quote/panes/begin/begin';
-import Personal from '../../components/quote/panes/personal/personal';
-import Plan from '../../components/quote/panes/plan/plan';
-import Results from '../../components/quote/panes/results/results';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import QuoteHelp from '../../components/quote/quote-help';
 import s from './Quote.module.scss';
 import './Quote.common.scss';
 import cx from 'classnames';
+const Begin = React.lazy(() => import('../../components/quote/panes/begin/begin'));
+const Personal = React.lazy(() => import('../../components/quote/panes/personal/personal'));
+const Plan = React.lazy(() => import('../../components/quote/panes/plan/plan'));
+const Results = React.lazy(() => import('../../components/quote/panes/results/results'));
+
 
 class Quote extends Component<any, any> {
 
@@ -26,13 +27,15 @@ class Quote extends Component<any, any> {
             <div className={s.quoteContainer}>
                 <div className="form-content">
                     <div className={s.formContainer}>
-                        <Switch>
-                            <Route path={this.props.match.path + '/begin'} component={Begin} />
-                            <Route path={this.props.match.path + '/personal'} component={Personal} />
-                            <Route path={this.props.match.path + '/plan'} component={Plan} />
-                            <Route path={this.props.match.path + '/results'} component={Results} />
-                            <Redirect to="/quote/begin" />
-                        </Switch>
+                        <Suspense fallback={<div>Loading...</div>}>
+                            <Switch>
+                                <Route path={this.props.match.path + '/begin'} component={Begin} />
+                                <Route path={this.props.match.path + '/personal'} component={Personal} />
+                                <Route path={this.props.match.path + '/plan'} component={Plan} />
+                                <Route path={this.props.match.path + '/results'} component={Results} />
+                                <Redirect to="/quote/begin" />
+                            </Switch>
+                        </Suspense>
                     </div>
                 </div>
                 <div className={cx(s.quoteHelpContainer, 'hideOnSmallScreens')}>

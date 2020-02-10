@@ -31,7 +31,7 @@ const getGradient = (status: ApplicationStatus): { start: string; end: string } 
     return { start, end };
 };
 
-export const ApplicationStatusView: React.FunctionComponent<StatusViewProps> = (props) => {
+const ApplicationStatusView: React.FunctionComponent<StatusViewProps> = (props) => {
     const application = props.application;
     Logger.info(application);
     if (!application) {
@@ -58,3 +58,5 @@ export const ApplicationStatusView: React.FunctionComponent<StatusViewProps> = (
         </div>
     );
 };
+
+export default ApplicationStatusView;

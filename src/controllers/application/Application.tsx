@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
 import Store from '../../ApplicationStore';
-import { ApplicationBasicInfo } from '../../components/application/ApplicationBasicInfo/ApplicationBasicInfo';
 import { Route, RouteComponentProps, Switch, Redirect } from 'react-router-dom';
 import { ApplicationService } from '../../services/application.service';
 import { Application as ApplicationModel, QuickTermQuoteResult, ApplicationStatus as Status, ApplicationStatus } from '@insuqo/shared';
-import { ApplicationPaymentInfo } from '../../components/application/ApplicationPaymentInfo/ApplicationPaymentInfo';
-import { ApplicationReview } from '../../components/application/ApplicationReview/ApplicationReview';
-import { ApplicationStatusView } from '../../components/application/ApplicationStatusView/ApplicationStatusView';
 import Spinner from 'react-spinkit';
 import s from './Application.module.scss';
 import { ClientAuthentication } from '../sign-up/ClientAuthentication';
-import { AuthenticationService } from '../../services/authentication.service';
 import { Logger } from '../../services/logger';
+import { Auth } from '../../services/firebase';
+const ApplicationBasicInfo = React.lazy(() => import('../../components/application/ApplicationBasicInfo/ApplicationBasicInfo'));
+const ApplicationPaymentInfo = React.lazy(() => import('../../components/application/ApplicationPaymentInfo/ApplicationPaymentInfo'));
+const ApplicationReview = React.lazy(() => import('../../components/application/ApplicationReview/ApplicationReview'));
+const ApplicationStatusView = React.lazy(() => import('../../components/application/ApplicationStatusView/ApplicationStatusView'))
 
 interface ApplicationState {
     application: ApplicationModel | undefined;
@@ -31,8 +31,8 @@ class Application extends Component<RouteComponentProps<{ appId: string }>, Appl
 
     public componentDidMount = async () => {
         document.title = 'Application | INSUQO';
-        try {
-            if ((await AuthenticationService.getCurrentSession()).isValid()) {
+        Auth.onAuthStateChanged(async (user) => {
+            if (user) {
                 const appId = this.props.match.params.appId;
                 if (!appId) {
                     Logger.warn('No application ID');
@@ -41,13 +41,9 @@ class Application extends Component<RouteComponentProps<{ appId: string }>, Appl
                 }
                 await this.loadApplication();
             } else {
-                throw new Error('Invalid session');
+                this.setState({ showAuthModal: true });
             }
-
-        } catch (error) {
-            Logger.error(error);
-            this.setState({ showAuthModal: true });
-        }
+        });
 
     };
 

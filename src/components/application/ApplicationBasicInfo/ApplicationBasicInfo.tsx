@@ -18,7 +18,7 @@ interface ApplicationBasicInfoProps {
     onSubmit: (application: Application & { beneficiaries: Beneficiary[] }) => any;
 }
 
-export const ApplicationBasicInfo: React.FunctionComponent<ApplicationBasicInfoProps> = (props) => {
+const ApplicationBasicInfo: React.FunctionComponent<ApplicationBasicInfoProps> = (props) => {
     const app = props.application;
     let ssnAlreadyFilled = false;
     if (!app) {
@@ -470,3 +470,5 @@ const getPaymentTerm = (freq: PremiumMode) => {
             return 'month';
     }
 };
+
+export default ApplicationBasicInfo;

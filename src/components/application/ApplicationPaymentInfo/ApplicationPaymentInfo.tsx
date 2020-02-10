@@ -18,7 +18,7 @@ interface PaymentInfoProps {
     application: Application;
 }
 
-export const ApplicationPaymentInfo: React.FunctionComponent<PaymentInfoProps> = (props) => {
+const ApplicationPaymentInfo: React.FunctionComponent<PaymentInfoProps> = (props) => {
     if (!props.application) {
         return <></>;
     }
@@ -110,3 +110,5 @@ export const ApplicationPaymentInfo: React.FunctionComponent<PaymentInfoProps> =
 function iteratorToArray<T>(iterator: IterableIterator<T>): T[] {
     return Array.from(iterator);
 }
+
+export default ApplicationPaymentInfo;
