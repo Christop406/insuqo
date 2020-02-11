@@ -3,7 +3,7 @@ import Store from '../../ApplicationStore';
 import {login} from '../../api';
 import constants from '../../util/constants';
 import './ClientLogin.scss';
-import {ClientAuthentication} from '../sign-up/ClientAuthentication';
+import ClientAuthentication from '../auth/ClientAuthentication';
 import { Logger } from '../../services/logger';
 import { Auth } from '../../services/firebase';
 

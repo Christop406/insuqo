@@ -166,7 +166,7 @@ class Personal extends Component<IPersonalProps> {
                     {bdError ? <span className={classes.errorMessage}>{bdErrMsg}</span> : ''}
                 </div>
                 <div className="qform-group">
-                    <label className="qform-label" htmlFor="sex">Sex</label>
+                    <label className="qform-label" htmlFor="sex">Sex</label>&nbsp;
                     <button className="button text text-primary" color="dark-4" onClick={this.showGenderModal}>Why are there only two options?</button>
                     <RadioGroup name="sex" value={sex} options={this.sexOptions} onChange={this.updateSex} />
                 </div>
@@ -174,7 +174,7 @@ class Personal extends Component<IPersonalProps> {
                     <label className="qform-label" htmlFor="substance-cb">Lifestyle</label>
                     <p>
                         Select any of the answers below, if they apply to you.&nbsp;
-                        <button className="text-primary" onClick={this.showSmokingModal}>Why?</button>
+                        <button className="button text text-primary" onClick={this.showSmokingModal}>Why?</button>
                     </p>
                     <div id="substance-cb" style={{ marginBottom: 20 }}>
                         <Checkbox

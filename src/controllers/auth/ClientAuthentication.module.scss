@@ -40,19 +40,37 @@
 
   .authContainer {
     display: flex;
+    flex-direction: column;
     background-color: white;
     border-radius: 4px;
     overflow: hidden;
+    height: 100%;
+    width: 100%;
+
+    @include tablet-min {
+      flex-direction: row;
+      height: unset;
+      width: unset;
+    }
 
     .left {
       background-color: $color-primary;
       background-image: url('../../assets/img/auth-background.png');
       background-size: cover;
-      min-width: 275px;
+      min-height: 150px;
+      height: 25%;
+
+      @include tablet-min {
+        min-width: 275px;
+        height: 100%;
+      }
     }
 
     .authForm {
-      min-width: 500px; // remove
+      max-width: 500px; // remove
+      width: 100%;
+      padding: 30px;
+      align-self: center;
 
       @include tablet-min {
         padding: 60px;

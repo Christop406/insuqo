@@ -8,7 +8,7 @@ import Spinner from 'react-spinkit';
 import { Store as S } from 'undux';
 import { History, LocationState } from 'history';
 import { QuickTermQuoteResult, Address, PremiumMode } from '@insuqo/shared';
-import { ClientAuthentication } from '../../../../controllers/sign-up/ClientAuthentication';
+import ClientAuthentication from '../../../../controllers/auth/ClientAuthentication';
 import { ApplicationService } from '../../../../services/application.service';
 import { Logger } from '../../../../services/logger';
 import { Auth } from '../../../../services/firebase';

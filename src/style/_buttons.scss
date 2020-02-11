@@ -16,6 +16,10 @@
     width: 100%;
   }
 
+  &.block {
+    display: block;
+  }
+
   &.primary:not(.outline):not(.text) {
     background-color: $color-primary;
     color: $text-light;
@@ -47,6 +51,7 @@
   &.text {
     padding: 0;
     margin: 0;
+    display: inline;
     &:hover, &:focus {
       outline: none;
     }

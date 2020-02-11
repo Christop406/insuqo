@@ -27,7 +27,7 @@ interface ClientAuthenticationState {
     savedUserInfo?: { email: string; password: string };
 }
 
-export class ClientAuthentication extends React.Component<ClientAuthenticationProps, ClientAuthenticationState> {
+export default class ClientAuthentication extends React.Component<ClientAuthenticationProps, ClientAuthenticationState> {
 
     private user?: auth.UserCredential = undefined;
 

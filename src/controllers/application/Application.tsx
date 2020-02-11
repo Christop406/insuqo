@@ -5,13 +5,13 @@ import { ApplicationService } from '../../services/application.service';
 import { Application as ApplicationModel, QuickTermQuoteResult, ApplicationStatus as Status, ApplicationStatus } from '@insuqo/shared';
 import Spinner from 'react-spinkit';
 import s from './Application.module.scss';
-import { ClientAuthentication } from '../sign-up/ClientAuthentication';
+import ClientAuthentication from '../auth/ClientAuthentication';
 import { Logger } from '../../services/logger';
 import { Auth } from '../../services/firebase';
 const ApplicationBasicInfo = React.lazy(() => import('../../components/application/ApplicationBasicInfo/ApplicationBasicInfo'));
 const ApplicationPaymentInfo = React.lazy(() => import('../../components/application/ApplicationPaymentInfo/ApplicationPaymentInfo'));
 const ApplicationReview = React.lazy(() => import('../../components/application/ApplicationReview/ApplicationReview'));
-const ApplicationStatusView = React.lazy(() => import('../../components/application/ApplicationStatusView/ApplicationStatusView'))
+const ApplicationStatusView = React.lazy(() => import('../../components/application/ApplicationStatusView/ApplicationStatusView'));
 
 interface ApplicationState {
     application: ApplicationModel | undefined;
