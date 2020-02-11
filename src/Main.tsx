@@ -1,20 +1,21 @@
 import React, { Component, Suspense } from 'react';
-import Store from './ApplicationStore';
-import Quote from './controllers/quote/Quote';
+import IQStore, { IQStoreProps } from './store/IQStore';
 // import AppStatus from './controllers/application-status/application-status';
 import { Grommet } from 'grommet';
 import { grommet } from 'grommet/themes';
-import { Route, Switch, Redirect } from 'react-router-dom';
+import { Route, Switch, Redirect, withRouter, RouteComponentProps } from 'react-router-dom';
 import img from './assets/img/insuqo-logo.png';
 import s from './Main.module.scss';
+import QuoteContainer from './containers/quote/QuoteContainer';
 const ClientAuthentication = React.lazy(() => import('./controllers/auth/ClientAuthentication'));
 const Agent = React.lazy(() => import('./controllers/agent/Agent'));
 const ClientLogin = React.lazy(() => import('./controllers/login/ClientLogin'));
 const Client = React.lazy(() => import('./controllers/client/Client'));
 const Application = React.lazy(() => import('./controllers/application/Application'));
 
+type MainProps = IQStoreProps & RouteComponentProps;
 
-class Main extends Component {
+class Main extends Component<MainProps> {
     render = () => {
         return (
             <Grommet theme={grommet}>
@@ -43,7 +44,7 @@ class QuotingTool extends Component {
                             <Route path="/agent" component={Agent} />
                             <Route path="/application/:appId" component={Application} />
                             <Route exact path="/application" component={Application} />
-                            <Route path="/quote" component={Quote} />
+                            <Route path="/quote" component={QuoteContainer} />
                             <Redirect to="/quote" />
                         </Switch>
                     </Suspense>
@@ -53,4 +54,4 @@ class QuotingTool extends Component {
     }
 }
 
-export default Store.withStore(Main as any);
+export default IQStore.withStore(withRouter(Main));

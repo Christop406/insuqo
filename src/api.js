@@ -21,17 +21,6 @@ export function newApplication(app) {
     });
 }
 
-export function localizeZip(zip) {
-    if (zip == null || zip.length < 5) {
-        return Promise.reject('zip_invalid');
-    }
-    return axios.get(apiUrl + '/util/zip/lookup', {
-        params: {
-            zip: zip
-        }
-    });
-}
-
 export function login(type, email, password) {
     if (email == null || password == null || (type !== constants.userTypes.client && type !== constants.userTypes.agent)) return Promise.reject('invalid username/password/type');
     return axios.post(apiUrl + '/' + type + '/login', qs.stringify({

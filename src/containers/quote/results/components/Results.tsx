@@ -1,48 +1,25 @@
 import React, { Component } from 'react';
-import Store from '../../../../ApplicationStore';
 import { Accordion, AccordionPanel, Anchor, Box, Heading, Paragraph } from 'grommet';
-import dayjs from 'dayjs';
 import { formatCovAmount, logoImageForCompanyID, splitPrice } from '../../../../func';
-import { QuoteService } from '../../../../services/quote.service';
 import Spinner from 'react-spinkit';
-import { Store as S } from 'undux';
-import { History, LocationState } from 'history';
-import { QuickTermQuoteResult, Address, PremiumMode } from '@insuqo/shared';
-import ClientAuthentication from '../../../../controllers/auth/ClientAuthentication';
-import { ApplicationService } from '../../../../services/application.service';
-import { Logger } from '../../../../services/logger';
-import { Auth } from '../../../../services/firebase';
-import qs from 'query-string';
-import s from './results.module.scss';
+import { QuickTermQuoteResult, PremiumMode } from '@insuqo/shared';
+import s from './Results.module.scss';
+import IQStore, { IQStoreProps } from '../../../../store/IQStore';
+import { withRouter, RouteComponentProps } from 'react-router-dom';
+import { QuoteHelper } from '../../../../util/quote-helper';
 
-interface ResultsProps {
-    store: S<any>;
-    history: History<LocationState>;
+interface ResultsProps extends IQStoreProps, RouteComponentProps {
+    loading: boolean;
+    quotes: QuickTermQuoteResult[];
+    onApply: (quote: QuickTermQuoteResult, event: any) => any;
 }
 
 interface ResultsState {
-    loading: boolean;
-    quotes: QuickTermQuoteResult[];
     active: number;
-    freq: PremiumMode;
+    quotes: QuickTermQuoteResult[];
+    paymentFrequency: PremiumMode;
     freqLabel: string;
-    showAuthModal: boolean;
-    selectedQuote?: QuickTermQuoteResult;
 }
-
-const styles = {
-    quoteSubtitle: {
-        marginTop: '-10px'
-    },
-    sexButtons: {
-        marginLeft: 10,
-        marginBottom: 10,
-        marginTop: 5
-    },
-    quoteListLabel: {
-        minWidth: 50
-    }
-};
 
 const frequencies = [
     { val: 'month', name: 'Monthly' },
@@ -53,80 +30,10 @@ const frequencies = [
 class Results extends Component<ResultsProps, ResultsState> {
 
     state: ResultsState = {
-        loading: true,
-        quotes: [],
         active: 0,
-        freq: PremiumMode.MONTHLY,
+        paymentFrequency: PremiumMode.MONTHLY,
         freqLabel: 'Monthly',
-        showAuthModal: false,
-    };
-
-    private applicationService = new ApplicationService();
-    private quoteService = new QuoteService();
-
-    private location?: Partial<Address>;
-    private birthDate?: string;
-
-    getQuotes = () => {
-        const store = this.props.store;
-        const stateCode = store.get('stateCode');
-        const birthdate = store.get('birthdate');
-        const sex = store.get('sex');
-        const covAmount = store.get('covAmount');
-        const termLength = store.get('termLength');
-        const rider = store.get('rider');
-
-        const now = dayjs();
-        const birthTime = dayjs(birthdate, 'YYYY-MM-DD');
-        const actualAge = now.diff(birthTime, 'year');
-        const nearestAge = Math.round(now.diff(birthTime, 'year', true));
-
-        const tobacco = store.get('tobacco');
-        const cannabis = store.get('cannabis');
-        const healthType = tobacco || cannabis ? 'preferred_smoker' : 'preferred_non_smoker';
-
-        return this.quoteService.runQuotes(stateCode, actualAge, nearestAge, covAmount, termLength, healthType, sex, rider, 10);
-    };
-
-    componentDidMount = async () => {
-        window.scrollTo({ top: 0 });
-        const { store } = this.props;
-        const { freq } = this.state;
-        const { search } = this.props.history.location;
-        Logger.log(search);
-        if (search) {
-            const query = qs.parse(search.slice(1), {});
-            console.log(query);
-            if (query.id) {
-                query.id = Array.isArray(query.id) ? query.id[0] : query.id;
-                const retrievedQuotes = await this.quoteService.getQuotesByKey(query.id);
-                retrievedQuotes?.sort((a, b) => qutoeSortValue(a, b, freq));
-                if (retrievedQuotes) {
-                    this.setState({ loading: false, quotes: retrievedQuotes });
-                    return;
-                } else {
-                    this.props.history.push({ search: '' });
-                }
-            }
-        }
-
-        try {
-            const newQuotes = await this.getQuotes();
-            Logger.debug(newQuotes);
-            this.setState({ loading: false, quotes: newQuotes.data!.quotes });
-            this.props.history.push({ search: qs.stringify({ id: newQuotes.data?.key }) });
-        } catch (error) {
-            Logger.error(error);
-            throw error;
-        }
-
-        this.location = {
-            city: store.get('city'),
-            state: store.get('stateCode'),
-            zipCode: store.get('zipCode')
-        };
-
-        this.birthDate = store.get('birthdate');
+        quotes: this.props.quotes
     };
 
     formatShortFreqType = (freq: string) => {
@@ -144,7 +51,7 @@ class Results extends Component<ResultsProps, ResultsState> {
     };
 
     formatQuotes = (freq: string) => {
-        const { quotes } = this.state;
+        const { quotes } = this.props;
         if (quotes === undefined || quotes.length === 0) {
             return <div />;
         }
@@ -158,6 +65,7 @@ class Results extends Component<ResultsProps, ResultsState> {
     };
 
     formatQuoteBody = (quote: QuickTermQuoteResult) => {
+        const { onApply } = this.props;
         return (
             <Box>
                 <Box style={{ backgroundColor: '#F5F5F5', padding: 10 }}>
@@ -181,7 +89,7 @@ class Results extends Component<ResultsProps, ResultsState> {
                     </Box>
                     <Box style={{ width: '100%', maxWidth: 300 }} alignSelf="center">
                         <button className="button primary full" onClick={(event: any) => {
-                            this.apply(quote, event);
+                            onApply(quote, event);
                         }}>APPLY</button>
                     </Box>
                 </Box>
@@ -240,55 +148,19 @@ class Results extends Component<ResultsProps, ResultsState> {
         this.setState({ active: active[0] });
     };
 
-    apply = async (quote: QuickTermQuoteResult, event: any) => {
-        event.preventDefault();
-        console.log('apply');
-        Auth.onAuthStateChanged(async (user) => {
-            console.log('auth');
-            if (user) {
-                console.log('logged in');
-                await this.createApplication(quote);
-            } else {
-                console.log('logged OUT');
-                this.setState({ showAuthModal: true, selectedQuote: quote });
-            }
-        });
-    };
-
-    private createApplication = async (quote: QuickTermQuoteResult) => {
-        console.log('creating');
-        const app = await this.applicationService.createApplication(quote.id, quote.RecID, this.birthDate!, this.location!);
-        console.log('created?');
-        if (app && app.id) {
-            console.log(app);
-            this.props.history.push(`/application/${app.id}/apply`);
-        } else {
-            console.log('err');
-            throw new Error('There was an error creating the application');
-        }
-    };
-
-    handleAuthentication = async () => {
-        this.setState({ showAuthModal: false });
-        const { selectedQuote } = this.state;
-
-        if (selectedQuote) {
-            await this.createApplication(selectedQuote);
-        }
-    };
-
     updateFreq = (newFreq: any) => {
-        const oldQuotes = this.state.quotes;
-        const freq = newFreq.target.value;
+        const oldQuotes = this.props.quotes;
+        const paymentFrequency = newFreq.target.value;
 
         let quotes: QuickTermQuoteResult[] = [];
-        quotes = quotes.concat(oldQuotes).sort((a, b) => qutoeSortValue(a, b, freq));
+        quotes = quotes.concat(oldQuotes).sort((a, b) => QuoteHelper.quoteSortValue(a, b, paymentFrequency));
 
-        this.setState({ freq, quotes });
+        this.setState({ paymentFrequency, quotes });
     };
 
     render = () => {
-        const { active, loading, freq, showAuthModal } = this.state;
+        const { active, paymentFrequency } = this.state;
+        const { loading } = this.props;
         return (
             <>
                 {loading ?
@@ -297,20 +169,18 @@ class Results extends Component<ResultsProps, ResultsState> {
                     </div> :
                     <>
                         <h1 className="text-primary">Here are your quotes</h1>
-                        <h3 style={styles.quoteSubtitle}>Click on each for more info.</h3>
+                        <h3 className={s.quoteSubtitle}>Click on each for more info.</h3>
                         <div className={s.paymentFrequencyContainer}>
                             <h5 className={s.frequencyLabel}>Payment Frequency </h5>
-                            <select className="input select inline" value={freq} onBlur={this.updateFreq}>
+                            <select className="input select inline" value={paymentFrequency} onChange={this.updateFreq}>
                                 {frequencies.map((option, index) => <option value={option.val}
                                     key={index}>{option.name}</option>)}
                             </select>
                         </div>
                         <Accordion animate onActive={this.updateActiveIndex}
                             activeIndex={loading ? undefined : active}>
-                            {this.formatQuotes(freq)}
+                            {this.formatQuotes(paymentFrequency)}
                         </Accordion>
-                        {showAuthModal &&
-                            <ClientAuthentication type="signup" onAuthenticate={this.handleAuthentication} />}
                     </>
                 }
             </>
@@ -331,21 +201,4 @@ const formatRider = (quote: QuickTermQuoteResult) => {
     return 'None';
 };
 
-const qutoeSortValue = (a: QuickTermQuoteResult, b: QuickTermQuoteResult, paymentFreq: PremiumMode): number => {
-    let property: keyof QuickTermQuoteResult = 'MonthlyTotalPremium';
-    switch (paymentFreq) {
-        case PremiumMode.QUARTERLY:
-            property = 'QuarterlyTotalPremium';
-            break;
-        case PremiumMode.SEMI_ANNUALLY:
-            property = 'SemiAnnualTotalPremium';
-            break;
-        case PremiumMode.ANNUAL:
-            property = 'AnnualTotalPremium';
-            break;
-    }
-
-    return Number(a[property]) - Number(b[property]);
-};
-
-export default Store.withStore(Results);
+export default IQStore.withStore(withRouter(Results));
