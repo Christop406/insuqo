@@ -1,8 +1,6 @@
 import React from 'react';
 import s from './ClientAuthentication.module.scss';
-import { AuthenticationForm } from '../../components/authentication/AuthenticationForm';
 import { AuthChallengeName } from '@insuqo/shared/types/auth-challenge-name';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Auth } from '../../services/firebase';
 import { FirebaseError } from '../../model/auth';
 import { auth } from 'firebase';
