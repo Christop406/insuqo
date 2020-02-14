@@ -1,4 +1,6 @@
 import { createConnectedStore, Effects, Store, withLogger } from 'undux';
+import { Application } from '@insuqo/shared/types/application';
+import { QuickTermQuoteResult } from '@insuqo/shared';
 
 interface IQStoreState {
     zipCode: string | undefined;
@@ -12,6 +14,8 @@ interface IQStoreState {
     coverageAmount: number | undefined;
     termLength: number | undefined;
     planRider: string | undefined;
+    application: Application | undefined;
+    chosenQuote: QuickTermQuoteResult | undefined;
 }
 
 const initialState: IQStoreState = {
@@ -26,6 +30,8 @@ const initialState: IQStoreState = {
     coverageAmount: undefined,
     termLength: undefined,
     planRider: undefined,
+    application: undefined,
+    chosenQuote: undefined,
 };
 
 export default createConnectedStore(initialState, withLogger);

@@ -1,17 +1,22 @@
 import React, { Component } from 'react';
-import Store from '../../ApplicationStore';
-import { Route, RouteComponentProps, Switch, Redirect } from 'react-router-dom';
-import { ApplicationService } from '../../services/application.service';
+import { Route, RouteComponentProps, Switch, Redirect, withRouter } from 'react-router-dom';
+import { ApplicationService } from 'services/application.service';
 import { Application as ApplicationModel, QuickTermQuoteResult, ApplicationStatus as Status, ApplicationStatus } from '@insuqo/shared';
 import Spinner from 'react-spinkit';
 import s from './Application.module.scss';
-import ClientAuthentication from '../auth/ClientAuthentication';
-import { Logger } from '../../services/logger';
-import { Auth } from '../../services/firebase';
-const ApplicationBasicInfo = React.lazy(() => import('../../components/application/ApplicationBasicInfo/ApplicationBasicInfo'));
-const ApplicationPaymentInfo = React.lazy(() => import('../../components/application/ApplicationPaymentInfo/ApplicationPaymentInfo'));
-const ApplicationReview = React.lazy(() => import('../../components/application/ApplicationReview/ApplicationReview'));
-const ApplicationStatusView = React.lazy(() => import('../../components/application/ApplicationStatusView/ApplicationStatusView'));
+import ClientAuthentication from 'controllers/auth/ClientAuthentication';
+import { Logger } from 'services/logger';
+import { Auth } from 'services/firebase';
+import IQStore, { IQStoreProps } from 'store/IQStore';
+import BasicInfoContainer from '../basic-info/BasicInfoContainer';
+const ApplicationBasicInfo = React.lazy(() => import('containers/application/basic-info/components/ApplicationBasicInfo'));
+const ApplicationPaymentInfo = React.lazy(() => import('components/application/ApplicationPaymentInfo/ApplicationPaymentInfo'));
+const ApplicationReview = React.lazy(() => import('components/application/ApplicationReview/ApplicationReview'));
+const ApplicationStatusView = React.lazy(() => import('components/application/ApplicationStatusView/ApplicationStatusView'));
+
+interface ApplicationProps extends IQStoreProps, RouteComponentProps<{ appId: string }> {
+
+}
 
 interface ApplicationState {
     application: ApplicationModel | undefined;
@@ -19,7 +24,7 @@ interface ApplicationState {
     showAuthModal: boolean;
 }
 
-class Application extends Component<RouteComponentProps<{ appId: string }>, ApplicationState> {
+class Application extends Component<ApplicationProps, ApplicationState> {
 
     public state = {
         application: undefined,
@@ -60,9 +65,8 @@ class Application extends Component<RouteComponentProps<{ appId: string }>, Appl
         return (
             <>
                 <Switch>
-                    <Route path={`${this.props.match.path}/apply`} render={(props) =>
-                        <ApplicationBasicInfo {...props} onSubmit={this.updateBasicInfo} application={application!}
-                            chosenQuote={chosenQuote} />} />
+                    <Route path={`${this.props.match.path}/apply`} component={BasicInfoContainer} />
+                    <Route path={`${this.props.match.path}/beneficiaries`} />
                     <Route path={`${this.props.match.path}/payment`} render={(props) =>
                         <ApplicationPaymentInfo {...props} application={application!}
                             onSubmit={this.updatePaymentInfo} />} />
@@ -151,6 +155,8 @@ class Application extends Component<RouteComponentProps<{ appId: string }>, Appl
                     application,
                     chosenQuote
                 });
+                this.props.store.set('application')(application);
+                this.props.store.set('chosenQuote')(chosenQuote);
             }
         } else {
             // error
@@ -159,5 +165,5 @@ class Application extends Component<RouteComponentProps<{ appId: string }>, Appl
     };
 }
 
-export default Store.withStore(Application as any);
+export default IQStore.withStore(withRouter(Application));
 // disabled={!fnameValid || !lnameValid || !ssValid || !pPhoneValid || !emailValid}

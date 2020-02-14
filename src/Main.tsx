@@ -11,7 +11,7 @@ const ClientAuthentication = React.lazy(() => import('./controllers/auth/ClientA
 const Agent = React.lazy(() => import('./controllers/agent/Agent'));
 const ClientLogin = React.lazy(() => import('./controllers/login/ClientLogin'));
 const Client = React.lazy(() => import('./controllers/client/Client'));
-const Application = React.lazy(() => import('./controllers/application/Application'));
+const ApplicationContainer = React.lazy(() => import('containers/application/ApplicationContainer'));
 
 type MainProps = IQStoreProps & RouteComponentProps;
 
@@ -42,8 +42,8 @@ class QuotingTool extends Component {
                         <Switch>
                             <Route path="/client" component={Client} />
                             <Route path="/agent" component={Agent} />
-                            <Route path="/application/:appId" component={Application} />
-                            <Route exact path="/application" component={Application} />
+                            <Route path="/application/:appId" component={ApplicationContainer} />
+                            <Route exact path="/application" component={ApplicationContainer} />
                             <Route path="/quote" component={QuoteContainer} />
                             <Redirect to="/quote" />
                         </Switch>

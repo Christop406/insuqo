@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Store from '../../ApplicationStore';
 import { Box, Button, Heading } from 'grommet/es6/index';
 import { makeid } from '../../func';
 import relations from '@insuqo/shared/constants/relations.json';
@@ -10,6 +9,7 @@ import { Beneficiary } from '@insuqo/shared';
 import { Store as S } from 'undux';
 import Cleave from 'cleave.js/react';
 import { Logger } from '../../services/logger';
+import IQStore from '../../store/IQStore';
 
 declare type IBeneficiaryListProps = {
     onUpdate: (beneficiaries: Beneficiary[]) => void;
@@ -140,4 +140,4 @@ class BeneficiaryList extends Component<IBeneficiaryListProps, IBeneficiaryListS
     }
 }
 
-export default Store.withStore(BeneficiaryList);
+export default IQStore.withStore(BeneficiaryList);

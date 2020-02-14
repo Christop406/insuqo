@@ -8,7 +8,7 @@ export class ApiBaseService {
     protected async authenticatedGet<T>(endpoint: string, config?: RequestConfig): Promise<ApiResponse<T>> {
         return (await axios.get<ApiResponse<T>>(ApiBaseService.buildURL(endpoint), {
             headers: {
-                Authorization: await ApiBaseService.getAuthHeader(),
+                Authorization: 'Bearer ' + await ApiBaseService.getAuthHeader(),
                 ...config?.headers
             }
         })).data;
@@ -17,7 +17,7 @@ export class ApiBaseService {
     protected async authenticatedPut<T>(endpoint: string, body?: any): Promise<ApiResponse<T>> {
         return (await axios.put<ApiResponse<T>>(ApiBaseService.buildURL(endpoint), body, {
             headers: {
-                Authorization: await ApiBaseService.getAuthHeader(),
+                Authorization: 'Bearer ' + await ApiBaseService.getAuthHeader(),
             }
         })).data;
     }

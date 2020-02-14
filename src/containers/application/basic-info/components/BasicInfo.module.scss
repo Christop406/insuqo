@@ -5,7 +5,7 @@
   align-items: center;
 }
 
-.form-container {
+.formContainer {
   max-width: 800px;
   display: flex;
   justify-content: flex-start;
@@ -13,31 +13,31 @@
   margin-bottom: 20vh;
 }
 
-.form-error {
-  display: block;
-}
-
-.form-section {
+.formSection {
+  width: 100%;
   margin: 15px 0;
 }
 
-.frequency-display {
+.frequencyDisplay {
   padding: 15px;
-  background-color: #efecff;
+  background-color: rgba(#efecff, 1);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-}
-.frequency-display .price-label {
-  font-size: 4rem;
-  line-height: 4rem;
+
+  .priceLabel {
+    font-size: 4rem;
+    line-height: 4rem;
+  }
 }
 
-.submit-section {
+.submitSection {
   display: flex;
-  flex-direction: row-reverse;
-  justify-content: space-between;
-}
+  justify-content: center;
 
-/*# sourceMappingURL=ApplicationBasicInfo.module.css.map */
+  .submitButton {
+      width: 100%;
+      max-width: 450px;
+  }
+}
