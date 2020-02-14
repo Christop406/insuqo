@@ -9,6 +9,7 @@ import { Logger } from 'services/logger';
 import { Auth } from 'services/firebase';
 import IQStore, { IQStoreProps } from 'store/IQStore';
 import BasicInfoContainer from '../basic-info/BasicInfoContainer';
+import BeneficiariesContainer from '../beneficiaries/BeneficiariesContainer';
 const ApplicationBasicInfo = React.lazy(() => import('containers/application/basic-info/components/ApplicationBasicInfo'));
 const ApplicationPaymentInfo = React.lazy(() => import('components/application/ApplicationPaymentInfo/ApplicationPaymentInfo'));
 const ApplicationReview = React.lazy(() => import('components/application/ApplicationReview/ApplicationReview'));
@@ -66,7 +67,7 @@ class Application extends Component<ApplicationProps, ApplicationState> {
             <>
                 <Switch>
                     <Route path={`${this.props.match.path}/apply`} component={BasicInfoContainer} />
-                    <Route path={`${this.props.match.path}/beneficiaries`} />
+                    <Route path={`${this.props.match.path}/beneficiaries`} component={BeneficiariesContainer}/>
                     <Route path={`${this.props.match.path}/payment`} render={(props) =>
                         <ApplicationPaymentInfo {...props} application={application!}
                             onSubmit={this.updatePaymentInfo} />} />
