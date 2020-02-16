@@ -14,7 +14,7 @@ interface BeneficiariesProps {
 const Beneficiaries: React.FC<BeneficiariesProps> = ({ beneficiaries, application, onSubmit }) => {
     const methods = useForm<Application>({ mode: 'onChange', defaultValues: application });
 
-    const { handleSubmit, register, errors } = methods;
+    const { handleSubmit } = methods; // register, errors
 
     return (
         <div className={s.container}>

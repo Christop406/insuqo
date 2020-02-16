@@ -8,9 +8,8 @@ import ClientAuthentication from 'controllers/auth/ClientAuthentication';
 import { Logger } from 'services/logger';
 import { Auth } from 'services/firebase';
 import IQStore, { IQStoreProps } from 'store/IQStore';
-import BasicInfoContainer from '../basic-info/BasicInfoContainer';
 import BeneficiariesContainer from '../beneficiaries/BeneficiariesContainer';
-const ApplicationBasicInfo = React.lazy(() => import('containers/application/basic-info/components/ApplicationBasicInfo'));
+const BasicInfoContainer = React.lazy(() => import('../basic-info/BasicInfoContainer'));
 const ApplicationPaymentInfo = React.lazy(() => import('components/application/ApplicationPaymentInfo/ApplicationPaymentInfo'));
 const ApplicationReview = React.lazy(() => import('components/application/ApplicationReview/ApplicationReview'));
 const ApplicationStatusView = React.lazy(() => import('components/application/ApplicationStatusView/ApplicationStatusView'));
@@ -54,7 +53,7 @@ class Application extends Component<ApplicationProps, ApplicationState> {
     };
 
     render = () => {
-        const { application, chosenQuote, showAuthModal } = this.state;
+        const { application, showAuthModal } = this.state; // chosenQuote
 
         if (!application) {
             return <div className={s.loadingContainer}>

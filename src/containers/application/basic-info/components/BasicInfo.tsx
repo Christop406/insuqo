@@ -1,6 +1,6 @@
 import React from 'react';
 import { useForm, FormContext } from 'react-hook-form';
-import { PremiumMode, QuickTermQuoteResult, Application } from '@insuqo/shared';
+import { QuickTermQuoteResult, Application } from '@insuqo/shared';
 import s from './BasicInfo.module.scss';
 import cx from 'classnames';
 import Cleave from 'cleave.js/react';
