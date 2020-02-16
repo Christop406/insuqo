@@ -3,6 +3,7 @@ import { Beneficiary, Application } from '@insuqo/shared';
 import s from './Beneficiaries.module.scss';
 import { useForm, FormContext } from 'react-hook-form';
 import BeneficiaryListItem from 'components/beneficiary/BeneficiaryListItem';
+import BeneficiaryChart from 'components/beneficiary-chart/BeneficiaryChart';
 
 interface BeneficiariesProps {
     beneficiaries: Beneficiary[];
@@ -17,13 +18,17 @@ const Beneficiaries: React.FC<BeneficiariesProps> = ({ beneficiaries, applicatio
 
     return (
         <div className={s.container}>
-            <h1>Beneficiaries: {beneficiaries.length}</h1>
+            <h1>Add Beneficiaries</h1>
             <div className={s.beneficiaryList}>
                 <FormContext {...methods}>
                     <form onSubmit={handleSubmit(onSubmit)}>
                         {beneficiaries.map((b, i) => <BeneficiaryListItem key={i} initialValue={b} edit={false}/>)}
                     </form>
                 </FormContext>
+                <button className="button full primary outline">Add Beneficiary</button>
+            </div>
+            <div className={s.beneficiaryChart}>
+                <BeneficiaryChart beneficiaries={beneficiaries} />
             </div>
         </div>
     );

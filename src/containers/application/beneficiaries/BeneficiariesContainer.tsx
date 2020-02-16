@@ -18,10 +18,38 @@ class BeneficiariesContainer extends React.Component<BeneficiariesContainerProps
                 beneficiaries={[
                     {
                         firstName: 'Chris', lastName: 'Gilardi',
-                        relationship: Relationship.BROTHER,
-                        middleInitial: '',
+                        relationship: Relationship.OTHER,
+                        middleInitial: 'T',
                         suffix: 'Jr',
                         percentage: 10
+                    },
+                    {
+                        firstName: 'Thomas', lastName: 'Gilardi',
+                        relationship: Relationship.FATHER,
+                        middleInitial: 'S',
+                        suffix: '',
+                        percentage: 20
+                    },
+                    {
+                        firstName: 'Yvette', lastName: 'Gilardi',
+                        relationship: Relationship.MOTHER,
+                        middleInitial: 'M',
+                        suffix: '',
+                        percentage: 30
+                    },
+                    {
+                        firstName: 'Yvette', lastName: 'Gilardi',
+                        relationship: Relationship.MOTHER,
+                        middleInitial: 'M',
+                        suffix: '',
+                        percentage: 15
+                    },
+                    {
+                        firstName: 'Yvette', lastName: 'Gilardi',
+                        relationship: Relationship.MOTHER,
+                        middleInitial: 'M',
+                        suffix: '',
+                        percentage: 25
                     }
                 ]}
                 onSubmit={this.handleSubmit} />;

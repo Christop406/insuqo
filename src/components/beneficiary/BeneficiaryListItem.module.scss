@@ -1,3 +1,19 @@
 .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
 
+  &:not(:last-of-type) {
+    border-bottom: 1px solid rgba(gray, 0.2);
+  }
+}
+
+.beneficiaryName {
+  font-weight: 600;
+}
+
+.shareLabel {
+  font-size: 30px;
+  font-weight: 600;
 }
