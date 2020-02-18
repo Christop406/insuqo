@@ -9,11 +9,29 @@
   }
 }
 
+.infoContainer {
+  display: flex;
+  position: relative;
+
+  .deleteButton {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+  }
+}
+
 .beneficiaryName {
   font-weight: 600;
+  > *:not(:last-child) {
+    margin-right: 3px;
+  }
 }
 
 .shareLabel {
   font-size: 30px;
   font-weight: 600;
+}
+
+.selector {
+  border: none;
 }

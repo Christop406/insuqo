@@ -29,7 +29,7 @@ export class ApplicationService extends ApiBaseService {
         return (await this.authenticatedPut<Application>(`/applications/${applicationId}/payment-info`, paymentInfo)).data;
     }
 
-    public async updateApplication(applicationId: string, application: Application): Promise<Application | undefined> {
+    public async updateApplication(applicationId: string, application: Partial<Application>): Promise<Application | undefined> {
         Logger.log(application);
         const res = await this.authenticatedPut<Application>(`/applications/${applicationId}/update`, application);
         return res.data;

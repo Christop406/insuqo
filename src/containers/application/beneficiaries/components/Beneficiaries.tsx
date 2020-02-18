@@ -1,35 +1,51 @@
-import React from 'react';
-import { Beneficiary, Application } from '@insuqo/shared';
+import React, { useState } from 'react';
+import { Beneficiary } from '@insuqo/shared';
 import s from './Beneficiaries.module.scss';
-import { useForm, FormContext } from 'react-hook-form';
 import BeneficiaryListItem from 'components/beneficiary/BeneficiaryListItem';
 import BeneficiaryChart from 'components/beneficiary-chart/BeneficiaryChart';
+import cx from 'classnames';
 
 interface BeneficiariesProps {
-    beneficiaries: Beneficiary[];
-    application: Application;
-    onSubmit: (application: Application) => any;
+    onSubmit: (beneficiaries: Beneficiary[]) => any;
+    beneficiaries?: Beneficiary[];
 }
 
-const Beneficiaries: React.FC<BeneficiariesProps> = ({ beneficiaries, application, onSubmit }) => {
-    const methods = useForm<Application>({ mode: 'onChange', defaultValues: application });
+const Beneficiaries: React.FC<BeneficiariesProps> = ({ beneficiaries, onSubmit }) => {
+    beneficiaries = beneficiaries || [];
 
-    const { handleSubmit } = methods; // register, errors
+    const [bens, setBens] = useState(beneficiaries);
+
+    const updateBeneficiary = (index: number, beneficiary: Beneficiary) => {
+        const newBens = [...bens.slice(0, index), beneficiary, ...bens.slice(index + 1)];
+        setBens(newBens);
+    };
+
+    const removeBeneficiary = (index: number) => {
+        setBens(bens.filter((b, i) => i !== index));
+    };
+
+    const addBeneficiary = () => {
+        const newBens = [...bens, {}];
+        setBens(newBens as any[]);
+    };
 
     return (
         <div className={s.container}>
             <h1>Add Beneficiaries</h1>
             <div className={s.beneficiaryList}>
-                <FormContext {...methods}>
-                    <form onSubmit={handleSubmit(onSubmit)}>
-                        {beneficiaries.map((b, i) => <BeneficiaryListItem key={i} initialValue={b} edit={false}/>)}
-                    </form>
-                </FormContext>
-                <button className="button full primary outline">Add Beneficiary</button>
+                <form onSubmit={console.log}>
+                    {bens.map((b, i) => <BeneficiaryListItem
+                        onClose={() => removeBeneficiary(i)}
+                        onChange={(ben) => updateBeneficiary(i, ben)}
+                        key={i}
+                        beneficiary={b} />)}
+                </form>
+                <button type="submit" onClick={addBeneficiary} className="button full primary outline">Add Beneficiary</button>
             </div>
             <div className={s.beneficiaryChart}>
-                <BeneficiaryChart beneficiaries={beneficiaries} />
+                <BeneficiaryChart beneficiaries={bens} />
             </div>
+            <input type="submit" onClick={() => onSubmit && onSubmit(bens)} className={cx('button full primary', s.submitButton)}></input>
         </div>
     );
 };

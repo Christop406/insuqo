@@ -1,0 +1,13 @@
+.editableLabel {
+    input {
+        border: 1px dashed rgba(gray, 0.3);
+        border-radius: 3px;
+    }
+
+    &.filled {
+        border: none;
+        input {
+            border: none;
+        }
+    }
+}
