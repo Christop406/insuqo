@@ -1,12 +1,20 @@
 .container {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
   padding: 15px;
 
   &:not(:last-of-type) {
     border-bottom: 1px solid rgba(gray, 0.2);
   }
+}
+
+.content {
+  width: 100%;
+}
+
+.personalContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .infoContainer {
@@ -34,4 +42,8 @@
 
 .selector {
   border: none;
+}
+
+.contactContainer {
+  
 }

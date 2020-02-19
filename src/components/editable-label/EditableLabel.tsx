@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import AutosizeInput from 'react-input-autosize';
 import s from './EditableLabel.module.scss';
 import cx from 'classnames';
@@ -13,7 +13,7 @@ interface EditableLabelProps {
     name?: string;
 }
 
-const EditableLabel: React.FC<EditableLabelProps> = ({ initialValue, placeholder, className, name, value, onChange }) => {
+const EditableLabel: React.FC<EditableLabelProps> = ({ placeholder, className, name, value, onChange }) => {
     return (
         <AutosizeInput 
             placeholder={placeholder}

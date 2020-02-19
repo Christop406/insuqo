@@ -8,11 +8,10 @@ import ClientAuthentication from 'controllers/auth/ClientAuthentication';
 import { Logger } from 'services/logger';
 import { Auth } from 'services/firebase';
 import IQStore, { IQStoreProps } from 'store/IQStore';
-import BeneficiariesContainer from '../beneficiaries/BeneficiariesContainer';
-import PaymentInfoContainer from '../payment-info/PaymentInfoContainer';
+const BeneficiariesContainer = React.lazy(() => import('../beneficiaries/BeneficiariesContainer'));
 const BasicInfoContainer = React.lazy(() => import('../basic-info/BasicInfoContainer'));
-const ApplicationPaymentInfo = React.lazy(() => import('containers/application/payment-info/components/ApplicationPaymentInfo'));
-const ApplicationReview = React.lazy(() => import('components/application/ApplicationReview/ApplicationReview'));
+const PaymentInfoContainer = React.lazy(() => import('../payment-info/PaymentInfoContainer'));
+const ReviewContainer = React.lazy(() => import('../review/ReviewContainer'));
 const ApplicationStatusView = React.lazy(() => import('components/application/ApplicationStatusView/ApplicationStatusView'));
 
 interface ApplicationProps extends IQStoreProps, RouteComponentProps<{ appId: string }> {
@@ -69,9 +68,7 @@ class Application extends Component<ApplicationProps, ApplicationState> {
                     <Route path={`${this.props.match.path}/apply`} component={BasicInfoContainer} />
                     <Route path={`${this.props.match.path}/beneficiaries`} component={BeneficiariesContainer}/>
                     <Route path={`${this.props.match.path}/payment`} component={PaymentInfoContainer}/>
-                    <Route path={`${this.props.match.path}/review`} render={(props) =>
-                        <ApplicationReview {...props} application={application!}
-                            onSubmit={this.submitApplication} />} />
+                    <Route path={`${this.props.match.path}/review`} component={ReviewContainer}/>
                     <Route path={`${this.props.match.path}/status`} render={(props) =>
                         <ApplicationStatusView {...props} application={application!} />} />
                     <Redirect to={`${this.props.match.path}/${this.getDefaultStep(application)}`} />
@@ -80,24 +77,8 @@ class Application extends Component<ApplicationProps, ApplicationState> {
         );
     };
 
-    private updateBasicInfo = async (app: any) => {
-        const appId = (this.state.application as any).id;
-        const updateResponse = await this.applicationService.updateBasicInfo(appId, app);
-        if (updateResponse) {
-            this.props.history.push(`/application/${appId}/payment`);
-        }
-    };
-
-    private updatePaymentInfo = async (paymentInfo: any) => {
-        const appId = (this.state.application as any).id;
-        const updateResponse = await this.applicationService.updatePaymentInfo(appId, paymentInfo);
-        if (updateResponse) {
-            this.setState({ application: updateResponse }, () => this.props.history.push(`/application/${appId}/review`));
-        }
-    };
-
-    private submitApplication = async (applicationId: string) => {
-        const updated = await this.applicationService.submitApplication(applicationId);
+    private submitApplication = async (application: ApplicationModel) => {
+        const updated = await this.applicationService.submitApplication(application.id);
         if (updated?.status === ApplicationStatus.Submitted) {
             // success
             this.setState({ application: updated }, () => this.props.history.push(`/application/${updated.id}/status`));

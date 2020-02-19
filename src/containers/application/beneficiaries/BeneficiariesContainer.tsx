@@ -18,6 +18,10 @@ class BeneficiariesContainer extends React.Component<BeneficiariesContainerProps
         this.applicationService = new ApplicationService();
     }
 
+    componentDidMount = () => {
+        document.title = 'Beneficiaries - Application | INSUQO';
+    };
+
     render = () => {
         const application = this.props.store.get('application');
 
@@ -30,10 +34,11 @@ class BeneficiariesContainer extends React.Component<BeneficiariesContainerProps
     };
 
     private handleSubmit = async (beneficiaries: Beneficiary[]) => {
-        const application = this.props.store.get('application');
+        const { store, history } = this.props;
+        const application = store.get('application');
         const newApp = await this.applicationService.updateApplication(application!.id, { beneficiaries });
-        this.props.store.set('application')(newApp);
-        this.props.history.push(`/application/${application?.id}/payment`);
+        store.set('application')(newApp);
+        history.push(`/application/${application?.id}/payment`);
     };
 }
 

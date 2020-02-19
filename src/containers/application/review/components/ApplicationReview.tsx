@@ -2,20 +2,19 @@ import React, { useEffect, useState } from 'react';
 import { Application, QuickTermQuoteResult, PremiumMode } from '@insuqo/shared';
 import s from './ApplicationReview.module.scss';
 import cx from 'classnames';
-import { ApplicationService } from '../../../services/application.service';
-import { logoImageForCompanyID, formatCovAmount } from '../../../func';
-import { RouteComponentProps } from 'react-router-dom';
+import { ApplicationService } from 'services/application.service';
+import { logoImageForCompanyID, formatCovAmount } from '../../../../func';
 
 const applicationService = new ApplicationService();
 
-const ApplicationReview: React.FC<RouteComponentProps & ApplicationReviewProps> = (props) => {
+const ApplicationReview: React.FC<ApplicationReviewProps> = (props) => {
     const { application } = props;
 
     const [image1, setImage1] = useState<string>();
     const [image2, setImage2] = useState<string>();
 
     useEffect(() => {
-        if (application) {
+        if (application && application.images) {
             applicationService.getImageUrl(application.id, application.images![0]).then((img) => {
                 setImage1(img);
             });
@@ -31,7 +30,7 @@ const ApplicationReview: React.FC<RouteComponentProps & ApplicationReviewProps> 
     const chosenQuote = application.quotes?.find((q) => q.id === application.quoteId && q.RecID === application.quoteRecId);
 
     const submitApplication = async () => {
-        props.onSubmit(application.id);
+        props.onSubmit(application);
     };
 
     return (
@@ -171,8 +170,8 @@ const getQuotePrice = (quote: QuickTermQuoteResult, paymentFrequency?: PremiumMo
 };
 
 interface ApplicationReviewProps {
-    application: Application;
-    onSubmit: (appId: string) => any;
+    application: Application | undefined;
+    onSubmit: (application: Application) => any;
 }
 
 const BooleanDisplay: React.FC<BooleanDisplayProps> = (props) => {

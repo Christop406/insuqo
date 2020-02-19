@@ -17,7 +17,7 @@ class BasicInfoContainer extends React.Component<BasicInfoContainerProps> {
     }
 
     componentDidMount = () => {
-        document.title = 'Application | INSUQO';
+        document.title = 'Basic Info - Application | INSUQO';
     }
 
     public render() {
@@ -40,7 +40,7 @@ class BasicInfoContainer extends React.Component<BasicInfoContainerProps> {
         application = { ...application, ...app };
         const res = await this.applicationService.updateApplication(application.id, application);
         this.props.store.set('application')(res);
-        this.props.history.push(`/applications/${application.id}/beneficiaries`);
+        this.props.history.push(`/application/${application.id}/beneficiaries`);
     };
 }
 
