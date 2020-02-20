@@ -1,11 +1,17 @@
 import { ApiBaseService } from './api-base.service';
 import { DynamoQuote, QuoteInsertResponse } from '../model/dynamo-quote';
 import { ApiResponse } from '@insuqo/shared/types/api-response';
+import { QuickTermQuoteResult } from '@insuqo/shared';
 
 export class QuoteService extends ApiBaseService {
 
     public async getQuotesByKey(key: string): Promise<DynamoQuote[] | undefined> {
-        return (await this.get<DynamoQuote[]>(`/quotes/get/${encodeURIComponent(key)}`)).data;
+        return (await this.get<DynamoQuote[]>(`/quotes/${encodeURIComponent(key)}`)).data;
+    }
+
+    public async getQuotesForApplication(applicationId: string): Promise<QuickTermQuoteResult[]> {
+        const quoteRes = await this.authenticatedGet<QuickTermQuoteResult[]>(`/quotes/application/${applicationId}`);
+        return quoteRes.data || [];
     }
 
     public runQuotes = (

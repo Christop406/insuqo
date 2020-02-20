@@ -8,6 +8,7 @@ import ClientAuthentication from 'controllers/auth/ClientAuthentication';
 import { Logger } from 'services/logger';
 import { Auth } from 'services/firebase';
 import IQStore, { IQStoreProps } from 'store/IQStore';
+import { QuoteService } from 'services/quote.service';
 const BeneficiariesContainer = React.lazy(() => import('../beneficiaries/BeneficiariesContainer'));
 const BasicInfoContainer = React.lazy(() => import('../basic-info/BasicInfoContainer'));
 const PaymentInfoContainer = React.lazy(() => import('../payment-info/PaymentInfoContainer'));
@@ -33,6 +34,7 @@ class Application extends Component<ApplicationProps, ApplicationState> {
     };
 
     private applicationService: ApplicationService = new ApplicationService();
+    private quoteService: QuoteService = new QuoteService();
 
     public componentDidMount = async () => {
         document.title = 'Application | INSUQO';
@@ -66,9 +68,9 @@ class Application extends Component<ApplicationProps, ApplicationState> {
             <>
                 <Switch>
                     <Route path={`${this.props.match.path}/apply`} component={BasicInfoContainer} />
-                    <Route path={`${this.props.match.path}/beneficiaries`} component={BeneficiariesContainer}/>
-                    <Route path={`${this.props.match.path}/payment`} component={PaymentInfoContainer}/>
-                    <Route path={`${this.props.match.path}/review`} component={ReviewContainer}/>
+                    <Route path={`${this.props.match.path}/beneficiaries`} component={BeneficiariesContainer} />
+                    <Route path={`${this.props.match.path}/payment`} component={PaymentInfoContainer} />
+                    <Route path={`${this.props.match.path}/review`} component={ReviewContainer} />
                     <Route path={`${this.props.match.path}/status`} render={(props) =>
                         <ApplicationStatusView {...props} application={application!} />} />
                     <Redirect to={`${this.props.match.path}/${this.getDefaultStep(application)}`} />
@@ -108,9 +110,13 @@ class Application extends Component<ApplicationProps, ApplicationState> {
 
     private loadApplication = async () => {
         const appId = this.props.match.params.appId;
-        const application = await this.applicationService.getApplication(appId);
-        if (application && application.quotes) {
-            const chosenQuote = application.quotes.find<QuickTermQuoteResult>(((quote: QuickTermQuoteResult) => {
+        const [application, quotes] = await Promise.all([
+            this.applicationService.getApplication(appId),
+            this.quoteService.getQuotesForApplication(appId)
+        ]);
+
+        if (application && quotes) {
+            const chosenQuote = quotes.find<QuickTermQuoteResult>(((quote: QuickTermQuoteResult) => {
                 return quote.RecID === application.quoteRecId;
             }) as any);
             if (chosenQuote) {

@@ -1,4 +1,4 @@
-import { Application, ApplicationStatus, Address } from '@insuqo/shared';
+import { Application, ApplicationStatus, Address, Beneficiary } from '@insuqo/shared';
 import { ApiBaseService, RequestConfig } from './api-base.service';
 import { Logger } from './logger';
 
@@ -13,8 +13,13 @@ export class ApplicationService extends ApiBaseService {
     }
 
     public async getApplication(id: string): Promise<Application | undefined> {
-        const applicationRes = await this.authenticatedGet<Application>('/applications?id=' + encodeURIComponent(id));
+        const applicationRes = await this.authenticatedGet<Application>(`/applications/${id}`);
         return applicationRes.data;
+    }
+
+    public async getBeneficiaries(applicationId: string): Promise<Beneficiary[]> {
+        const benRes = await this.authenticatedGet<Beneficiary[]>(`/applications/${applicationId}/beneficiaries`);
+        return benRes.data || [];
     }
 
     public async getImageUrl(appId: string, imageKey: string): Promise<string | undefined> {
