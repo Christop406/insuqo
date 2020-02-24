@@ -72,7 +72,7 @@ const BeneficiaryListItem: React.FC<BeneficiaryListItemProps> = ({ onClose, onCh
                                     onChange={setLastName as any}
                                     placeholder="Last" />
                             </div>
-                            <select placeholder="Relationship" value={relationship} onChange={setRelationship as any} className={cx(s.selector, 'select input')}>
+                            <select placeholder="Relationship" value={relationship} onChange={(e) => setRelationship(e.target.value as any)} className={cx(s.selector, 'select input')}>
                                 {relations.map((r) => <option key={r.code} value={r.code}>{r.name}</option>)}
                             </select>
                         </div>

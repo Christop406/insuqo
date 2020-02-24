@@ -116,6 +116,7 @@ class Application extends Component<ApplicationProps, ApplicationState> {
         ]);
 
         if (application && quotes) {
+            application.quotes = quotes;
             const chosenQuote = quotes.find<QuickTermQuoteResult>(((quote: QuickTermQuoteResult) => {
                 return quote.RecID === application.quoteRecId;
             }) as any);

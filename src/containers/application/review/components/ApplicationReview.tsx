@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Application, QuickTermQuoteResult, PremiumMode } from '@insuqo/shared';
+import { Application, QuickTermQuoteResult, PremiumMode, Beneficiary } from '@insuqo/shared';
 import s from './ApplicationReview.module.scss';
 import cx from 'classnames';
 import { ApplicationService } from 'services/application.service';
@@ -8,26 +8,17 @@ import { logoImageForCompanyID, formatCovAmount } from '../../../../func';
 const applicationService = new ApplicationService();
 
 const ApplicationReview: React.FC<ApplicationReviewProps> = (props) => {
-    const { application } = props;
+    const { application, quotes, beneficiaries, checkImages } = props;
+    let { chosenQuote } = props;
 
-    const [image1, setImage1] = useState<string>();
-    const [image2, setImage2] = useState<string>();
-
-    useEffect(() => {
-        if (application && application.images) {
-            applicationService.getImageUrl(application.id, application.images![0]).then((img) => {
-                setImage1(img);
-            });
-            applicationService.getImageUrl(application.id, application.images![1]).then((img) => {
-                setImage2(img);
-            });
-        }
-    }, [application]);
+    // const [image1, setImage1] = useState<string>();
+    // const [image2, setImage2] = useState<string>();
 
     if (!application) {
         return <></>;
     }
-    const chosenQuote = application.quotes?.find((q) => q.id === application.quoteId && q.RecID === application.quoteRecId);
+
+    chosenQuote = chosenQuote || quotes?.find((q) => q.id === application.quoteId && q.RecID === application.quoteRecId);
 
     const submitApplication = async () => {
         props.onSubmit(application);
@@ -96,7 +87,7 @@ const ApplicationReview: React.FC<ApplicationReviewProps> = (props) => {
                 </div>
                 <div className={s.reviewSection}>
                     <h2>Beneficiaries</h2>
-                    {application.beneficiaries?.map((b, i) => (
+                    {beneficiaries?.map((b, i) => (
                         <div className={s.beneficiaryItem} key={i}>
                             <h5>Beneficiary {i + 1}</h5>
                             <div className={s.fieldRow}>
@@ -117,8 +108,8 @@ const ApplicationReview: React.FC<ApplicationReviewProps> = (props) => {
                         <p className={s.field}><span className={s.label}>Account Number</span> <span className="code">{application.accountNumber}</span></p>
                         <p className={s.field}><span className={s.label}>Routing Number</span> <span className="code">{application.routingNumber}</span></p>
                     </div>
-                    <img alt="Front of check" className={s.paymentImage} src={image1}></img>
-                    <img alt="Back of check" className={s.paymentImage} src={image2}></img>
+                    <img alt="Front of check" className={s.paymentImage} src={checkImages && checkImages[0]}></img>
+                    <img alt="Back of check" className={s.paymentImage} src={checkImages && checkImages[1]}></img>
                 </div>
                 <div className={s.reviewSection}>
                     <h2>Other Plan Options</h2>
@@ -151,7 +142,8 @@ const ApplicationReview: React.FC<ApplicationReviewProps> = (props) => {
 };
 
 const getQuotePrice = (quote: QuickTermQuoteResult, paymentFrequency?: PremiumMode): string => {
-    let quotePrice: string;
+    let quotePrice: string | number;
+    quote = quote || {};
     switch (paymentFrequency) {
         case PremiumMode.ANNUAL:
             quotePrice = quote.AnnualTotalPremium;
@@ -166,11 +158,16 @@ const getQuotePrice = (quote: QuickTermQuoteResult, paymentFrequency?: PremiumMo
         default:
             quotePrice = quote.MonthlyTotalPremium;
     }
+    quotePrice = quotePrice || 0;
     return (+quotePrice).toFixed(2);
 };
 
 interface ApplicationReviewProps {
     application: Application | undefined;
+    quotes?: QuickTermQuoteResult[];
+    chosenQuote?: QuickTermQuoteResult;
+    beneficiaries?: Beneficiary[];
+    checkImages?: string[];
     onSubmit: (application: Application) => any;
 }
 

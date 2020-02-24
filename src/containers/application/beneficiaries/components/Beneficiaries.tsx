@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Beneficiary } from '@insuqo/shared';
 import s from './Beneficiaries.module.scss';
 import BeneficiaryListItem from 'components/beneficiary/BeneficiaryListItem';
@@ -14,6 +14,12 @@ const Beneficiaries: React.FC<BeneficiariesProps> = ({ beneficiaries, onSubmit }
     beneficiaries = beneficiaries || [];
 
     const [bens, setBens] = useState(beneficiaries);
+
+    useEffect(() => {
+        if (beneficiaries) {
+            setBens(beneficiaries);
+        }
+    }, [beneficiaries]);
 
     const updateBeneficiary = (index: number, beneficiary: Beneficiary) => {
         const newBens = [...bens.slice(0, index), beneficiary, ...bens.slice(index + 1)];
