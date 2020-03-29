@@ -67,23 +67,19 @@ class ReviewContainer extends React.Component<ReviewContainerProps, any> {
 
     private async loadCheckImages(): Promise<void> {
         const application = this.props.store.get('application');
-        if (application && application.images) {
-            if (application.images[0]) {
-                this.applicationService.getImageUrl(application.id, application.images![0]).then((img) => {
-                    this.setState({ frontImage: img });
-                });
-                if (application.images[1]) {
-                    this.applicationService.getImageUrl(application.id, application.images![1]).then((img) => {
-                        this.setState({ backImage: img });
-                    });
-                    console.debug('2 images');
-                } else {
-                    console.debug('1 image');
-                }
-            } else{
-                console.debug('No images');
-            }
+        let frontPromise: Promise<string | undefined> | undefined;
+        let backPromise: Promise<string | undefined> | undefined;
+        if (application?.checkFront) {
+            frontPromise = this.applicationService.getImageUrl(application.id, application.checkFront);
         }
+        if (application?.checkBack) {
+            backPromise = this.applicationService.getImageUrl(application.id, application.checkBack);
+        }
+
+        this.setState({
+            frontImage: await frontPromise,
+            backImage: await backPromise,
+        });
     }
 }
 

@@ -9,10 +9,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 interface BeneficiaryListItemProps {
     name?: string;
     onClose?: () => any;
-    onChange?: (beneficiary: Beneficiary) => any;
+    onChange?: (beneficiary: Omit<Beneficiary, 'application'>) => any;
     control?: any;
     register?: any;
-    beneficiary: Beneficiary;
+    beneficiary: Omit<Beneficiary, 'application'>;
 }
 
 const BeneficiaryListItem: React.FC<BeneficiaryListItemProps> = ({ onClose, onChange, beneficiary }) => {

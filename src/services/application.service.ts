@@ -54,7 +54,7 @@ export class ApplicationService extends ApiBaseService {
     }
 }
 
-interface SignedUrlResponse {
+export interface SignedUrlResponse {
     put: string;
     delete: string;
     id: string;

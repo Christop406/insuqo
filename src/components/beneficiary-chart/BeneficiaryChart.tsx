@@ -1,5 +1,6 @@
 import React from 'react';
-import { Beneficiary, Relationship } from '@insuqo/shared';
+import { Relationship } from '@insuqo/shared';
+import { Beneficiary } from 'model/beneficiary';
 import { Doughnut } from 'react-chartjs-2';
 
 interface BeneficiaryChartProps {
@@ -20,9 +21,9 @@ const BeneficiaryChart: React.FC<BeneficiaryChartProps> = ({ beneficiaries }) =>
                 showLines: false
             }}
             data={{
-                labels: beneficiaries.map((b) => `${b.firstName} ${b.lastName}`),
+                labels: beneficiaries?.map((b) => `${b.firstName} ${b.lastName}`),
                 datasets: [{
-                    data: beneficiaries.map((b) => b.percentage),
+                    data: beneficiaries?.map((b) => b.percentage),
                     backgroundColor: getColors(beneficiaries),
                 }]
             }} />
@@ -42,7 +43,7 @@ const allowedColors = (index: number) => {
     }
 };
 
-const getColors = (beneficiaries: Beneficiary[]) => {
+const getColors = (beneficiaries: Beneficiary[] = []) => {
 
     const colors = beneficiaries.slice(0, -1).map((b, i) => allowedColors(i));
 
@@ -55,7 +56,7 @@ const getColors = (beneficiaries: Beneficiary[]) => {
 
 const prepareBeneficiaries = (beneficiaries: Beneficiary[]) => {
     const percentage = beneficiaries.reduce((acc, curr) => {
-        acc += curr.percentage;
+        acc += (curr.percentage || 0);
         return acc;
     }, 0);
     if (percentage < 100) {

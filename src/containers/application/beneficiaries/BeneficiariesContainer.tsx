@@ -2,7 +2,7 @@ import React from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import IQStore, { IQStoreProps } from 'store/IQStore';
 import Beneficiaries from './components/Beneficiaries';
-import { Beneficiary } from '@insuqo/shared';
+import { Beneficiary } from '../../../model/beneficiary';
 import { ApplicationService } from 'services/application.service';
 import { BeneficiaryService } from 'services/beneficiary.service';
 

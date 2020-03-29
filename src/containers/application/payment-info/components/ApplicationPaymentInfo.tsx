@@ -1,14 +1,16 @@
 import React from 'react';
+import ReactDOMServer from 'react-dom/server';
 import { Application } from '@insuqo/shared';
 import { FilePond, registerPlugin } from 'react-filepond';
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
 import 'filepond/dist/filepond.min.css';
+import cx from 'classnames';
 
 import s from './ApplicationPaymentInfo.module.scss';
 import { useForm } from 'react-hook-form';
-import { ProcessServerConfigFunction } from 'model/filepond';
+import { ProcessServerConfigFunction, RevertServerConfigFunction } from 'model/filepond';
 registerPlugin(FilePondPluginImagePreview);
 
 
@@ -17,8 +19,8 @@ interface PaymentInfoProps {
     onSubmit: (output: any) => any;
     application?: Application;
     onImageClick?: () => any;
-    onAddImage?: ProcessServerConfigFunction;
-    onRemoveImage?: any;
+    onAddImage: (side: 'front' | 'back') => ProcessServerConfigFunction;
+    onRemoveImage: (side: 'front' | 'back') => RevertServerConfigFunction;
 }
 
 const ApplicationPaymentInfo: React.FunctionComponent<PaymentInfoProps> = ({ application, onSubmit, onAddImage, onRemoveImage }) => {
@@ -48,14 +50,24 @@ const ApplicationPaymentInfo: React.FunctionComponent<PaymentInfoProps> = ({ app
                         <label htmlFor="routingNumber">Routing Number</label>
                         <input ref={register({ required: true })} className="input code" placeholder="011401533" name="routingNumber" />
                     </div>
-                    <div className="form-group">
-                        <label htmlFor='imageUploader'>Check Picture</label>
-                        {/* <button onClick={onImageClick}>Open Media thing</button> */}
-                        <FilePond name='imageUploader' server={{
-                            process: onAddImage,
-                            revert: onRemoveImage
-                        }} allowMultiple={true} maxFiles={2} />
+                    <div className={cx('form-group', s.checkUploaderContainer)}>
+                        <div className={s.checkUploader}>
+                            <label htmlFor='frontUploader'>Front of Check</label>
+                            {/* <button onClick={onImageClick}>Open Media thing</button> */}
+                            <FilePond name='frontUploader' server={{
+                                process: onAddImage('front'),
+                                revert: onRemoveImage('front')
+                            }} allowMultiple={true} maxFiles={1} labelIdle={uploaderIdleText()} />
+                        </div>
+                        <div className={s.checkUploader}>
+                            <label htmlFor='backUploader'>Back of Check</label>
+                            <FilePond name='backUploader' server={{
+                                process: onAddImage('back'),
+                                revert: onRemoveImage('back')
+                            }} allowMultiple={true} maxFiles={1} labelIdle={uploaderIdleText()} />
+                        </div>
                     </div>
+                    <img alt="test" src="https://storage.cloud.google.com/insuqo-payments/process/4cac73ab-dd7d-4563-9398-298d2da3b8a6/2d30381d-0a85-4550-adbe-3b2e3d33f100.png"></img>
                     <button className="button full primary"
                         disabled={!formState.isValid}
                         type="submit">
@@ -66,5 +78,9 @@ const ApplicationPaymentInfo: React.FunctionComponent<PaymentInfoProps> = ({ app
         </div>
     );
 };
+
+const uploaderIdleText = () => ReactDOMServer.renderToStaticMarkup(
+    <span>Drop Image Here or <span className="filepond--label-action">Click to Upload</span></span>
+);
 
 export default ApplicationPaymentInfo;

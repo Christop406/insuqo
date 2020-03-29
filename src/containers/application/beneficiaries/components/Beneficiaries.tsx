@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Beneficiary } from '@insuqo/shared';
+import { Beneficiary } from 'model/beneficiary';
 import s from './Beneficiaries.module.scss';
 import BeneficiaryListItem from 'components/beneficiary/BeneficiaryListItem';
 import BeneficiaryChart from 'components/beneficiary-chart/BeneficiaryChart';

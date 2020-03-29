@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { Application, QuickTermQuoteResult, PremiumMode, Beneficiary } from '@insuqo/shared';
+import React from 'react';
+import { Application, QuickTermQuoteResult, PremiumMode } from '@insuqo/shared';
 import s from './ApplicationReview.module.scss';
 import cx from 'classnames';
 import { ApplicationService } from 'services/application.service';
 import { logoImageForCompanyID, formatCovAmount } from '../../../../func';
+import { Beneficiary } from 'model/beneficiary';
 
-const applicationService = new ApplicationService();
+// const applicationService = new ApplicationService();
 
 const ApplicationReview: React.FC<ApplicationReviewProps> = (props) => {
     const { application, quotes, beneficiaries, checkImages } = props;

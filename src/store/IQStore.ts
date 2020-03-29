@@ -1,5 +1,6 @@
 import { createConnectedStore, Effects, Store, withLogger } from 'undux';
-import { Application, Beneficiary } from '@insuqo/shared/types/application';
+import { Application } from '@insuqo/shared/types/application';
+import { Beneficiary } from '../model/beneficiary';
 import { QuickTermQuoteResult } from '@insuqo/shared';
 
 interface IQStoreState {

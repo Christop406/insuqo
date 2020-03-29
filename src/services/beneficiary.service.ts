@@ -1,5 +1,5 @@
 import { ApiBaseService } from './api-base.service';
-import { Beneficiary } from '@insuqo/shared';
+import { Beneficiary } from '../model/beneficiary';
 
 export class BeneficiaryService extends ApiBaseService {
     public async getBeneficiaries(applicationId: string): Promise<Beneficiary[]> {

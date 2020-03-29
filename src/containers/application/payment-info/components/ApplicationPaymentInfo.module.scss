@@ -1,3 +1,5 @@
+@import "../../../../style/mixins";
+
 .container {
   width: 100%;
   display: flex;
@@ -15,4 +17,23 @@
 
 .header {
   margin: -5px 0 20px 0;
+}
+
+.checkUploaderContainer {
+  display: flex;
+  flex-direction: column;
+  margin: 0 -10px;
+
+  @include tablet-min {
+    flex-direction: row;
+  }
+
+  .checkUploader {
+    padding: 0 10px;
+    flex-basis: 50%;
+
+    // @include tablet-min {
+    //   flex-basis: 100%;
+    // }
+  }
 }
