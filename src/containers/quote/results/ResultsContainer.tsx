@@ -4,12 +4,12 @@ import { RouteComponentProps, withRouter } from 'react-router-dom';
 import Results from './components/Results';
 import { ApplicationService } from '../../../services/application.service';
 import { QuoteService } from '../../../services/quote.service';
-import dayjs from 'dayjs';
-import { PremiumMode, Address, QuickTermQuoteResult } from '@insuqo/shared';
+import { PremiumMode, QuickTermQuoteResult } from '@insuqo/shared';
 import { Auth } from '../../../services/firebase';
 import { QuoteHelper } from '../../../util/quote-helper';
 import qs from 'query-string';
 import ClientAuthentication from '../../../controllers/auth/ClientAuthentication';
+import { ZipCode } from '@insuqo/shared/types/zip-code';
 
 type ResultsContainerProps = IQStoreProps & RouteComponentProps;
 
@@ -30,29 +30,12 @@ class ResultsContainer extends React.Component<ResultsContainerProps, ResultsCon
 
     private applicationService = new ApplicationService();
     private quoteService = new QuoteService();
-    private location: Partial<Address> = {};
+    private location?: ZipCode;
     private birthDate?: string;
     private selectedQuote?: QuickTermQuoteResult;
 
     componentDidMount = async () => {
         const { store } = this.props;
-        const { paymentFrequency } = this.state;
-        const { search } = this.props.history.location;
-        if (search) {
-            const query = qs.parse(search.slice(1), {});
-            console.log(query);
-            if (query.id) {
-                query.id = Array.isArray(query.id) ? query.id[0] : query.id;
-                const retrievedQuotes = await this.quoteService.getQuotesByKey(query.id);
-                retrievedQuotes?.sort((a, b) => QuoteHelper.quoteSortValue(a, b, paymentFrequency));
-                if (retrievedQuotes) {
-                    this.setState({ loading: false, quotes: retrievedQuotes });
-                    return;
-                } else {
-                    this.props.history.push({ search: '' });
-                }
-            }
-        }
 
         try {
             const newQuotes = await this.getQuotes();
@@ -63,47 +46,29 @@ class ResultsContainer extends React.Component<ResultsContainerProps, ResultsCon
             throw error;
         }
 
-        this.location = {
-            city: store.get('city'),
-            state: store.get('stateCode'),
-            zipCode: store.get('zipCode')
-        };
+        this.location = store.get('location');
 
-        this.birthDate = store.get('birthDate');
+        this.birthDate = store.get('quote')?.birthdate;
     };
 
     private getQuotes = () => {
-        const store = this.props.store;
-        const stateCode = store.get('stateCode');
-        const birthdate = store.get('birthDate');
-        const sex = store.get('sex');
-        const covAmount = store.get('coverageAmount');
-        const termLength = store.get('termLength');
-        const rider = store.get('planRider');
-
-        const now = dayjs();
-        const birthTime = dayjs(birthdate, 'YYYY-MM-DD');
-        const actualAge = now.diff(birthTime, 'year');
-        const nearestAge = Math.round(now.diff(birthTime, 'year', true));
-
-        const tobacco = store.get('tobacco');
-        const cannabis = store.get('cannabis');
-        const healthType = tobacco || cannabis ? 'preferred_smoker' : 'preferred_non_smoker';
-
-        return this.quoteService.runQuotes(stateCode, actualAge, nearestAge, covAmount, termLength, healthType, sex, rider, 10);
+        const quote = this.props.store.get('quote');
+        if (quote) {
+            return this.quoteService.runQuotes(quote.id);
+        } else {
+            throw new Error('No Quote in Store');
+        }
     };
 
     private createApplication = async (quote: QuickTermQuoteResult) => {
-        console.log('creating');
-        const app = await this.applicationService.createApplication(quote.id, quote.RecID, this.birthDate!, this.location!);
-        console.log('created?');
-        if (app && app.id) {
-            console.log(app);
-            this.props.history.push(`/application/${app.id}/apply`);
-        } else {
-            console.log('err');
-            throw new Error('There was an error creating the application');
-        }
+        // const app = await this.applicationService.createApplication(quote.id, quote.RecID, this.birthDate!, this.location!);
+        // if (app && app.id) {
+        //     console.log(app);
+        //     this.props.history.push(`/application/${app.id}/apply`);
+        // } else {
+        //     console.log('err');
+        //     throw new Error('There was an error creating the application');
+        // }
     };
 
     private apply = async (quote: QuickTermQuoteResult, event: any) => {

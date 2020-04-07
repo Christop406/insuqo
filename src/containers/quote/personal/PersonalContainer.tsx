@@ -3,13 +3,15 @@ import IQStore, { IQStoreProps } from '../../../store/IQStore';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import Personal from './components/Personal';
 import dayjs from 'dayjs';
+import { Sex } from '@insuqo/shared';
+import { QuoteService } from 'services/quote.service';
 
 interface PersonalContainerProps extends IQStoreProps, RouteComponentProps { }
 interface PersonalContainerState {
-    birthDate: string;
-    sex: 'male' | 'female' | 'none';
-    tobacco: boolean;
-    cannabis: boolean;
+    birthDate: string | undefined;
+    sex: Sex | undefined;
+    tobacco: boolean | undefined;
+    cannabis: boolean | undefined;
     bdError: boolean;
     bdErrMsg: string | undefined;
 }
@@ -18,15 +20,32 @@ class PersonalContainer extends React.Component<PersonalContainerProps, Personal
 
     state: PersonalContainerState = {
         birthDate: '',
-        sex: 'none',
-        tobacco: false,
-        cannabis: false,
+        sex: undefined,
+        tobacco: undefined,
+        cannabis: undefined,
         bdError: false,
         bdErrMsg: undefined,
     };
 
+    private quoteService: QuoteService;
+
+    constructor(props: PersonalContainerProps) {
+        super(props);
+        this.quoteService = new QuoteService();
+    }
+
+    public componentDidMount() {
+        const { quote } = this.props.store.getState();
+        this.setState({
+            sex: quote?.sex,
+            tobacco: quote?.tobacco,
+            cannabis: quote?.cannabis,
+            birthDate: quote?.birthdate,
+        });
+    }
+
     private updateBirthday = (birthDate: string) => {
-        console.log(birthDate);
+        // console.log(birthDate);
         const bd = dayjs(birthDate, 'MM/DD/YYYY');
         const now = dayjs();
 
@@ -50,6 +69,7 @@ class PersonalContainer extends React.Component<PersonalContainerProps, Personal
 
     private updateTobacco = () => {
         const { tobacco } = this.state;
+        // console.log(tobacco, !tobacco);
         this.setState({ tobacco: !tobacco });
     };
 
@@ -58,32 +78,57 @@ class PersonalContainer extends React.Component<PersonalContainerProps, Personal
         this.setState({ cannabis: !cannabis });
     };
 
-    private updateSex = (sex: 'male' | 'female' | 'none') => {
-        this.setState({ sex });
+    private updateSex = (sex: Omit<Sex, Sex.UNKNOWN>) => {
+        this.setState({ sex: sex as Sex });
+        // console.log('updated to', sex);
     };
 
-    private submitPersonalInfo = () => {
+    private submitPersonalInfo = async () => {
         if (this.validateBirthdate()) {
             const store = this.props.store;
             const { birthDate, sex, tobacco, cannabis } = this.state;
-            store.set('birthDate')(dayjs(birthDate, 'MM/DD/YYYY').format('YYYY-MM-DD'));
-            store.set('sex')(sex);
-            store.set('tobacco')(tobacco);
-            store.set('cannabis')(cannabis);
-            this.props.history.push('/quote/plan');
+            const currentQuote = store.get('quote');
+
+            if (!currentQuote) {
+                throw new Error('No current quote');
+            }
+
+            const updatedQuote = await this.quoteService.updateQuoteRecord(currentQuote.id, {
+                birthdate: birthDate,
+                sex,
+                tobacco,
+                cannabis,
+            });
+
+            store.set('quote')(updatedQuote);
+            this.props.history.push(`/quote/${updatedQuote.id}/plan`);
         }
     };
 
     render = () => {
-        const { bdError, bdErrMsg, tobacco, cannabis, birthDate, sex } = this.state;
+        const { bdError, bdErrMsg } = this.state;
+        let { sex, birthDate, tobacco, cannabis } = this.state;
+        const { store } = this.props;
+        const quote = store.get('quote');
+        const location = store.get('location');
+
+        sex = sex === undefined ? quote?.sex : sex;
+        birthDate = birthDate === undefined ? quote?.birthdate : birthDate;
+        tobacco = tobacco === undefined ? !!(quote?.tobacco) : tobacco;
+        cannabis = cannabis === undefined ? !!(quote?.cannabis) : cannabis;
+
+        // TODO: get this (all values) updating correctly and auto-fill them on load
+        // console.log(sex, birthDate);
+        
         return <Personal
+            location={location}
             sex={sex}
+            tobaccoChecked={tobacco}
+            cannabisChecked={cannabis}
+            birthdate={birthDate}
             updateSex={this.updateSex}
-            birthDate={birthDate}
             updateCannabis={this.updateCannabis}
             updateTobacco={this.updateTobacco}
-            tobacco={tobacco}
-            cannabis={cannabis}
             birthDateError={bdError}
             birthDateMessage={bdErrMsg}
             onSubmit={this.submitPersonalInfo}

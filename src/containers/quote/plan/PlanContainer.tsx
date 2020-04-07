@@ -2,30 +2,59 @@ import React from 'react';
 import Plan from './components/Plan';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import IQStore, { IQStoreProps } from '../../../store/IQStore';
+import { QuoteRider } from '@insuqo/shared';
+import { QuoteService } from 'services/quote.service';
 
 type PlanContainerProps = RouteComponentProps & IQStoreProps;
 
 interface PlanContainerState {
     covAmount: number;
     termLength: number;
-    rider: string;
+    rider: QuoteRider | undefined;
 }
 
 class PlanContainer extends React.Component<PlanContainerProps, PlanContainerState> {
 
+    private quoteService: QuoteService;
+
+    constructor(props: PlanContainerProps) {
+        super(props);
+        this.quoteService = new QuoteService();
+    }
+
     state: PlanContainerState = {
         covAmount: 500000,
         termLength: 20,
-        rider: 'none'
+        rider: undefined,
     };
 
-    submitPlanInfo = () => {
+    public componentDidMount(): void {
+        const { quote } = this.props.store.getState();
+        const { covAmount, termLength } = this.state;
+        this.setState({
+            covAmount: quote?.coverage || covAmount,
+            termLength: quote?.termLength || termLength,
+            rider: quote?.rider,
+        });
+    }
+
+    submitPlanInfo = async () => {
         const store = this.props.store;
         const { covAmount, termLength, rider } = this.state;
-        store.set('coverageAmount')(covAmount);
-        store.set('termLength')(termLength);
-        store.set('planRider')(rider);
-        this.props.history.push('/quote/results');
+        const currentQuote = store.get('quote');
+
+        if (!currentQuote) {
+            throw new Error('No quote to update');
+        }
+
+        const updatedQuote = await this.quoteService.updateQuoteRecord(currentQuote.id,{
+            coverage: covAmount,
+            termLength,
+            rider,
+        });
+
+        store.set('quote')(updatedQuote);
+        this.props.history.push(`/quote/${updatedQuote.id}/results`);
     };
 
     updateCovAmount = (covAmount: number) => {
@@ -36,7 +65,7 @@ class PlanContainer extends React.Component<PlanContainerProps, PlanContainerSta
         this.setState({ termLength });
     };
 
-    updateRider = (rider: string) => {
+    updateRider = (rider: QuoteRider) => {
         this.setState({ rider });
     };
 

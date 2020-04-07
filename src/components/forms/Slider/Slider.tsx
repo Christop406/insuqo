@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Range } from 'react-range';
 import s from './Slider.module.scss';
 
@@ -26,6 +26,10 @@ export const Slider: React.FC<SliderProps> = ({ min, max, onChange, steps, stepS
         setValue(val);
         onChange(val);
     };
+
+    useEffect(() => {
+        setValue(initialValue!);
+    }, [initialValue]);
 
     return (
         <Range values={[value]} step={stepSize} min={min} max={max} onChange={handleChange} renderTrack={({ props, children }) => (

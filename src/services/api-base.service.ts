@@ -28,6 +28,18 @@ export class ApiBaseService {
         })).data;
     }
 
+    protected async post<T = any>(endpoint: string, body?: any): Promise<ApiResponse<T>>;
+    protected async post<B extends object, T = any>(endpoint: string, body?: B): Promise<ApiResponse<T>>;
+    protected async post<B extends object, T = any>(endpoint: string, body?: B): Promise<ApiResponse<T>> {
+        return (await axios.post<ApiResponse<T>>(ApiBaseService.buildURL(endpoint), body)).data;
+    }
+
+    protected async put<T = any>(endpoint: string, body?: any): Promise<ApiResponse<T>>;
+    protected async put<B = any, T = any>(endpoint: string, body?: B): Promise<ApiResponse<T>>;
+    protected async put<B = any, T = any>(endpoint: string, body?: B): Promise<ApiResponse<T>> {
+        return (await axios.put<ApiResponse<T>>(ApiBaseService.buildURL(endpoint), body)).data;
+    }
+
     private static async getAuthHeader(): Promise<string> {
         return new Promise((resolve, reject) => {
             Auth.onAuthStateChanged((user) => {

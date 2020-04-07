@@ -1,37 +1,20 @@
 import { createConnectedStore, Effects, Store, withLogger } from 'undux';
 import { Application } from '@insuqo/shared/types/application';
 import { Beneficiary } from '../model/beneficiary';
-import { QuickTermQuoteResult } from '@insuqo/shared';
+import { QuickTermQuoteResult, Quote } from '@insuqo/shared';
+import { ZipCode } from '@insuqo/shared/types/zip-code';
 
 interface IQStoreState {
-    zipCode: string | undefined;
-    stateName: string | undefined;
-    stateCode: string | undefined;
-    city: string | undefined;
-    birthDate: string | undefined;
-    sex: string | undefined;
-    tobacco: boolean | undefined;
-    cannabis: boolean | undefined;
-    coverageAmount: number | undefined;
-    termLength: number | undefined;
-    planRider: string | undefined;
+    location: ZipCode | undefined;
+    quote: Quote | undefined;
     application: Application | undefined;
     chosenQuote: QuickTermQuoteResult | undefined;
     beneficiaries: Beneficiary[] | undefined;
 }
 
 const initialState: IQStoreState = {
-    zipCode: undefined,
-    stateName: undefined,
-    stateCode: undefined,
-    city: undefined,
-    birthDate: undefined,
-    sex: undefined,
-    tobacco: undefined,
-    cannabis: undefined,
-    coverageAmount: undefined,
-    termLength: undefined,
-    planRider: undefined,
+    location: undefined,
+    quote: undefined,
     application: undefined,
     chosenQuote: undefined,
     beneficiaries: undefined,

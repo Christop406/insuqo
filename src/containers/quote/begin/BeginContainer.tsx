@@ -1,8 +1,8 @@
 import React from 'react';
 import IQStore, { IQStoreProps } from '../../../store/IQStore';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
-import { GeolocationService } from '../../../services/geolocation.service';
 import Begin from './components/Begin';
+import { QuoteService } from 'services/quote.service';
 
 type BeginContainerProps = IQStoreProps & RouteComponentProps;
 
@@ -24,7 +24,12 @@ class BeginContainer extends React.Component<BeginContainerProps, BeginContainer
         zipInvalid: false,
     };
 
-    private geolocation: GeolocationService = new GeolocationService();
+    private quoteService: QuoteService;
+
+    constructor(props: BeginContainerProps) {
+        super(props);
+        this.quoteService = new QuoteService();
+    }
 
     private updateZipCode = (zipCode?: string) => {
         const { triedSubmit } = this.state;
@@ -50,15 +55,17 @@ class BeginContainer extends React.Component<BeginContainerProps, BeginContainer
 
         this.setState({ loading: true, triedSubmit: true });
         try {
-            const localizeRes = await this.geolocation.localizeZip(zipCode);
-            if (localizeRes) {
-                store.set('zipCode')(localizeRes.code);
-                store.set('stateName')(localizeRes.stateName);
-                store.set('stateCode')(localizeRes.stateCode);
-                store.set('city')(localizeRes.cityName);
-                history.push('/quote/personal');
+            if (!zipCode) {
+                throw new Error('No ZIP Code Supplied');
+            }
+            const createRes = await this.quoteService.createQuoteRecord(zipCode);
+            if (createRes) {
+                const { location, quote } = createRes;
+                store.set('quote')(quote);
+                store.set('location')(location);
+                history.push(`/quote/${quote.id}/personal`);
             } else {
-                throw new Error('There was an error localizing the ZIP code.');
+                throw new Error('There was an error creating the quote record.');
             }
         } catch (err) {
             console.log(err);

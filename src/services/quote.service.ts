@@ -1,12 +1,32 @@
 import { ApiBaseService } from './api-base.service';
 import { DynamoQuote, QuoteInsertResponse } from '../model/dynamo-quote';
 import { ApiResponse } from '@insuqo/shared/types/api-response';
-import { QuickTermQuoteResult } from '@insuqo/shared';
+import { QuickTermQuoteResult, Quote } from '@insuqo/shared';
+import { ZipCode } from '@insuqo/shared/types/zip-code';
 
 export class QuoteService extends ApiBaseService {
 
     public async getQuotesByKey(key: string): Promise<DynamoQuote[] | undefined> {
-        return (await this.get<DynamoQuote[]>(`/quotes/${encodeURIComponent(key)}`)).data;
+        return [];
+    }
+
+    public async getQuoteRecord(id: string): Promise<{ quote: Quote; location: ZipCode } | undefined> {
+        return (await this.get<{ quote: Quote; location: ZipCode }>(`/quotes/${id}`)).data;
+    }
+
+    public async createQuoteRecord(zip: string): Promise<{ quote: Quote; location: ZipCode } | undefined> {
+        if (!zip || zip.length < 5) {
+            throw new Error('ZIP Code is invalid. Must be at least 5 characters.');
+        }
+        return (await this.post<{ quote: Quote; location: ZipCode }>('/quotes/new', { zip })).data;
+    }
+
+    public async updateQuoteRecord(id: string, updatedQuote: Partial<Omit<Quote, 'id'>>): Promise<Quote> {
+        const updateResponse = await this.put('/quotes/update', {
+            id,
+            ...updatedQuote,
+        });
+        return updateResponse.data;
     }
 
     public async getQuotesForApplication(applicationId: string): Promise<QuickTermQuoteResult[]> {
@@ -15,35 +35,12 @@ export class QuoteService extends ApiBaseService {
     }
 
     public runQuotes = (
-        state: string | undefined,
-        actualAge: number | undefined,
-        nearestAge: number | undefined,
-        amount: number | undefined,
-        termLength: number | undefined,
-        healthType: any,
-        sex: string | undefined,
-        rider: string | undefined,
-        showTop: number
+        quoteId: string,
+        showTop = 25
     ): Promise<ApiResponse<QuoteInsertResponse>> => {
-
-        const requiredParams = [state, actualAge, nearestAge, amount, termLength, healthType, sex, rider, showTop];
-
-        if (requiredParams.some(el => el === undefined)) {
-            return Promise.reject('undefined_data');
-        }
-
-        return this.get('/quotes/run', {
-            state: state,
-            actualAge: actualAge,
-            nearestAge: nearestAge,
-            amount: amount,
-            length: termLength,
-            // health: healthType,
-            sex: sex,
-            rider: rider,
+        return this.get(`/quotes/${quoteId}/run`, {
             top: showTop,
             paymentFreq: 'Monthly',
-            smoker: 'false'
         });
     }
 }

@@ -8,19 +8,22 @@ import { Checkbox } from '../../../../components/forms/Checkbox/Checkbox';
 import { RadioOption, RadioGroup } from '../../../../components/forms/RadioGroup/RadioGroup';
 import IQStore, { IQStoreProps } from '../../../../store/IQStore';
 import GenderModal from './GenderModal';
+import { Sex } from '@insuqo/shared';
+import { ZipCode } from '@insuqo/shared/types/zip-code';
 
 interface PersonalProps extends IQStoreProps {
     updateBirthday: (birthday: string) => any;
     onSubmit: () => any;
     updateTobacco: (tobacco: boolean) => any;
     updateCannabis: (cannabis: boolean) => any;
-    updateSex: (sex: 'male' | 'female') => any;
+    updateSex: (sex: Omit<Sex, Sex.UNKNOWN>) => any;
     birthDateError: boolean;
     birthDateMessage: string | undefined;
-    tobacco: boolean;
-    cannabis: boolean;
-    birthDate: string | undefined;
-    sex: 'male' | 'female' | 'none';
+    location: ZipCode | undefined;
+    sex: Sex | undefined;
+    tobaccoChecked: boolean;
+    cannabisChecked: boolean;
+    birthdate: string | undefined;
 }
 
 const styles = {
@@ -37,12 +40,12 @@ const styles = {
 class Personal extends Component<PersonalProps> {
 
     state = {
-        sModalVisible: false
+        sModalVisible: false,
     };
 
     private sexOptions: RadioOption<string>[] = [
-        { name: 'Male', value: 'male' },
-        { name: 'Female', value: 'female' }
+        { name: 'Male', value: Sex.MALE },
+        { name: 'Female', value: Sex.FEMALE }
     ];
 
 
@@ -65,21 +68,24 @@ class Personal extends Component<PersonalProps> {
 
     render = () => {
         const {
-            store,
             updateBirthday,
             onSubmit,
             birthDateError,
             birthDateMessage,
             updateCannabis,
             updateTobacco,
-            birthDate,
             updateSex,
-            sex
+            sex,
+            birthdate,
+            location,
+            cannabisChecked,
+            tobaccoChecked,
         } = this.props;
+
         return (
             <div>
                 <h1 className={classes.paneHeader} color="#9c37f2">The weather's fine
-                    in {store.get('stateName') ? store.get('stateName') : 'XXXX'}!</h1>
+                    in {location?.stateName ? location.stateName : 'XXXX'}!</h1>
                 <h3 style={styles.quoteSubtitle}>(Because we've got you covered!)</h3>
                 <p>
                     Before we can find quotes, we need to know a bit more about you as a person - let's start with your
@@ -95,7 +101,7 @@ class Personal extends Component<PersonalProps> {
                             className="input"
                             options={{ date: true, datePattern: ['m', 'd', 'Y'] }}
                             onChange={(e) => updateBirthday(e.target.value)}
-                            value={birthDate}
+                            value={birthdate || undefined}
                         />
                     </div>
                     {birthDateError ? <span className={classes.errorMessage}>{birthDateMessage}</span> : ''}
@@ -116,16 +122,18 @@ class Personal extends Component<PersonalProps> {
                             label="I regularly smoke tobacco products"
                             onChange={updateTobacco}
                             name="tobacco"
+                            checked={tobaccoChecked}
                         />
                         <Checkbox
                             label="I regularly use cannabis products"
                             onChange={updateCannabis}
                             name="cannabis"
+                            checked={cannabisChecked}
                         />
                     </div>
                 </div>
                 <button onClick={onSubmit} className="button primary full"
-                    disabled={(birthDate && birthDate.length < 10) || birthDateError || sex === 'none'}>Continue</button>
+                    disabled={(birthdate && birthdate.length < 10) || birthDateError || sex === Sex.UNKNOWN}>Continue</button>
             </div>
         );
     };

@@ -8,13 +8,14 @@ import s from './Plan.module.scss';
 import { Slider } from '../../../../components/forms/Slider/Slider';
 import { RadioOption, RadioGroup } from '../../../../components/forms/RadioGroup/RadioGroup';
 import IQStore, { IQStoreProps } from '../../../../store/IQStore';
+import { QuoteRider } from '@insuqo/shared';
 
 interface PlanProps extends IQStoreProps {
     onSubmit: () => any;
     onUpdateCoverage: (coverage: number) => any;
     onUpdateTermLength: (len: number) => any;
-    onUpdateRider: (rider: string) => any;
-    rider: string;
+    onUpdateRider: (rider: QuoteRider) => any;
+    rider: QuoteRider | undefined;
     termLength: number;
     coverageAmount: number;
 }
@@ -27,12 +28,12 @@ const styles = {
 
 class Plan extends Component<PlanProps> {
 
-    private riderOptions: RadioOption<string>[] = [
-        { name: 'Accidental Death', value: 'accidental_death' },
-        { name: 'Waiver of Premium', value: 'waiver_premium' },
-        { name: 'Return of Premium', value: 'return_premium' },
-        { name: 'Child Rider', value: 'child' },
-        { name: 'None', value: 'none' }
+    private readonly riderOptions: RadioOption<string | undefined>[] = [
+        { name: 'Accidental Death', value: QuoteRider.AccidentalDeath },
+        { name: 'Waiver of Premium', value: QuoteRider.WaiverOfPremium },
+        { name: 'Return of Premium', value: QuoteRider.ReturnOfPremium },
+        { name: 'Child Rider', value: QuoteRider.ChildRider },
+        { name: 'None', value: undefined }
     ];
 
     showHelpMeChoose = () => {
@@ -61,6 +62,7 @@ class Plan extends Component<PlanProps> {
             termLength,
             coverageAmount
         } = this.props;
+
         return (
             <div>
                 <h1 className={s.paneHeader}>Choose your coverage.</h1>
