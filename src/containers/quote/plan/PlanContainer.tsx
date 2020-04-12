@@ -47,7 +47,7 @@ class PlanContainer extends React.Component<PlanContainerProps, PlanContainerSta
             throw new Error('No quote to update');
         }
 
-        const updatedQuote = await this.quoteService.updateQuoteRecord(currentQuote.id,{
+        const updatedQuote = await this.quoteService.updateQuoteRecord(currentQuote.id, {
             coverage: covAmount,
             termLength,
             rider,
@@ -66,6 +66,7 @@ class PlanContainer extends React.Component<PlanContainerProps, PlanContainerSta
     };
 
     updateRider = (rider: QuoteRider) => {
+        console.log({ rider });
         this.setState({ rider });
     };
 

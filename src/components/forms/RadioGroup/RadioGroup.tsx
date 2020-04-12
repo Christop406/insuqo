@@ -19,8 +19,8 @@ interface RadioGroupProps {
 export const RadioGroup: React.FC<RadioGroupProps> = ({ value, options, onChange, name, className, style }) => {
 
     const buildRadioButtons = (options: RadioOption[] = []) => {
-        return options.map((o) =>
-            <label key={o.value} className={s.radio}>
+        return options.map((o, i) =>
+            <label key={`${i}${o.value}`} className={s.radio}>
                 <input type="radio" checked={value === o.value} name={name} value={o.value} onChange={(e) => onChange && onChange(e.target.value)} />
                 {o.name}
             </label>

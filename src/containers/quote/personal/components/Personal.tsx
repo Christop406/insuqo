@@ -133,7 +133,7 @@ class Personal extends Component<PersonalProps> {
                     </div>
                 </div>
                 <button onClick={onSubmit} className="button primary full"
-                    disabled={(birthdate && birthdate.length < 10) || birthDateError || sex === Sex.UNKNOWN}>Continue</button>
+                    disabled={((birthdate?.length || 0) < 10) || birthDateError || !sex}>Continue</button>
             </div>
         );
     };

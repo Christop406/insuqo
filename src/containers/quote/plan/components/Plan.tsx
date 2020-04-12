@@ -33,7 +33,7 @@ class Plan extends Component<PlanProps> {
         { name: 'Waiver of Premium', value: QuoteRider.WaiverOfPremium },
         { name: 'Return of Premium', value: QuoteRider.ReturnOfPremium },
         { name: 'Child Rider', value: QuoteRider.ChildRider },
-        { name: 'None', value: undefined }
+        { name: 'None', value: '' }
     ];
 
     showHelpMeChoose = () => {
@@ -96,7 +96,7 @@ class Plan extends Component<PlanProps> {
                     <h2 className={s.paneHeader}>Other Options</h2>
                     <h3 className={s.paneHeader}>Riders</h3>
                     <p><button className="button text" style={{ marginTop: -10 }} onClick={this.showRiderInfo}>What are these?</button></p>
-                    <RadioGroup name="rider" value={rider} options={this.riderOptions} onChange={onUpdateRider} />
+                    <RadioGroup name="rider" value={rider || ''} options={this.riderOptions} onChange={onUpdateRider} />
                 </div>
                 <button onClick={onSubmit} className="button primary full">Get Quotes</button>
             </div>

@@ -2,14 +2,17 @@ import React, { Component } from 'react';
 import { Accordion, AccordionPanel, Anchor, Box, Heading, Paragraph } from 'grommet';
 import { formatCovAmount, logoImageForCompanyID, splitPrice } from '../../../../func';
 import Spinner from 'react-spinkit';
-import { QuickTermQuoteResult, PremiumMode } from '@insuqo/shared';
+import { QuickTermQuoteResult, PremiumMode, Quote } from '@insuqo/shared';
 import s from './Results.module.scss';
 import IQStore, { IQStoreProps } from '../../../../store/IQStore';
-import { withRouter, RouteComponentProps } from 'react-router-dom';
+import { withRouter, RouteComponentProps, Link } from 'react-router-dom';
 import { QuoteHelper } from '../../../../util/quote-helper';
+import { Optional } from 'components/base/Optional';
+import { Button } from 'components/forms/Button/Button';
 
 interface ResultsProps extends IQStoreProps, RouteComponentProps {
     loading: boolean;
+    quote: Quote | undefined;
     quotes: QuickTermQuoteResult[];
     onApply: (quote: QuickTermQuoteResult, event: any) => any;
 }
@@ -55,7 +58,7 @@ class Results extends Component<ResultsProps, ResultsState> {
         if (quotes === undefined || quotes.length === 0) {
             return <div />;
         }
-        return quotes.map((quote, index) => {
+        return quotes.sort((a, b) => QuoteHelper.quoteSortValue(a, b, freq as PremiumMode)).map((quote, index) => {
             return (
                 <AccordionPanel key={index} label={this.formatQuoteHeading(quote, freq)}>
                     {this.formatQuoteBody(quote)}
@@ -160,29 +163,35 @@ class Results extends Component<ResultsProps, ResultsState> {
 
     render = () => {
         const { active, paymentFrequency } = this.state;
-        const { loading } = this.props;
+        const { loading, quote } = this.props;
         return (
             <>
-                {loading ?
+                <Optional condition={loading}>
                     <div className={s.loadingContainer} style={{ visibility: loading ? 'visible' : 'hidden' }}>
                         <Spinner fadeIn="none" name='folding-cube' color="#9c37f2" />
-                    </div> :
-                    <>
-                        <h1 className="text-primary">Here are your quotes</h1>
-                        <h3 className={s.quoteSubtitle}>Click on each for more info.</h3>
-                        <div className={s.paymentFrequencyContainer}>
-                            <h5 className={s.frequencyLabel}>Payment Frequency </h5>
-                            <select className="input select inline" value={paymentFrequency} onChange={this.updateFreq}>
-                                {frequencies.map((option, index) => <option value={option.val}
-                                    key={index}>{option.name}</option>)}
-                            </select>
-                        </div>
+                    </div>
+                </Optional>
+                <Optional condition={!loading}>
+                    <h1 className="text-primary">Here are your quotes</h1>
+                    <h3 className={s.quoteSubtitle}>Click on each for more info.</h3>
+                    <div className={s.paymentFrequencyContainer}>
+                        <h5 className={s.frequencyLabel}>Payment Frequency </h5>
+                        <select className="input select inline" value={paymentFrequency} onChange={this.updateFreq}>
+                            {frequencies.map((option, index) => <option value={option.val}
+                                key={index}>{option.name}</option>)}
+                        </select>
+                    </div>
+                    <Optional condition={this.props.quotes.length > 0}>
                         <Accordion animate onActive={this.updateActiveIndex}
                             activeIndex={loading ? undefined : active}>
                             {this.formatQuotes(paymentFrequency)}
                         </Accordion>
-                    </>
-                }
+                    </Optional>
+                    <Optional condition={this.props.quotes.length === 0}>
+                        No Quotes Found
+                        <Button type="link" href={`/quote/${quote?.id}/personal`} primary label="Edit Quote Info"/>
+                    </Optional>
+                </Optional>
             </>
         );
     };

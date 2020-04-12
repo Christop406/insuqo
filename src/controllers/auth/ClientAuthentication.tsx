@@ -8,7 +8,7 @@ import iqLogo from '../../assets/img/insuqo-logo.png';
 import cx from 'classnames';
 
 interface ClientAuthenticationProps {
-    onAuthenticate: (user: auth.UserCredential) => unknown;
+    onAuthenticate?: (user: auth.UserCredential) => unknown;
     type?: 'login' | 'signup';
 }
 
@@ -74,7 +74,7 @@ export default class ClientAuthentication extends React.Component<ClientAuthenti
         try {
             const user = await Auth.signInWithEmailAndPassword(email, password);
             console.log(user, user.user?.displayName);
-            this.props.onAuthenticate(user);
+            this.props.onAuthenticate && this.props.onAuthenticate(user);
         } catch (err) {
             let formErrorText: string | undefined = undefined;
             switch (err.code as FirebaseError) {

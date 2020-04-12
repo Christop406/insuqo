@@ -2,20 +2,18 @@ import React from 'react';
 import IQStore, { IQStoreProps } from '../../../store/IQStore';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import Results from './components/Results';
-import { ApplicationService } from '../../../services/application.service';
 import { QuoteService } from '../../../services/quote.service';
-import { PremiumMode, QuickTermQuoteResult } from '@insuqo/shared';
+import { PremiumMode, QuickTermQuoteResult, Quote } from '@insuqo/shared';
 import { Auth } from '../../../services/firebase';
-import { QuoteHelper } from '../../../util/quote-helper';
-import qs from 'query-string';
 import ClientAuthentication from '../../../controllers/auth/ClientAuthentication';
-import { ZipCode } from '@insuqo/shared/types/zip-code';
+import { Optional } from 'components/base/Optional';
 
 type ResultsContainerProps = IQStoreProps & RouteComponentProps;
 
 interface ResultsContainerState {
     paymentFrequency: PremiumMode;
     loading: boolean;
+    quoteRecord: Quote | undefined;
     quotes: QuickTermQuoteResult[];
     showAuthModal: boolean;
 }
@@ -26,12 +24,10 @@ class ResultsContainer extends React.Component<ResultsContainerProps, ResultsCon
         loading: false,
         quotes: [],
         showAuthModal: false,
+        quoteRecord: undefined,
     };
 
-    private applicationService = new ApplicationService();
     private quoteService = new QuoteService();
-    private location?: ZipCode;
-    private birthDate?: string;
     private selectedQuote?: QuickTermQuoteResult;
 
     componentDidMount = async () => {
@@ -39,16 +35,16 @@ class ResultsContainer extends React.Component<ResultsContainerProps, ResultsCon
 
         try {
             const newQuotes = await this.getQuotes();
-            this.setState({ loading: false, quotes: newQuotes.data!.quotes });
-            this.props.history.push({ search: qs.stringify({ id: newQuotes.data?.key }) });
+            this.setState({
+                loading: false,
+                quotes: newQuotes.data!.quotes,
+                quoteRecord: store.get('quote'),
+            });
+            // this.props.history.push({ search: qs.stringify({ id: newQuotes.data?.key }) });
         } catch (error) {
             console.warn(error);
             throw error;
         }
-
-        this.location = store.get('location');
-
-        this.birthDate = store.get('quote')?.birthdate;
     };
 
     private getQuotes = () => {
@@ -95,16 +91,18 @@ class ResultsContainer extends React.Component<ResultsContainerProps, ResultsCon
     };
 
     render = () => {
-        const { loading, quotes, showAuthModal } = this.state;
+        const { loading, quotes, showAuthModal, quoteRecord } = this.state;
         return (
             <>
                 <Results
                     loading={loading}
+                    quote={quoteRecord}
                     quotes={quotes}
                     onApply={this.apply}
                 />
-                {showAuthModal &&
-                    <ClientAuthentication type="signup" onAuthenticate={this.handleAuthentication} />}
+                <Optional condition={showAuthModal}>
+                    <ClientAuthentication type="signup" onAuthenticate={this.handleAuthentication} />
+                </Optional>
             </>
         );
     }

@@ -20,7 +20,7 @@ class Main extends Component<MainProps> {
         return (
             <Grommet theme={grommet}>
                 <Switch>
-                    <Route path="/register" component={ClientAuthentication} />
+                    <Route path="/register" component={() => <Suspense fallback={<div>Loading...</div>}><ClientAuthentication/></Suspense>} />
                     <Route path="/client/login" component={() => <Suspense fallback={<div></div>}><ClientLogin /></Suspense>} />
                     <Redirect path="/login" to="/client/login" />
                     <Route component={QuotingTool} />
