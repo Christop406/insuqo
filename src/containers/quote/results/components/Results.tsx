@@ -5,7 +5,7 @@ import Spinner from 'react-spinkit';
 import { QuickTermQuoteResult, PremiumMode, Quote } from '@insuqo/shared';
 import s from './Results.module.scss';
 import IQStore, { IQStoreProps } from '../../../../store/IQStore';
-import { withRouter, RouteComponentProps, Link } from 'react-router-dom';
+import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { QuoteHelper } from '../../../../util/quote-helper';
 import { Optional } from 'components/base/Optional';
 import { Button } from 'components/forms/Button/Button';

@@ -9,16 +9,18 @@ import states from '@insuqo/shared/constants/states.json';
 import 'antd/es/modal/style/css';
 import Modal from 'antd/es/modal';
 import PaymentFrequency from 'components/application/PaymentFrequency/PaymentFrequency';
+import { ZipCode } from '@insuqo/shared/types/zip-code';
 
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface BasicInfoProps {
     application: Application;
     chosenQuote: QuickTermQuoteResult;
+    location: ZipCode | undefined;
     onSubmit: (application: Application) => any;
 }
 
-const BasicInfo: React.FC<BasicInfoProps> = ({ application, chosenQuote, onSubmit }) => {
+const BasicInfo: React.FC<BasicInfoProps> = ({ application, chosenQuote, onSubmit, location }) => {
     const methods = useForm<Application>({ mode: 'onChange', defaultValues: application });
     const { handleSubmit, register, formState } = methods;
     const { formGroup } = s;
@@ -99,22 +101,22 @@ const BasicInfo: React.FC<BasicInfoProps> = ({ application, chosenQuote, onSubmi
                                 <label htmlFor="line1">
                                     Street Address (Line 1)<span className="text-danger">*</span>
                                 </label>
-                                <input className="input" type="text" placeholder="635 Main St." name="address.line1" ref={register({ required: true })} />
+                                <input className="input" type="text" placeholder="635 Main St." name="address.streetAddress" ref={register({ required: true })} />
                             </div>
                             <div className={cx(formGroup, 'col-sm-4')}>
                                 <label htmlFor="line2">
                                     Apt/Unit (Line 2)
                                 </label>
-                                <input className="input" type="text" placeholder="#36B" name="address.line2" ref={register} />
+                                <input className="input" type="text" placeholder="#36B" name="address.unit" ref={register} />
                             </div>
                             <div className={s.formSection}>
                                 <div className="d-flex align-items-center w-100 justify-content-end">
                                     <button onClick={showCityReasoning} className="btn purpleText btn-sm btn-link" type="button">
                                         Why can't I change my city?
                                     </button>
-                                    <span className="d-block text-muted not-allowed">{application.address?.city},</span>
-                                    <span className="d-block text-muted not-allowed">&nbsp;{application.address?.state}</span>
-                                    <span className="d-block text-muted not-allowed">&nbsp;{application.address?.zipCode}</span>
+                                    <span className="d-block text-muted not-allowed">{location?.cityName},</span>
+                                    <span className="d-block text-muted not-allowed">&nbsp;{location?.stateCode}</span>
+                                    <span className="d-block text-muted not-allowed">&nbsp;{location?.code}</span>
                                 </div>
                             </div>
                         </div>

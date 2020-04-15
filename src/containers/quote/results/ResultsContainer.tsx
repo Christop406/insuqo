@@ -7,6 +7,7 @@ import { PremiumMode, QuickTermQuoteResult, Quote } from '@insuqo/shared';
 import { Auth } from '../../../services/firebase';
 import ClientAuthentication from '../../../controllers/auth/ClientAuthentication';
 import { Optional } from 'components/base/Optional';
+import { ApplicationService } from 'services/application.service';
 
 type ResultsContainerProps = IQStoreProps & RouteComponentProps;
 
@@ -21,12 +22,13 @@ interface ResultsContainerState {
 class ResultsContainer extends React.Component<ResultsContainerProps, ResultsContainerState> {
     state: ResultsContainerState = {
         paymentFrequency: PremiumMode.MONTHLY,
-        loading: false,
+        loading: true,
         quotes: [],
         showAuthModal: false,
         quoteRecord: undefined,
     };
 
+    private applicationService = new ApplicationService();
     private quoteService = new QuoteService();
     private selectedQuote?: QuickTermQuoteResult;
 
@@ -57,14 +59,14 @@ class ResultsContainer extends React.Component<ResultsContainerProps, ResultsCon
     };
 
     private createApplication = async (quote: QuickTermQuoteResult) => {
-        // const app = await this.applicationService.createApplication(quote.id, quote.RecID, this.birthDate!, this.location!);
-        // if (app && app.id) {
-        //     console.log(app);
-        //     this.props.history.push(`/application/${app.id}/apply`);
-        // } else {
-        //     console.log('err');
-        //     throw new Error('There was an error creating the application');
-        // }
+        const app = await this.applicationService.createApplication(quote);
+        if (app && app.id) {
+            console.log(app);
+            this.props.history.push(`/application/${app.id}/apply`);
+        } else {
+            console.log('err');
+            throw new Error('There was an error creating the application');
+        }
     };
 
     private apply = async (quote: QuickTermQuoteResult, event: any) => {
@@ -78,12 +80,14 @@ class ResultsContainer extends React.Component<ResultsContainerProps, ResultsCon
                 this.selectedQuote = quote;
                 this.setState({ showAuthModal: true });
             }
+            console.log(this.selectedQuote);
         });
     };
 
     private handleAuthentication = async () => {
         this.setState({ showAuthModal: false });
         const { selectedQuote } = this;
+        console.log(selectedQuote);
 
         if (selectedQuote) {
             await this.createApplication(selectedQuote);

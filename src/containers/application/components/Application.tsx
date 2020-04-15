@@ -110,10 +110,12 @@ class Application extends Component<ApplicationProps, ApplicationState> {
 
     private loadApplication = async () => {
         const appId = this.props.match.params.appId;
-        const [application, quotes] = await Promise.all([
+        const [app, quotes] = await Promise.all([
             this.applicationService.getApplication(appId),
             this.quoteService.getQuotesForApplication(appId)
         ]);
+        
+        const application = app?.application;
 
         if (application && quotes) {
             application.quotes = quotes;
@@ -138,12 +140,16 @@ class Application extends Component<ApplicationProps, ApplicationState> {
                         break;
                 }
                 Logger.info(application);
+                
                 this.setState({
                     application,
                     chosenQuote
                 });
+
                 this.props.store.set('application')(application);
                 this.props.store.set('chosenQuote')(chosenQuote);
+                this.props.store.set('location')(app?.location);
+                this.props.store.set('quote')(app?.quote);
             }
         } else {
             // error

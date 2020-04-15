@@ -8,7 +8,7 @@
     "@fortawesome/free-regular-svg-icons": "^5.11.2",
     "@fortawesome/free-solid-svg-icons": "^5.11.2",
     "@fortawesome/react-fontawesome": "^0.1.7",
-    "@insuqo/shared": "^1.0.1-3",
+    "@insuqo/shared": "^1.0.1-6",
     "@vardius/react-user-media": "^1.0.1",
     "antd": "^3.24.3",
     "axios": "^0.18.1",

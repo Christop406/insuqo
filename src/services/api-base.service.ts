@@ -14,7 +14,9 @@ export class ApiBaseService {
         })).data;
     }
 
-    protected async authenticatedPut<T>(endpoint: string, body?: any): Promise<ApiResponse<T>> {
+    protected async authenticatedPut<T>(endpoint: string, body?: any): Promise<ApiResponse<T>>;
+    protected async authenticatedPut<B extends object, T>(endpoint: string, body?: B): Promise<ApiResponse<T>>;
+    protected async authenticatedPut<B extends object, T>(endpoint: string, body?: B): Promise<ApiResponse<T | undefined>> {
         return (await axios.put<ApiResponse<T>>(ApiBaseService.buildURL(endpoint), body, {
             headers: {
                 Authorization: 'Bearer ' + await ApiBaseService.getAuthHeader(),

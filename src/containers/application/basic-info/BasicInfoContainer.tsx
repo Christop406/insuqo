@@ -24,11 +24,13 @@ class BasicInfoContainer extends React.Component<BasicInfoContainerProps> {
         const { store } = this.props;
         const application = store.get('application');
         const chosenQuote = store.get('chosenQuote');
-        console.log(application);
+        const location = store.get('location');
+
         if (application && chosenQuote) {
             return <BasicInfo
                 chosenQuote={chosenQuote}
                 application={application}
+                location={location}
                 onSubmit={this.handleSubmit} />;
         }
 
@@ -36,11 +38,10 @@ class BasicInfoContainer extends React.Component<BasicInfoContainerProps> {
     }
 
     private handleSubmit = async (app: Application) => {
-        let application = this.props.store.get('application');
-        application = { ...application, ...app };
-        const res = await this.applicationService.updateApplication(application.id, application);
+        const application = this.props.store.get('application');
+        const res = await this.applicationService.updateApplication(application!.id, app);
         this.props.store.set('application')(res);
-        this.props.history.push(`/application/${application.id}/beneficiaries`);
+        this.props.history.push(`/application/${application!.id}/beneficiaries`);
     };
 }
 

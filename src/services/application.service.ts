@@ -1,6 +1,6 @@
-import { Application, ApplicationStatus, Address, Beneficiary } from '@insuqo/shared';
+import { Application, ApplicationStatus, Beneficiary, QuickTermQuoteResult, Quote } from '@insuqo/shared';
 import { ApiBaseService, RequestConfig } from './api-base.service';
-import { Logger } from './logger';
+import { ZipCode } from '@insuqo/shared/types/zip-code';
 
 export class ApplicationService extends ApiBaseService {
     public async getStatus(sk: string): Promise<ApplicationStatus | undefined> {
@@ -8,12 +8,12 @@ export class ApplicationService extends ApiBaseService {
         return statusResponse.data && statusResponse.data.status;
     }
 
-    public async createApplication(quoteId: string, quoteRecId: number, birthDate: string, address: Partial<Address>): Promise<Application | undefined> {
-        return (await this.authenticatedPut<Application>('/applications/new', { quoteId, quoteRecId, address, birthDate })).data;
+    public async createApplication(quoteKey: Pick<QuickTermQuoteResult, 'id' | 'RecID'>): Promise<Application | undefined> {
+        return (await this.authenticatedPut<typeof quoteKey, Application>('/applications/new', quoteKey)).data;
     }
 
-    public async getApplication(id: string): Promise<Application | undefined> {
-        const applicationRes = await this.authenticatedGet<Application>(`/applications/${id}`);
+    public async getApplication(id: string): Promise<{application: Application; quote?: Quote; location?: ZipCode} | undefined> {
+        const applicationRes = await this.authenticatedGet<any>(`/applications/${id}`);
         return applicationRes.data;
     }
 
@@ -35,8 +35,7 @@ export class ApplicationService extends ApiBaseService {
     }
 
     public async updateApplication(applicationId: string, application: Partial<Application>): Promise<Application | undefined> {
-        Logger.log(application);
-        const res = await this.authenticatedPut<Application>(`/applications/${applicationId}/update`, application);
+        const res = await this.authenticatedPut<Application>(`/applications/${applicationId}`, application);
         return res.data;
     }
 
