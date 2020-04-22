@@ -49,7 +49,8 @@ class PaymentInfoContainer extends React.Component<PaymentInfoContainerProps, Pa
 
     handleSubmit = async (paymentInfo: Partial<Application>) => {
         const application = this.props.store.get('application');
-        await this.applicationService.updatePaymentInfo(application!.id, { ...paymentInfo });
+        const { checkFront, checkBack } = this;
+        await this.applicationService.updateApplication(application!.id, { ...paymentInfo, checkFront: checkFront?.id, checkBack: checkBack?.id });
         const { history, continueTo } = this.props;
 
         history.push(continueTo || `/application/${application?.id}/review`);
@@ -69,16 +70,13 @@ class PaymentInfoContainer extends React.Component<PaymentInfoContainerProps, Pa
     handleAddImage: ProcessServerConfigFunction = async (fileName, file, _m, load, error) => {
         const application = this.props.store.get('application')!;
         try {
-            const uploadedFile = await this.signAndUpload(application, file);
-            if (fileName === 'front') {
-                this.checkFront = uploadedFile;
-            } else if (fileName === 'back') {
-                this.checkBack = uploadedFile;
+            const uploadedFile = await this.applicationService.uploadFile(application.id, file, fileName);
+
+            if (!uploadedFile) {
+                throw new Error('WHOOPSY');
             }
 
-            console.log(this.checkFront, this.checkBack);
-
-            load(uploadedFile);
+            load(uploadedFile!);
         } catch (err) {
             error(err);
         }

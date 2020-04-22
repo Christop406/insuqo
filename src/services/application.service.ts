@@ -12,7 +12,7 @@ export class ApplicationService extends ApiBaseService {
         return (await this.authenticatedPut<typeof quoteKey, Application>('/applications/new', quoteKey)).data;
     }
 
-    public async getApplication(id: string): Promise<{application: Application; quote?: Quote; location?: ZipCode} | undefined> {
+    public async getApplication(id: string): Promise<{ application: Application; quote?: Quote; location?: ZipCode } | undefined> {
         const applicationRes = await this.authenticatedGet<any>(`/applications/${id}`);
         return applicationRes.data;
     }
@@ -22,16 +22,20 @@ export class ApplicationService extends ApiBaseService {
         return benRes.data || [];
     }
 
-    public async getImageUrl(appId: string, imageKey: string): Promise<string | undefined> {
-        return (await this.authenticatedGet<string>(`/applications/${appId}/image-url/${imageKey}`)).data;
+    public async getImageUrl(appId: string, imageKey: string): Promise<string | undefined>;
+    public async getImageUrl(appId: string, imageKey: string, includeDelete: boolean): Promise<{ read: string; delete: string } | undefined>;
+    public async getImageUrl(appId: string, imageKey: string, includeDelete?: boolean): Promise<{ read: string; delete: string } | string | undefined> {
+        let queryString = '';
+
+        if (includeDelete !== undefined) {
+            queryString += `?includeDelete=${includeDelete}`;
+        }
+
+        return (await this.authenticatedGet<string>(`/applications/${appId}/image-url/${imageKey}${queryString}`)).data;
     }
 
     public async updateBasicInfo(applicationId: string, application: Application): Promise<Application | undefined> {
         return (await this.authenticatedPut<Application>(`/applications/${applicationId}/basic-info`, application)).data;
-    }
-
-    public async updatePaymentInfo(applicationId: string, paymentInfo: any): Promise<Application | undefined> {
-        return (await this.authenticatedPut<Application>(`/applications/${applicationId}/payment-info`, paymentInfo)).data;
     }
 
     public async updateApplication(applicationId: string, application: Partial<Application>): Promise<Application | undefined> {
@@ -50,6 +54,19 @@ export class ApplicationService extends ApiBaseService {
         } else {
             throw new Error(res.error);
         }
+    }
+
+    public async uploadFile(applicationId: string, file: any, fileName: string): Promise<string | undefined> {
+        const formData = new FormData();
+        formData.append('file', file);
+
+        const res = await this.authenticatedPost<string>(`/applications/${applicationId}/upload?named=${fileName || ''}`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            }
+        });
+
+        return res.data;
     }
 }
 

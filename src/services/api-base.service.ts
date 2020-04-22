@@ -24,6 +24,17 @@ export class ApiBaseService {
         })).data;
     }
 
+    protected async authenticatedPost<T>(endpoint: string, body?: any, config?: RequestConfig): Promise<ApiResponse<T>>;
+    protected async authenticatedPost<B extends object, T>(endpoint: string, body?: B, config?: RequestConfig): Promise<ApiResponse<T>>;
+    protected async authenticatedPost<B extends object, T>(endpoint: string, body?: B, config: RequestConfig = {}): Promise<ApiResponse<T | undefined>> {
+        return (await axios.post<ApiResponse<T>>(ApiBaseService.buildURL(endpoint), body, {
+            headers: {
+                Authorization: 'Bearer ' + await ApiBaseService.getAuthHeader(),
+                ...config.headers,
+            }
+        })).data;
+    }
+
     protected async get<T>(endpoint: string, queryParams?: any): Promise<ApiResponse<T>> {
         return (await axios.get<ApiResponse<T>>(ApiBaseService.buildURL(endpoint), {
             params: queryParams

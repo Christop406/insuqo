@@ -21,14 +21,13 @@ class ReviewContainer extends React.Component<ReviewContainerProps, any> {
         super(props);
         this.beneficiaryService = new BeneficiaryService();
         this.applicationService = new ApplicationService();
-        console.log('heh');
+
         this.loadBeneficiaries.bind(this);
         this.handleSubmit.bind(this);
         this.loadCheckImages.bind(this);
     }
 
     public componentDidMount(): void {
-        console.log('cdm');
         document.title = 'Review - Application | INSUQO';
         Promise.all([
             this.loadBeneficiaries(),
@@ -39,11 +38,15 @@ class ReviewContainer extends React.Component<ReviewContainerProps, any> {
     public render(): JSX.Element {
         const application = this.props.store.get('application');
         const chosenQuote = this.props.store.get('chosenQuote');
+        const quote = this.props.store.get('quote');
         const beneficiaries = this.props.store.get('beneficiaries');
+        const location = this.props.store.get('location');
         const { frontImage, backImage } = this.state;
         return (
             <ApplicationReview
                 application={application}
+                quote={quote}
+                location={location}
                 onSubmit={this.handleSubmit}
                 quotes={application?.quotes}
                 chosenQuote={chosenQuote}

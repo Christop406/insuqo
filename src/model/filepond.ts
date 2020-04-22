@@ -44,4 +44,24 @@ type ProgressServerConfigFunction = (
     totalDataAmount: number,
 ) => void;
 
+export type LoadServerConfigFunction = (
+    source: any,
+    /** Should call the load method with a file object or blob when done */
+    load: (file: ActualFileObject) => void,
+    /** Can call the error method is something went wrong, should exit after */
+    error: (errorText: string) => void,
+    /**
+     * Should call the progress method to update the progress to 100% before calling load()
+     * Setting computable to false switches the loading indicator to infinite mode
+     */
+    progress: ProgressServerConfigFunction,
+    /** Let FilePond know the request has been cancelled */
+    abort: () => void,
+    /*
+     * Can call the headers method to supply FilePond with early response header string
+     * https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/getAllResponseHeaders
+     */
+    headers: (headersString: string) => void,
+) => void;
+
 type ActualFileObject = Blob & {readonly lastModified: number; readonly name: string};

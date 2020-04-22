@@ -18,6 +18,22 @@ export class AuthClass implements Omit<AuthType, OverriddenFeatures> {
         return this.auth;
     }
 
+    public async header(): Promise<{ Authorization: string } | undefined> {
+        const Authorization = await new Promise<string>((resolve, reject) => {
+            this.onAuthStateChanged((user) => {
+                if (user) {
+                    resolve(user.getIdToken());
+                } else {
+                    reject();
+                }
+            });
+        });
+
+        return {
+            Authorization,
+        };
+    }
+
     public async getTenantId(): Promise<string | undefined> {
         return (await this.getClient()).tenantId || undefined;
     }

@@ -1,14 +1,16 @@
 import React from 'react';
-import { Application, QuickTermQuoteResult, PremiumMode } from '@insuqo/shared';
+import { Application, QuickTermQuoteResult, PremiumMode, Quote } from '@insuqo/shared';
 import s from './ApplicationReview.module.scss';
 import cx from 'classnames';
 import { logoImageForCompanyID, formatCovAmount } from '../../../../func';
 import { Beneficiary } from 'model/beneficiary';
+import { Optional } from 'components/base/Optional';
+import { ZipCode } from '@insuqo/shared/types/zip-code';
 
 // const applicationService = new ApplicationService();
 
 const ApplicationReview: React.FC<ApplicationReviewProps> = (props) => {
-    const { application, quotes, beneficiaries, checkImages } = props;
+    const { application, quotes, beneficiaries, checkImages, quote, location } = props;
     let { chosenQuote } = props;
 
     // const [image1, setImage1] = useState<string>();
@@ -55,7 +57,7 @@ const ApplicationReview: React.FC<ApplicationReviewProps> = (props) => {
                         <p className={s.field}><span className={s.label}>Last Name</span> {application.lastName}</p>
                     </div>
                     <div className={s.fieldRow}>
-                        <p className={s.field}><span className={s.label}>Date of Birth</span> {application.birthDate?.substring(0, 10)}</p>
+                        <p className={s.field}><span className={s.label}>Date of Birth</span> {quote?.birthdate}</p>
                         <p className={s.field}><span className={s.label}>Birth Country</span> {application.countryOfBirth}</p>
                     </div>
                 </div>
@@ -73,10 +75,13 @@ const ApplicationReview: React.FC<ApplicationReviewProps> = (props) => {
                     <div className={s.addressContainer}>
                         <div className={s.field}>
                             <div className={s.label}>Address</div>
-                            <p>{application.address?.line1} {application.address?.appt}</p>
-                            {application.address?.line2 && <p>{application.address?.line2} (Line 2)</p>}
-                            {application.address?.line3 && <p>{application.address?.line3} (Line 3)</p>}
-                            <p>{application.address?.city}, {application.address?.state} {application.address?.zipCode}</p>
+                            <p>
+                                {application.address?.streetAddress}
+                                <Optional condition={application.address?.unit}>
+                                    Apt {application.address?.unit}
+                                </Optional>
+                            </p>
+                            <p>{location?.cityName}, {location?.stateCode} {location?.code}</p>
                         </div>
                         <br />
                     </div>
@@ -125,14 +130,6 @@ const ApplicationReview: React.FC<ApplicationReviewProps> = (props) => {
                     </div>
                     {application.referrer && <p className={s.field}><span className={s.label}>Referred By</span> {application.referrer}</p>}
                 </div>
-                {/* <div className={s.reviewSection}>
-                    <h2>Application Info</h2>
-                    <p>Creation: {application.creation}</p>
-                    <p>ID: {application.id}</p>
-                    <p>Status: {application.status}</p>
-                    <p>Updated: {application.updateTime}</p>
-                    <p>Owner: {application.userId}</p>
-                </div> */}
             </div>
             <div className={s.actionButtonContainer}>
                 <button onClick={submitApplication} className="primary button">Submit</button>
@@ -164,6 +161,8 @@ const getQuotePrice = (quote: QuickTermQuoteResult, paymentFrequency?: PremiumMo
 
 interface ApplicationReviewProps {
     application: Application | undefined;
+    quote: Quote | undefined;
+    location: ZipCode | undefined;
     quotes?: QuickTermQuoteResult[];
     chosenQuote?: QuickTermQuoteResult;
     beneficiaries?: Beneficiary[];
