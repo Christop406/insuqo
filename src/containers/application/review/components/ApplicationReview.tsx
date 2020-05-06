@@ -10,7 +10,7 @@ import { ZipCode } from '@insuqo/shared/types/zip-code';
 // const applicationService = new ApplicationService();
 
 const ApplicationReview: React.FC<ApplicationReviewProps> = (props) => {
-    const { application, quotes, beneficiaries, checkImages, quote, location } = props;
+    const { application, quotes, beneficiaries, checkFront, checkBack, quote, location } = props;
     let { chosenQuote } = props;
 
     // const [image1, setImage1] = useState<string>();
@@ -113,8 +113,8 @@ const ApplicationReview: React.FC<ApplicationReviewProps> = (props) => {
                         <p className={s.field}><span className={s.label}>Account Number</span> <span className="code">{application.accountNumber}</span></p>
                         <p className={s.field}><span className={s.label}>Routing Number</span> <span className="code">{application.routingNumber}</span></p>
                     </div>
-                    <img alt="Front of check" className={s.paymentImage} src={checkImages && checkImages[0]}></img>
-                    <img alt="Back of check" className={s.paymentImage} src={checkImages && checkImages[1]}></img>
+                    <img alt="Front of check" className={s.paymentImage} src={checkFront}></img>
+                    <img alt="Back of check" className={s.paymentImage} src={checkBack}></img>
                 </div>
                 <div className={s.reviewSection}>
                     <h2>Other Plan Options</h2>
@@ -166,7 +166,8 @@ interface ApplicationReviewProps {
     quotes?: QuickTermQuoteResult[];
     chosenQuote?: QuickTermQuoteResult;
     beneficiaries?: Beneficiary[];
-    checkImages?: string[];
+    checkFront?: string;
+    checkBack?: string;
     onSubmit: (application: Application) => any;
 }
 

@@ -11,7 +11,7 @@ interface ReviewContainerProps extends IQStoreProps, RouteComponentProps { }
 class ReviewContainer extends React.Component<ReviewContainerProps, any> {
 
     state: any = {
-        
+
     };
 
     private beneficiaryService: BeneficiaryService;
@@ -23,7 +23,6 @@ class ReviewContainer extends React.Component<ReviewContainerProps, any> {
         this.applicationService = new ApplicationService();
 
         this.loadBeneficiaries.bind(this);
-        this.handleSubmit.bind(this);
         this.loadCheckImages.bind(this);
     }
 
@@ -51,13 +50,17 @@ class ReviewContainer extends React.Component<ReviewContainerProps, any> {
                 quotes={application?.quotes}
                 chosenQuote={chosenQuote}
                 beneficiaries={beneficiaries}
-                checkImages={[frontImage, backImage]}
+                checkFront={frontImage}
+                checkBack={backImage}
             />
         );
     }
 
-    private async handleSubmit(application: Application): Promise<void> {
+    private handleSubmit = async (application: Application): Promise<void> => {
         console.log(application);
+        const updated = await this.applicationService.submitApplication(application.id);
+        this.props.store.set('application')(updated);
+        this.props.history.push(`/application/${application.id}/status`);
     }
 
     private async loadBeneficiaries(): Promise<void> {
@@ -70,19 +73,18 @@ class ReviewContainer extends React.Component<ReviewContainerProps, any> {
 
     private async loadCheckImages(): Promise<void> {
         const application = this.props.store.get('application');
-        let frontPromise: Promise<string | undefined> | undefined;
-        let backPromise: Promise<string | undefined> | undefined;
-        if (application?.checkFront) {
-            // frontPromise = ApplicationService.getImageUrl(application.id, application.checkFront) as any;
-        }
-        if (application?.checkBack) {
-            // backPromise = ApplicationService.getImageUrl(application.id, application.checkBack) as any;
+        if (application) {
+            const [frontImage, backImage] = await Promise.all([
+                await this.applicationService.getSignedImageUrl(application.id, 'front'),
+                await this.applicationService.getSignedImageUrl(application.id, 'back')
+            ]);
+            this.setState({
+                frontImage,
+                backImage,
+            });
+            console.log(frontImage, backImage);
         }
 
-        this.setState({
-            frontImage: await frontPromise,
-            backImage: await backPromise,
-        });
     }
 }
 
