@@ -29,7 +29,7 @@ class BasicInfoContainer extends React.Component<BasicInfoContainerProps> {
         if (application && chosenQuote) {
             return <BasicInfo
                 chosenQuote={chosenQuote}
-                application={application}
+                application={application || {}}
                 location={location}
                 onSubmit={this.handleSubmit} />;
         }

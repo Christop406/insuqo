@@ -2,7 +2,7 @@ import React from 'react';
 import IQStore, { IQStoreProps } from 'store/IQStore';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import ApplicationPaymentInfo from './components/ApplicationPaymentInfo';
-import { ProcessServerConfigFunction, RevertServerConfigFunction } from 'model/filepond';
+import { ProcessServerConfigFunction, RevertServerConfigFunction, LoadServerConfigFunction } from 'model/filepond';
 import { ApplicationService, SignedUrlResponse } from 'services/application.service';
 import axios from 'axios';
 import { Application } from '@insuqo/shared';
@@ -40,6 +40,7 @@ class PaymentInfoContainer extends React.Component<PaymentInfoContainerProps, Pa
                     application={application}
                     onSubmit={this.handleSubmit}
                     onImageClick={this.openCamera}
+                    onLoadImage={this.handleLoadImage}
                     onAddImage={this.handleAddCheckImage}
                     onRemoveImage={this.handleRemoveCheckImage}
                 />
@@ -63,6 +64,27 @@ class PaymentInfoContainer extends React.Component<PaymentInfoContainerProps, Pa
         this.videoRef.srcObject = res;
     };
 
+    handleLoadImage = (side: 'front' | 'back'): LoadServerConfigFunction => {
+        const application = this.props.store.get('application');
+        return async (source, load, error, _progress, abort) => {
+            try {
+                const img = await this.applicationService.getSignedImageUrl(application!.id, side);
+                if (img) {
+                    const downloadRes = await axios.get(img, { responseType: 'blob' });
+                    load(downloadRes.data);
+                }
+            } catch (err) {
+                switch (err?.response?.status) {
+                    case 404:
+                        abort();
+                        break;
+                    default:
+                        error(err);
+                }
+            }
+        };
+    };
+
     handleAddCheckImage = (side: 'front' | 'back'): ProcessServerConfigFunction => {
         return (_, file, metadata, load, error, progress, abort) => this.handleAddImage(side, file, metadata, load, error, progress, abort);
     };
@@ -82,51 +104,24 @@ class PaymentInfoContainer extends React.Component<PaymentInfoContainerProps, Pa
         }
     };
 
-    private signAndUpload = async (application: Application, file: any): Promise<SignedUrlResponse> => {
-        const urls = await this.applicationService.getSignedUploadUrl(application.id, {
-            headers: {
-                'X-Mime-Type': file.type,
-            }
-        });
-
-        if (urls) {
-            await axios.put(urls.put, file, {
-                headers: {
-                    'Content-Type': file.type
-                }
-            });
-
-            return urls;
-        } else {
-            throw new Error('Could not sign URLs for upload');
-        }
-    }
-
     private handleRemoveCheckImage = (side: 'front' | 'back'): RevertServerConfigFunction => {
         return (_uniqueFileId, load, error) => this.handleRemoveImage(side, load, error);
     };
 
     handleRemoveImage: RevertServerConfigFunction = async (side, load, error) => {
-        let deleteUrl: string | undefined;
-
         if (side === 'front') {
-            deleteUrl = this.checkFront?.delete;
             this.checkFront = undefined;
         } else if (side === 'back') {
-            deleteUrl = this.checkBack?.delete;
             this.checkBack = undefined;
         }
 
-        if (deleteUrl) {
-            try {
-                await axios.delete(deleteUrl);
-            } catch (err) {
-                error(err);
-            }
-        } else {
-            error('No URL for file');
+        const application = this.props.store.get('application')!;
+        try {
+            await this.applicationService.deleteImage(application.id, side);
+        } catch (e) {
+            error(e);
         }
-        console.log(this.checkFront, this.checkBack);
+
         load();
     }
 }

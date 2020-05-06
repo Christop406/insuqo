@@ -5,7 +5,7 @@ import cx from 'classnames';
 
 import s from './ApplicationPaymentInfo.module.scss';
 import { useForm } from 'react-hook-form';
-import { ProcessServerConfigFunction, RevertServerConfigFunction } from 'model/filepond';
+import { ProcessServerConfigFunction, RevertServerConfigFunction, LoadServerConfigFunction } from 'model/filepond';
 import { CheckImageUploader } from 'components/forms/CheckImageUploader/CheckImageUploader';
 
 
@@ -14,11 +14,18 @@ interface PaymentInfoProps {
     onSubmit: (output: any) => any;
     application?: Application;
     onImageClick?: () => any;
+    onLoadImage: (side: 'front' | 'back') => LoadServerConfigFunction;
     onAddImage: (side: 'front' | 'back') => ProcessServerConfigFunction;
     onRemoveImage: (side: 'front' | 'back') => RevertServerConfigFunction;
 }
 
-const ApplicationPaymentInfo: React.FunctionComponent<PaymentInfoProps> = ({ application, onSubmit, onAddImage, onRemoveImage }) => {
+const ApplicationPaymentInfo: React.FunctionComponent<PaymentInfoProps> = ({
+    application,
+    onLoadImage,
+    onSubmit,
+    onAddImage,
+    onRemoveImage,
+}) => {
     const { handleSubmit, register, formState } = useForm({ defaultValues: application, mode: 'onChange' });
 
     if (!application) {
@@ -49,16 +56,17 @@ const ApplicationPaymentInfo: React.FunctionComponent<PaymentInfoProps> = ({ app
                         <div className={s.checkUploader}>
                             <label htmlFor='frontUploader'>Front of Check</label>
                             <CheckImageUploader
+                                onLoad={onLoadImage('front')}
                                 onProcess={onAddImage('front')}
                                 onRevert={onRemoveImage('front')}
-                                source={application.checkFront} />
+                                source=""/>
                         </div>
                         <div className={s.checkUploader}>
                             <label htmlFor='backUploader'>Back of Check</label>
                             <CheckImageUploader
+                                onLoad={onLoadImage('back')}
                                 onProcess={onAddImage('back')}
-                                onRevert={onRemoveImage('back')}
-                                source={application.checkBack} />
+                                onRevert={onRemoveImage('back')} />
                         </div>
                     </div>
                     <button className="button full primary"

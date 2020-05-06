@@ -73,10 +73,10 @@ class ReviewContainer extends React.Component<ReviewContainerProps, any> {
         let frontPromise: Promise<string | undefined> | undefined;
         let backPromise: Promise<string | undefined> | undefined;
         if (application?.checkFront) {
-            frontPromise = this.applicationService.getImageUrl(application.id, application.checkFront);
+            // frontPromise = ApplicationService.getImageUrl(application.id, application.checkFront) as any;
         }
         if (application?.checkBack) {
-            backPromise = this.applicationService.getImageUrl(application.id, application.checkBack);
+            // backPromise = ApplicationService.getImageUrl(application.id, application.checkBack) as any;
         }
 
         this.setState({
