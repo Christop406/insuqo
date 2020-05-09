@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import Store from '../../ApplicationStore';
 import {login} from '../../api';
 import constants from '../../util/constants';
 import './ClientLogin.scss';
 import ClientAuthentication from '../auth/ClientAuthentication';
 import { Logger } from '../../services/logger';
 import { Auth } from '../../services/firebase';
+import IQStore from 'store/IQStore';
 
 class ClientLogin extends Component {
 
@@ -46,4 +46,4 @@ class ClientLogin extends Component {
     }
 }
 
-export default Store.withStore(ClientLogin);
+export default IQStore.withStore(ClientLogin);

@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import Store from '../../ApplicationStore';
 import ClientDashboard from './ClientDashboard';
 import {Route, Switch, RouteComponentProps} from 'react-router-dom';
 import {getUserInfo} from '../../api';
 import constants from '../../util/constants.json';
 import { Store as S } from 'undux';
+import IQStore from 'store/IQStore';
 
 declare type IClientProps = {
     store: S<any>;
@@ -38,4 +38,4 @@ class Client extends Component<IClientProps> {
     }
 }
 
-export default Store.withStore(Client);
+export default IQStore.withStore(Client);

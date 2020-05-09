@@ -1,5 +1,5 @@
 import React from 'react';
-import { FilePond, registerPlugin, File } from 'react-filepond';
+import { FilePond, registerPlugin } from 'react-filepond';
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
 import 'filepond/dist/filepond.min.css';
@@ -9,7 +9,7 @@ import ReactDOMServer from 'react-dom/server';
 registerPlugin(FilePondPluginImagePreview);
 
 interface CheckImageUploaderProps {
-    onLoad: LoadServerConfigFunction;
+    onLoad?: LoadServerConfigFunction;
     onProcess: ProcessServerConfigFunction;
     onRevert: RevertServerConfigFunction;
     source?: string;
@@ -20,12 +20,10 @@ export const CheckImageUploader: React.FC<CheckImageUploaderProps> = ({
     onProcess,
     onRevert,
 }) => {
-    const files: any[] = [{ source: '/', options: { type: 'local' } }];
 
     return (
         <FilePond
             name='frontUploader'
-            files={files}
             server={{
                 load: onLoad,
                 process: onProcess,

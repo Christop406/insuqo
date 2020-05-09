@@ -5,7 +5,7 @@ import cx from 'classnames';
 
 import s from './ApplicationPaymentInfo.module.scss';
 import { useForm } from 'react-hook-form';
-import { ProcessServerConfigFunction, RevertServerConfigFunction, LoadServerConfigFunction } from 'model/filepond';
+import { ProcessServerConfigFunction, RevertServerConfigFunction } from 'model/filepond';
 import { CheckImageUploader } from 'components/forms/CheckImageUploader/CheckImageUploader';
 
 
@@ -14,17 +14,17 @@ interface PaymentInfoProps {
     onSubmit: (output: any) => any;
     application?: Application;
     onImageClick?: () => any;
-    onLoadImage: (side: 'front' | 'back') => LoadServerConfigFunction;
     onAddImage: (side: 'front' | 'back') => ProcessServerConfigFunction;
     onRemoveImage: (side: 'front' | 'back') => RevertServerConfigFunction;
+    imagesUploaded: boolean;
 }
 
 const ApplicationPaymentInfo: React.FunctionComponent<PaymentInfoProps> = ({
     application,
-    onLoadImage,
     onSubmit,
     onAddImage,
     onRemoveImage,
+    imagesUploaded,
 }) => {
     const { handleSubmit, register, formState } = useForm({ defaultValues: application, mode: 'onChange' });
 
@@ -56,7 +56,6 @@ const ApplicationPaymentInfo: React.FunctionComponent<PaymentInfoProps> = ({
                         <div className={s.checkUploader}>
                             <label htmlFor='frontUploader'>Front of Check</label>
                             <CheckImageUploader
-                                onLoad={onLoadImage('front')}
                                 onProcess={onAddImage('front')}
                                 onRevert={onRemoveImage('front')}
                                 source=""/>
@@ -64,13 +63,12 @@ const ApplicationPaymentInfo: React.FunctionComponent<PaymentInfoProps> = ({
                         <div className={s.checkUploader}>
                             <label htmlFor='backUploader'>Back of Check</label>
                             <CheckImageUploader
-                                onLoad={onLoadImage('back')}
                                 onProcess={onAddImage('back')}
                                 onRevert={onRemoveImage('back')} />
                         </div>
                     </div>
                     <button className="button full primary"
-                        disabled={!formState.isValid}
+                        disabled={!formState.isValid || !imagesUploaded}
                         type="submit">
                         Submit
                     </button>

@@ -2,9 +2,8 @@ import React from 'react';
 import IQStore, { IQStoreProps } from 'store/IQStore';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import ApplicationPaymentInfo from './components/ApplicationPaymentInfo';
-import { ProcessServerConfigFunction, RevertServerConfigFunction, LoadServerConfigFunction } from 'model/filepond';
-import { ApplicationService, SignedUrlResponse } from 'services/application.service';
-import axios from 'axios';
+import { ProcessServerConfigFunction, RevertServerConfigFunction } from 'model/filepond';
+import { ApplicationService } from 'services/application.service';
 import { Application } from '@insuqo/shared';
 
 interface PaymentInfoContainerProps extends IQStoreProps, RouteComponentProps {
@@ -13,15 +12,18 @@ interface PaymentInfoContainerProps extends IQStoreProps, RouteComponentProps {
 
 interface PaymentInfoContainerState {
     videoStream?: any;
+    imagesUploaded: boolean;
 }
 
 class PaymentInfoContainer extends React.Component<PaymentInfoContainerProps, PaymentInfoContainerState> {
 
-    state: PaymentInfoContainerState = {};
+    state: PaymentInfoContainerState = {
+        imagesUploaded: false,
+    };
     private videoRef?: any;
     private applicationService: ApplicationService;
-    private checkFront?: SignedUrlResponse;
-    private checkBack?: SignedUrlResponse;
+    private checkFront?: string;
+    private checkBack?: string;
 
     constructor(props: any) {
         super(props);
@@ -33,6 +35,7 @@ class PaymentInfoContainer extends React.Component<PaymentInfoContainerProps, Pa
     };
 
     render() {
+        const { imagesUploaded } = this.state;
         const application = this.props.store.get('application');
         return (
             <>
@@ -40,9 +43,9 @@ class PaymentInfoContainer extends React.Component<PaymentInfoContainerProps, Pa
                     application={application}
                     onSubmit={this.handleSubmit}
                     onImageClick={this.openCamera}
-                    onLoadImage={this.handleLoadImage}
                     onAddImage={this.handleAddCheckImage}
                     onRemoveImage={this.handleRemoveCheckImage}
+                    imagesUploaded={imagesUploaded}
                 />
             </>
         );
@@ -51,7 +54,7 @@ class PaymentInfoContainer extends React.Component<PaymentInfoContainerProps, Pa
     handleSubmit = async (paymentInfo: Partial<Application>) => {
         const application = this.props.store.get('application');
         const { checkFront, checkBack } = this;
-        await this.applicationService.updateApplication(application!.id, { ...paymentInfo, checkFront: checkFront?.id, checkBack: checkBack?.id });
+        await this.applicationService.updateApplication(application!.id, { ...paymentInfo, checkFront, checkBack });
         const { history, continueTo } = this.props;
 
         history.push(continueTo || `/application/${application?.id}/review`);
@@ -62,27 +65,6 @@ class PaymentInfoContainer extends React.Component<PaymentInfoContainerProps, Pa
             video: true,
         });
         this.videoRef.srcObject = res;
-    };
-
-    handleLoadImage = (side: 'front' | 'back'): LoadServerConfigFunction => {
-        const application = this.props.store.get('application');
-        return async (source, load, error, _progress, abort) => {
-            try {
-                const img = await this.applicationService.getSignedImageUrl(application!.id, side);
-                if (img) {
-                    const downloadRes = await axios.get(img, { responseType: 'blob' });
-                    load(downloadRes.data);
-                }
-            } catch (err) {
-                switch (err?.response?.status) {
-                    case 404:
-                        abort();
-                        break;
-                    default:
-                        error(err);
-                }
-            }
-        };
     };
 
     handleAddCheckImage = (side: 'front' | 'back'): ProcessServerConfigFunction => {
@@ -97,6 +79,14 @@ class PaymentInfoContainer extends React.Component<PaymentInfoContainerProps, Pa
             if (!uploadedFile) {
                 throw new Error('WHOOPSY');
             }
+
+            if (fileName === 'front') {
+                this.checkFront = uploadedFile;
+            } else if (fileName === 'back') {
+                this.checkBack = uploadedFile;
+            }
+
+            this.setState({ imagesUploaded: !!(this.checkBack && this.checkFront) });
 
             load(uploadedFile!);
         } catch (err) {
@@ -118,6 +108,7 @@ class PaymentInfoContainer extends React.Component<PaymentInfoContainerProps, Pa
         const application = this.props.store.get('application')!;
         try {
             await this.applicationService.deleteImage(application.id, side);
+            this.setState({ imagesUploaded: false });
         } catch (e) {
             error(e);
         }

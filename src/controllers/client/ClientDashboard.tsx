@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import Store from '../../ApplicationStore';
 import {getApplication} from '../../api';
+import IQStore from 'store/IQStore';
 
 interface IClientDashboardProps {
     client: any; // give this a type
@@ -27,4 +27,4 @@ class ClientDashboard extends Component<IClientDashboardProps> {
     }
 }
 
-export default Store.withStore(ClientDashboard as any); // get rid of undux for react context
+export default IQStore.withStore(ClientDashboard as any); // get rid of undux for react context

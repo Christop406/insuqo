@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Route, RouteComponentProps, Switch, Redirect, withRouter } from 'react-router-dom';
 import { ApplicationService } from 'services/application.service';
-import { Application as ApplicationModel, QuickTermQuoteResult, ApplicationStatus as Status, ApplicationStatus } from '@insuqo/shared';
+import { Application as ApplicationModel, QuickTermQuoteResult, ApplicationStatus as Status } from '@insuqo/shared';
 import Spinner from 'react-spinkit';
 import s from './Application.module.scss';
 import ClientAuthentication from 'controllers/auth/ClientAuthentication';
@@ -13,7 +13,7 @@ const BeneficiariesContainer = React.lazy(() => import('../beneficiaries/Benefic
 const BasicInfoContainer = React.lazy(() => import('../basic-info/BasicInfoContainer'));
 const PaymentInfoContainer = React.lazy(() => import('../payment-info/PaymentInfoContainer'));
 const ReviewContainer = React.lazy(() => import('../review/ReviewContainer'));
-const ApplicationStatusView = React.lazy(() => import('components/application/ApplicationStatusView/ApplicationStatusView'));
+const StatusContainer = React.lazy(() => import('containers/application/status/StatusContainer'));
 
 interface ApplicationProps extends IQStoreProps, RouteComponentProps<{ appId: string }> {
 
@@ -71,24 +71,12 @@ class Application extends Component<ApplicationProps, ApplicationState> {
                     <Route path={`${this.props.match.path}/beneficiaries`} component={BeneficiariesContainer} />
                     <Route path={`${this.props.match.path}/payment`} component={PaymentInfoContainer} />
                     <Route path={`${this.props.match.path}/review`} component={ReviewContainer} />
-                    <Route path={`${this.props.match.path}/status`} render={(props) =>
-                        <ApplicationStatusView {...props} application={application!} />} />
+                    <Route path={`${this.props.match.path}/status`} component={StatusContainer} />
                     <Redirect to={`${this.props.match.path}/${this.getDefaultStep(application)}`} />
                 </Switch>
             </>
         );
     };
-
-    private submitApplication = async (application: ApplicationModel) => {
-        const updated = await this.applicationService.submitApplication(application.id);
-        if (updated?.status === ApplicationStatus.Submitted) {
-            // success
-            this.setState({ application: updated }, () => this.props.history.push(`/application/${updated.id}/status`));
-        } else {
-            // failure
-            // TODO: Show eror
-        }
-    }
 
     private getDefaultStep = (app?: ApplicationModel) => {
         switch (app?.status) {

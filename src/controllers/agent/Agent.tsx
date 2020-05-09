@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import Store from '../../ApplicationStore';
 import AgentDashboard from './AgentDashboard';
 import {Store as S } from 'undux';
+import IQStore from 'store/IQStore';
 
 interface IAgentProps {
     store: S<any>;
@@ -17,4 +17,4 @@ class Agent extends Component<IAgentProps> {
     }
 }
 
-export default Store.withStore(Agent);
+export default IQStore.withStore(Agent);
