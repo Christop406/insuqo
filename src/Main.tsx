@@ -6,11 +6,8 @@ import { grommet } from 'grommet/themes';
 import { Route, Switch, Redirect, withRouter, RouteComponentProps } from 'react-router-dom';
 import img from './assets/img/insuqo-logo.png';
 import s from './Main.module.scss';
-import QuoteContainer from './containers/quote/QuoteContainer';
+const QuoteContainer = React.lazy(() => import('containers/quote/QuoteContainer'));
 const ClientAuthentication = React.lazy(() => import('./controllers/auth/ClientAuthentication'));
-const Agent = React.lazy(() => import('./controllers/agent/Agent'));
-const ClientLogin = React.lazy(() => import('./controllers/login/ClientLogin'));
-const Client = React.lazy(() => import('./controllers/client/Client'));
 const ApplicationContainer = React.lazy(() => import('containers/application/ApplicationContainer'));
 
 type MainProps = IQStoreProps & RouteComponentProps;
@@ -21,7 +18,7 @@ class Main extends Component<MainProps> {
             <Grommet theme={grommet}>
                 <Switch>
                     <Route path="/register" component={() => <Suspense fallback={<div>Loading...</div>}><ClientAuthentication/></Suspense>} />
-                    <Route path="/client/login" component={() => <Suspense fallback={<div></div>}><ClientLogin /></Suspense>} />
+                    {/* <Route path="/client/login" component={() => <Suspense fallback={<div></div>}><ClientLogin /></Suspense>} /> */}
                     <Redirect path="/login" to="/client/login" />
                     <Route component={QuotingTool} />
                 </Switch>
@@ -40,8 +37,6 @@ class QuotingTool extends Component {
                 <div className={s.quoteFormContainer}>
                     <Suspense fallback={<div>Loading...</div>}>
                         <Switch>
-                            <Route path="/client" component={Client} />
-                            <Route path="/agent" component={Agent} />
                             <Route path="/application/:appId" component={ApplicationContainer} />
                             <Route exact path="/application" component={ApplicationContainer} />
                             <Route path="/quote" component={QuoteContainer} />

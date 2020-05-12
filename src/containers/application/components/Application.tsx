@@ -4,11 +4,12 @@ import { ApplicationService } from 'services/application.service';
 import { Application as ApplicationModel, QuickTermQuoteResult, ApplicationStatus as Status } from '@insuqo/shared';
 import Spinner from 'react-spinkit';
 import s from './Application.module.scss';
-import ClientAuthentication from 'controllers/auth/ClientAuthentication';
 import { Logger } from 'services/logger';
 import { Auth } from 'services/firebase';
 import IQStore, { IQStoreProps } from 'store/IQStore';
 import { QuoteService } from 'services/quote.service';
+import { Optional } from 'components/base/Optional';
+import AuthContainer from 'containers/auth/AuthContainer';
 const BeneficiariesContainer = React.lazy(() => import('../beneficiaries/BeneficiariesContainer'));
 const BasicInfoContainer = React.lazy(() => import('../basic-info/BasicInfoContainer'));
 const PaymentInfoContainer = React.lazy(() => import('../payment-info/PaymentInfoContainer'));
@@ -42,7 +43,6 @@ class Application extends Component<ApplicationProps, ApplicationState> {
             if (user) {
                 const appId = this.props.match.params.appId;
                 if (!appId) {
-                    Logger.warn('No application ID');
                     this.props.history.push('/');
                     return;
                 }
@@ -60,7 +60,9 @@ class Application extends Component<ApplicationProps, ApplicationState> {
         if (!application) {
             return <div className={s.loadingContainer}>
                 <Spinner name="folding-cube" fadeIn="none" color="#9c37f2" />
-                {showAuthModal && <ClientAuthentication type="login" onAuthenticate={this.handleAuthentication} />}
+                <Optional condition={showAuthModal}>
+                    <AuthContainer formType="signup" />
+                </Optional>
             </div>;
         }
 
@@ -102,7 +104,7 @@ class Application extends Component<ApplicationProps, ApplicationState> {
             this.applicationService.getApplication(appId),
             this.quoteService.getQuotesForApplication(appId)
         ]);
-        
+
         const application = app?.application;
 
         if (application && quotes) {
@@ -128,7 +130,7 @@ class Application extends Component<ApplicationProps, ApplicationState> {
                         break;
                 }
                 Logger.info(application);
-                
+
                 this.setState({
                     application,
                     chosenQuote

@@ -98,7 +98,10 @@ export class AuthClass implements Omit<AuthType, OverriddenFeatures> {
     public async signInWithCustomToken(token: string): Promise<firebase.auth.UserCredential> {
         return (await this.getClient()).signInWithCustomToken(token);
     }
-    public async signInWithEmailAndPassword(email: string, password: string): Promise<firebase.auth.UserCredential> {
+    public async signInWithEmailAndPassword(email: string | undefined, password: string | undefined): Promise<firebase.auth.UserCredential> {
+        if (!email || !password) {
+            throw new Error('Email & Password Must Be Defined');
+        }
         return (await this.getClient()).signInWithEmailAndPassword(email, password);
     }
     public async signInWithPhoneNumber(phoneNumber: string, applicationVerifier: firebase.auth.ApplicationVerifier): Promise<firebase.auth.ConfirmationResult> {

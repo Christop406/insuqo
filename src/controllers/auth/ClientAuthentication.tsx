@@ -148,10 +148,13 @@ export default class ClientAuthentication extends React.Component<ClientAuthenti
                     <div className={s.authForm}>
                         <img className={s.iqLogo} alt="INSUQO Logo" src={iqLogo} />
                         <div className={s.formTitle}>{title}</div>
-                        <form method="post" action="">
+                        <form>
                             <input placeholder="Email Address" onChange={this.updateEmail} className="input"></input>
                             <input placeholder="Password" onChange={this.updatePassword} type="password" className="input"></input>
-                            <span className={cx('form-help', s.formHelp)}><button className="button text">Forgot password?</button></span>
+                            <span className={cx('form-help', s.formHelp)}>
+                                <button type="button" onClick={() => this.switchPaneType()} className="button text">Sign Up</button>
+                                <button type="button" className="button text">Forgot password?</button>
+                            </span>
                             <button type="button" onClick={() => this.logIn()} className="button full primary">Continue</button>
                         </form>
                     </div>
@@ -160,22 +163,3 @@ export default class ClientAuthentication extends React.Component<ClientAuthenti
         );
     };
 }
-
-
-// <div className={s['modal-container']}>
-// <div className={s['auth-container']}>
-//     <h2>{title}</h2>
-//     {formErrorText && <span className={s['form-error']}><FontAwesomeIcon className={s['error-icon']} icon="exclamation-circle" />{formErrorText}</span>}
-//     {paneType === 'signup' &&
-//         <AuthenticationForm
-//             type={userNeedsConfirmation ? 'challenge' : 'signup'}
-//             onSubmit={userNeedsConfirmation ? this.sendConfirmation : this.signUp} />}
-//     {paneType === 'login' &&
-//         <AuthenticationForm
-//             onSubmit={authChallengeRequired ? this.answerAuthChallenge : this.logIn}
-//             challengeName={authChallengeName}
-//             type={authChallengeRequired ? 'challenge' : 'login'} />}
-//     <button className={`${s['mode-switcher']} full primary text button`} onClick={this.switchPaneType}>Switch
-//         to {paneType === 'login' ? 'Sign Up' : 'Log In'}</button>
-// </div>
-// </div>
