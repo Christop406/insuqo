@@ -48,7 +48,8 @@ class Application extends Component<ApplicationProps, ApplicationState> {
                 }
                 await this.loadApplication();
             } else {
-                this.setState({ showAuthModal: true });
+                await this.loadApplication(); // TODO: REMOVE
+                Auth.showAuthModal('signin');
             }
         });
 

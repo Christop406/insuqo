@@ -5,12 +5,12 @@ import { Auth } from 'services/firebase';
 import { FirebaseError } from 'model/auth';
 import s from './AuthContainer.module.scss';
 import iqLogo from '../../assets/img/insuqo-logo.png';
-import SignIn from './components/signin/SignIn';
+import SignIn from '../../controllers/auth/signin/SignIn';
 import { Optional } from 'components/base/Optional';
-import SignUp from './components/signup/SignUp';
+import SignUp from '../../controllers/auth/signup/SignUp';
 
 type AuthContainerProps = RouteComponentProps & IQStoreProps & {
-    formType: 'signin' | 'signup';
+    formType?: 'signin' | 'signup';
 };
 
 interface AuthContainerState {
@@ -18,16 +18,32 @@ interface AuthContainerState {
     userNeedsConfirmation?: boolean;
     formErrorText?: string;
     savedUserInfo?: any;
+    showing: boolean;
 }
 
 class AuthContainer extends React.Component<AuthContainerProps, AuthContainerState> {
 
     state: AuthContainerState = {
         formType: this.props.formType || 'signin',
+        showing: false,
     };
 
+    componentDidMount(): void {
+        Auth.subscribeAuthModalEvents((type) => {
+            this.setState({
+                showing: true,
+                formType: type,
+            });
+        });
+    }
+
     render() {
-        const { formType } = this.state;
+        const { formType, showing } = this.state;
+
+        if (!showing) {
+            return <></>;
+        }
+
         return <>
             <div className={s.modalContainer}>
                 <div className={s.authContainer}>
@@ -35,10 +51,10 @@ class AuthContainer extends React.Component<AuthContainerProps, AuthContainerSta
                     <div className={s.authForm}>
                         <img className={s.iqLogo} alt="INSUQO Logo" src={iqLogo} />
                         <Optional condition={formType === 'signin'}>
-                            <SignIn onSubmit={console.log} onSwitch={this.handleSwitch} />
+                            <SignIn onSubmit={(i) => this.signIn(i)} onSwitch={this.handleSwitch} />
                         </Optional>
                         <Optional condition={formType === 'signup'}>
-                            <SignUp onSubmit={console.log} onSwitch={this.handleSwitch} />
+                            <SignUp onSubmit={(i) => this.signUp(i)} onSwitch={this.handleSwitch} />
                         </Optional>
                     </div>
                 </div>
@@ -46,15 +62,16 @@ class AuthContainer extends React.Component<AuthContainerProps, AuthContainerSta
         </>;
     }
 
-    public signUp = async (email: string, password: string) => {
+    public signUp = async ({ email, password }: { email: string; password: string }) => {
         try {
             const signUpRes = await Auth.createUserWithEmailAndPassword(email, password);
             if (!signUpRes.user?.emailVerified) {
                 await signUpRes.user?.sendEmailVerification();
                 await Auth.signOut();
                 this.setState({ userNeedsConfirmation: true });
+            } else {
+                this.setState({ showing: false });
             }
-            console.log(signUpRes);
         } catch (err) {
             let formErrorText: string | undefined;
             switch (err.code as FirebaseError) {
@@ -76,7 +93,9 @@ class AuthContainer extends React.Component<AuthContainerProps, AuthContainerSta
     public signIn = async ({ email, password }: { email?: string; password?: string }) => {
         try {
             const user = await Auth.signInWithEmailAndPassword(email, password);
-            console.log(user, user.user?.displayName);
+            this.setState({
+                showing: false,
+            });
         } catch (err) {
             let formErrorText: string | undefined = undefined;
             switch (err.code as FirebaseError) {

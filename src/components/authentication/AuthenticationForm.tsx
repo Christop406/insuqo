@@ -4,7 +4,6 @@ import {Formik, FormikErrors, FormikValues} from 'formik';
 import {Validator} from '../../services/Validator';
 import {AuthChallengeName} from '@insuqo/shared/types/auth-challenge-name';
 import {PasswordSecurity} from '../password-security/PasswordSecurity';
-import * as Yup from 'yup';
 
 interface AuthenticationFormProps {
     onSubmit: (...args: any) => unknown;
@@ -69,12 +68,6 @@ const SignUpForm: React.FunctionComponent<SubFormProps> = (props) => {
             password: string[];
             passwordConf?: string;
         }> = {};
-
-        try {
-            Yup.string().email('Invalid email').validateSync(values.email);
-        } catch (err) {
-            errors.email = err.message;
-        }
 
         const passValidationResult = Validator.validatePassword(values.password || '');
         if (passValidationResult.length > 0) {
@@ -148,12 +141,6 @@ const SignUpForm: React.FunctionComponent<SubFormProps> = (props) => {
 const LoginForm: React.FunctionComponent<SubFormProps> = (props) => {
     const validateSignUpForm = (values: FormikValues) => {
         const errors: typeof values = {};
-
-        try {
-            Yup.string().email('Invalid email').validateSync(values.email);
-        } catch (err) {
-            errors.email = err.message;
-        }
 
         if (values.password.length < 8) {
             errors.password = 'Please enter a valid password';

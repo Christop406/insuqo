@@ -104,9 +104,7 @@ class ResultsContainer extends React.Component<ResultsContainerProps, ResultsCon
                     quotes={quotes}
                     onApply={this.apply}
                 />
-                <Optional condition={showAuthModal}>
-                    <ClientAuthentication type="signup" onAuthenticate={this.handleAuthentication} />
-                </Optional>
+
             </>
         );
     }
