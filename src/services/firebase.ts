@@ -1,13 +1,14 @@
 import firebaseConfig from '../config/firebase';
-import { Subject, Subscription, NextObserver } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 declare type AuthType = import('firebase').auth.Auth;
 declare type UserType = import('firebase').User;
 declare type AuthSettingsType = firebase.auth.AuthSettings;
 declare type OverriddenFeatures = 'app' | 'currentUser' | 'tenantId' | 'languageCode' | 'settings' | 'isSignInWithEmailLink' | 'onAuthStateChanged' | 'onIdTokenChanged';
+declare type AuthModalShowEvent = {type: 'signin' | 'signup'; callback: undefined | ((authData: any) => any)};
 
 export class AuthClass implements Omit<AuthType, OverriddenFeatures> {
 
-    private authModalSubject: Subject<'signin' | 'signup'> = new Subject();
+    private authModalSubject: Subject<AuthModalShowEvent> = new Subject();
     private auth?: AuthType;
 
     private async getClient(): Promise<AuthType> {
@@ -20,11 +21,11 @@ export class AuthClass implements Omit<AuthType, OverriddenFeatures> {
         return this.auth;
     }
 
-    public showAuthModal(type: 'signin' | 'signup' = 'signin'): void {
-        this.authModalSubject.next(type);
+    public showAuthModal(type: 'signin' | 'signup' = 'signin', callback?: (authData: any) => any): void {
+        this.authModalSubject.next({type, callback});
     }
 
-    public subscribeAuthModalEvents(next: (value: 'signin' | 'signup') => void, complete?: () => void): Subscription {
+    public subscribeAuthModalEvents(next: (value: AuthModalShowEvent) => void, complete?: () => void): Subscription {
         return this.authModalSubject.subscribe(next, undefined, complete);
     }
 
@@ -49,7 +50,11 @@ export class AuthClass implements Omit<AuthType, OverriddenFeatures> {
     }
 
     public async getCurrentUser(): Promise<UserType | undefined> {
-        return (await this.getClient()).currentUser || undefined;
+        return new Promise((resolve) => {
+            Auth.onAuthStateChanged((a) => {
+                resolve(a ?? undefined);
+            }).then((unsub) => unsub());
+        });
     }
 
     public async getLanguageCode(): Promise<string | undefined> {

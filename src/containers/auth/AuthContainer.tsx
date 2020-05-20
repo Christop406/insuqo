@@ -8,13 +8,14 @@ import iqLogo from '../../assets/img/insuqo-logo.png';
 import SignIn from '../../controllers/auth/signin/SignIn';
 import { Optional } from 'components/base/Optional';
 import SignUp from '../../controllers/auth/signup/SignUp';
+import { Verify } from 'controllers/auth/verify/Verify';
 
 type AuthContainerProps = RouteComponentProps & IQStoreProps & {
-    formType?: 'signin' | 'signup';
+    formType?: 'signin' | 'signup' | 'verify';
 };
 
 interface AuthContainerState {
-    formType: 'signup' | 'signin';
+    formType: 'signup' | 'signin' | 'verify';
     userNeedsConfirmation?: boolean;
     formErrorText?: string;
     savedUserInfo?: any;
@@ -23,22 +24,25 @@ interface AuthContainerState {
 
 class AuthContainer extends React.Component<AuthContainerProps, AuthContainerState> {
 
+    private callback?: (authData: any) => any;
+
     state: AuthContainerState = {
         formType: this.props.formType || 'signin',
         showing: false,
     };
 
     componentDidMount(): void {
-        Auth.subscribeAuthModalEvents((type) => {
+        Auth.subscribeAuthModalEvents((event) => {
             this.setState({
                 showing: true,
-                formType: type,
+                formType: event.type,
             });
+            this.callback = event.callback;
         });
     }
 
     render() {
-        const { formType, showing } = this.state;
+        const { formType, showing, formErrorText } = this.state;
 
         if (!showing) {
             return <></>;
@@ -54,7 +58,10 @@ class AuthContainer extends React.Component<AuthContainerProps, AuthContainerSta
                             <SignIn onSubmit={(i) => this.signIn(i)} onSwitch={this.handleSwitch} />
                         </Optional>
                         <Optional condition={formType === 'signup'}>
-                            <SignUp onSubmit={(i) => this.signUp(i)} onSwitch={this.handleSwitch} />
+                            <SignUp errorText={formErrorText} onSubmit={(i) => this.signUp(i)} onSwitch={this.handleSwitch} />
+                        </Optional>
+                        <Optional condition={formType === 'verify'}>
+                            <Verify onResend={() => this.resendVerificationCode()} onContinue={() => this.checkVerification()} />
                         </Optional>
                     </div>
                 </div>
@@ -67,10 +74,10 @@ class AuthContainer extends React.Component<AuthContainerProps, AuthContainerSta
             const signUpRes = await Auth.createUserWithEmailAndPassword(email, password);
             if (!signUpRes.user?.emailVerified) {
                 await signUpRes.user?.sendEmailVerification();
-                await Auth.signOut();
-                this.setState({ userNeedsConfirmation: true });
+                this.setState({ formType: 'verify' });
             } else {
                 this.setState({ showing: false });
+                this.callback && this.callback(signUpRes.user);
             }
         } catch (err) {
             let formErrorText: string | undefined;
@@ -96,6 +103,7 @@ class AuthContainer extends React.Component<AuthContainerProps, AuthContainerSta
             this.setState({
                 showing: false,
             });
+            this.callback && this.callback(user.user);
         } catch (err) {
             let formErrorText: string | undefined = undefined;
             switch (err.code as FirebaseError) {
@@ -106,6 +114,20 @@ class AuthContainer extends React.Component<AuthContainerProps, AuthContainerSta
                     formErrorText = 'Password is incorrect';
             }
             this.setState({ formErrorText, savedUserInfo: { email, password } });
+        }
+    };
+
+    private resendVerificationCode = async () => {
+        const usr = await Auth.getCurrentUser();
+        await usr?.sendEmailVerification();
+    };
+
+    private checkVerification = async () => {
+        const currentUser = await Auth.getCurrentUser();
+        if (currentUser?.emailVerified) {
+            this.setState({ showing: false });
+        } else {
+            this.setState({ formErrorText: 'Please Verify Email' });
         }
     };
 

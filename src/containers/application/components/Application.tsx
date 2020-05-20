@@ -48,24 +48,17 @@ class Application extends Component<ApplicationProps, ApplicationState> {
                 }
                 await this.loadApplication();
             } else {
-                await this.loadApplication(); // TODO: REMOVE
-                Auth.showAuthModal('signin');
+                // await this.loadApplication(); // TODO: REMOVE
+                Auth.showAuthModal('signin', () => {
+                    this.handleAuthentication();
+                });
             }
         });
 
     };
 
     render = () => {
-        const { application, showAuthModal } = this.state; // chosenQuote
-
-        if (!application) {
-            return <div className={s.loadingContainer}>
-                <Spinner name="folding-cube" fadeIn="none" color="#9c37f2" />
-                <Optional condition={showAuthModal}>
-                    <AuthContainer formType="signup" />
-                </Optional>
-            </div>;
-        }
+        const { application } = this.state; // chosenQuote
 
         return (
             <>
@@ -95,56 +88,58 @@ class Application extends Component<ApplicationProps, ApplicationState> {
     };
 
     private handleAuthentication = async () => {
-        this.setState({ showAuthModal: false });
         await this.loadApplication();
     };
 
     private loadApplication = async () => {
         const appId = this.props.match.params.appId;
-        const [app, quotes] = await Promise.all([
-            this.applicationService.getApplication(appId),
-            this.quoteService.getQuotesForApplication(appId)
-        ]);
+        try {
+            const app = this.applicationService.getApplication(appId);
+            const quotesPromise = this.quoteService.getQuotesForApplication(appId);
 
-        const application = app?.application;
+            const application = (await app)?.application;
+            const quotes = await quotesPromise;
 
-        if (application && quotes) {
-            application.quotes = quotes;
-            const chosenQuote = quotes.find<QuickTermQuoteResult>(((quote: QuickTermQuoteResult) => {
-                return quote.RecID === application.quoteRecId;
-            }) as any);
-            if (chosenQuote) {
-                switch (application.status) {
-                    case Status.New:
-                        this.props.history.push(`/application/${application.id}/apply`);
-                        break;
-                    case Status.Submitted:
-                    case Status.InProgress:
-                    case Status.Done: // change?
-                    case Status.Problem:
-                        this.props.history.push(`/application/${application.id}/status`);
-                        break;
-                    case Status.AwaitingPayment:
-                        if (this.props.location.pathname.includes('status')) {
-                            this.props.history.push(`/application/${application.id}/payment`);
-                        }
-                        break;
+            if (application && quotes) {
+                application.quotes = quotes;
+                const chosenQuote = quotes.find<QuickTermQuoteResult>(((quote: QuickTermQuoteResult) => {
+                    return quote.RecID === application.quoteRecId;
+                }) as any);
+                if (chosenQuote) {
+                    switch (application.status) {
+                        case Status.New:
+                            this.props.history.push(`/application/${application.id}/apply`);
+                            break;
+                        case Status.Submitted:
+                        case Status.InProgress:
+                        case Status.Done: // change?
+                        case Status.Problem:
+                            this.props.history.push(`/application/${application.id}/status`);
+                            break;
+                        case Status.AwaitingPayment:
+                            if (this.props.location.pathname.includes('status')) {
+                                this.props.history.push(`/application/${application.id}/payment`);
+                            }
+                            break;
+                    }
+                    Logger.info(application);
+
+                    this.setState({
+                        application,
+                        chosenQuote
+                    });
+
+                    this.props.store.set('application')(application);
+                    this.props.store.set('chosenQuote')(chosenQuote);
+                    this.props.store.set('location')((await app)?.location);
+                    this.props.store.set('quote')((await app)?.quote);
                 }
-                Logger.info(application);
-
-                this.setState({
-                    application,
-                    chosenQuote
-                });
-
-                this.props.store.set('application')(application);
-                this.props.store.set('chosenQuote')(chosenQuote);
-                this.props.store.set('location')(app?.location);
-                this.props.store.set('quote')(app?.quote);
+            } else {
+                // error
+                Logger.error('No Application Found');
             }
-        } else {
-            // error
-            Logger.error('No Application Found');
+        } catch (err) {
+            console.warn(err);
         }
     };
 }

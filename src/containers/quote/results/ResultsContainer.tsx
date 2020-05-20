@@ -78,24 +78,23 @@ class ResultsContainer extends React.Component<ResultsContainerProps, ResultsCon
             } else {
                 console.log('logged OUT');
                 this.selectedQuote = quote;
-                this.setState({ showAuthModal: true });
+                Auth.showAuthModal('signup', () => {
+                    this.handleAuthentication();
+                });
             }
             console.log(this.selectedQuote);
         });
     };
 
     private handleAuthentication = async () => {
-        this.setState({ showAuthModal: false });
-        const { selectedQuote } = this;
-        console.log(selectedQuote);
-
-        if (selectedQuote) {
-            await this.createApplication(selectedQuote);
+        console.log('called handleAuth', this);
+        if (this.selectedQuote) {
+            await this.createApplication(this.selectedQuote);
         }
     };
 
     render = () => {
-        const { loading, quotes, showAuthModal, quoteRecord } = this.state;
+        const { loading, quotes, quoteRecord } = this.state;
         return (
             <>
                 <Results

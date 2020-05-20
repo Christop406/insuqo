@@ -13,6 +13,7 @@ interface SignUpInfo {
 interface SignInProps {
     onSubmit: (info: SignUpInfo) => any;
     onSwitch?: () => any;
+    errorText?: string;
 }
 
 enum FormField {
@@ -21,7 +22,7 @@ enum FormField {
     PasswordConfirm = 'passwordConfirm',
 }
 
-const SignUp: React.FC<SignInProps> = ({ onSubmit, onSwitch }) => {
+const SignUp: React.FC<SignInProps> = ({ onSubmit, onSwitch, errorText }) => {
     const { register, handleSubmit, watch, formState } = useForm<SignUpInfo>({ mode: 'onChange', reValidateMode: 'onChange' });
 
     return (
@@ -42,6 +43,7 @@ const SignUp: React.FC<SignInProps> = ({ onSubmit, onSwitch }) => {
                         return !!value.length && value === watch(FormField.Password);
                     },
                 })} />
+                <span className={s.formError}>{errorText}</span>
                 <button className="full primary button" type="submit" disabled={!formState.isValid}>Sign Up</button>
                 <button className={cx('full outline button', s.switch)} onClick={onSwitch}>Sign In Instead</button>
             </form>
