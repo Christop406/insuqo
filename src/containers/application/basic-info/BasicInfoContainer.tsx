@@ -4,16 +4,27 @@ import IQStore, { IQStoreProps } from 'store/IQStore';
 import { Application } from '@insuqo/shared/types/application';
 import BasicInfo from './components/BasicInfo';
 import { ApplicationService } from 'services/application.service';
+import { Auth } from 'services/firebase';
 
 type BasicInfoContainerProps = RouteComponentProps & IQStoreProps;
+interface BasicInfoContainerState {
+    currentUser?: firebase.User;
+}
 
-class BasicInfoContainer extends React.Component<BasicInfoContainerProps> {
+class BasicInfoContainer extends React.Component<BasicInfoContainerProps, BasicInfoContainerState> {
+
+    state: BasicInfoContainerState = {};
 
     private applicationService: ApplicationService;
 
     constructor(props: any) {
         super(props);
         this.applicationService = new ApplicationService();
+        Auth.onAuthStateChanged((user) => {
+            if (user) {
+                this.setState({ currentUser: user });
+            }
+        });
     }
 
     componentDidMount = () => {
@@ -22,16 +33,17 @@ class BasicInfoContainer extends React.Component<BasicInfoContainerProps> {
 
     public render() {
         const { store } = this.props;
+        const { currentUser } = this.state;
         const application = store.get('application');
         const chosenQuote = store.get('chosenQuote');
         const location = store.get('location');
-
         if (application && chosenQuote) {
             return <BasicInfo
                 chosenQuote={chosenQuote}
                 application={application || {}}
                 location={location}
-                onSubmit={this.handleSubmit} />;
+                onSubmit={this.handleSubmit}
+                currentUser={currentUser} />;
         }
 
         return <h1>Application Not Found</h1>;

@@ -18,9 +18,11 @@ interface BasicInfoProps {
     chosenQuote: QuickTermQuoteResult;
     location: ZipCode | undefined;
     onSubmit: (application: Application) => any;
+    currentUser: firebase.User | undefined;
 }
 
-const BasicInfo: React.FC<BasicInfoProps> = ({ application, chosenQuote, onSubmit, location }) => {
+const BasicInfo: React.FC<BasicInfoProps> = ({ application, chosenQuote, onSubmit, location, currentUser }) => {
+    application = getDefaultValues(application, currentUser);
     const methods = useForm<Application>({ mode: 'onChange', defaultValues: application });
     const { handleSubmit, register, formState } = methods;
     const { formGroup } = s;
@@ -160,6 +162,13 @@ const BasicInfo: React.FC<BasicInfoProps> = ({ application, chosenQuote, onSubmi
     );
 };
 
+const getDefaultValues = (applicationInfo: Application, userInfo: firebase.User | undefined): Application => {
+    return {
+        ...applicationInfo,
+        primaryEmail: applicationInfo.primaryEmail || userInfo?.email || undefined,
+    };
+};
+
 const showCityReasoning = () => {
     Modal.info({
         title: 'Why can\'t I change my city/state?',
@@ -174,9 +183,9 @@ const showFreqInfo = () => {
     Modal.info({
         title: 'Why the different prices?',
         content: <p>A lot like any other kind of subscription,
-            a vendor will reward up-front payment with a discounted rate.
-            It is the same for life insurance. If you decide to pay on
-            an annual pay schedule, your overall rate will be somewhat lower
+        a vendor will reward up-front payment with a discounted rate.
+        It is the same for life insurance. If you decide to pay on
+        an annual pay schedule, your overall rate will be somewhat lower
             than on a monthly schedule.<br /><br />
             To see the different rates, click each radio button to change your payment frequency.
         </p>,

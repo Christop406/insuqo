@@ -15,7 +15,9 @@ export class AuthClass implements Omit<AuthType, OverriddenFeatures> {
         if (!this.auth) {
             const firebase = await import(/* webpackChunkName: "firebase" */ 'firebase/app');
             await import(/* webpackChunkName: "firebaseAuth" */ 'firebase/auth');
-            firebase.initializeApp(firebaseConfig);
+            if (!firebase.apps.length) {
+                firebase.initializeApp(firebaseConfig);
+            }
             this.auth = firebase.auth();
         }
         return this.auth;
