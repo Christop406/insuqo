@@ -5,8 +5,6 @@ import Results from './components/Results';
 import { QuoteService } from '../../../services/quote.service';
 import { PremiumMode, QuickTermQuoteResult, Quote } from '@insuqo/shared';
 import { Auth } from '../../../services/firebase';
-import ClientAuthentication from '../../../controllers/auth/ClientAuthentication';
-import { Optional } from 'components/base/Optional';
 import { ApplicationService } from 'services/application.service';
 
 type ResultsContainerProps = IQStoreProps & RouteComponentProps;

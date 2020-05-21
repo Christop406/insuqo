@@ -74,11 +74,10 @@ class AuthContainer extends React.Component<AuthContainerProps, AuthContainerSta
             const signUpRes = await Auth.createUserWithEmailAndPassword(email, password);
             if (!signUpRes.user?.emailVerified) {
                 await signUpRes.user?.sendEmailVerification();
-                this.setState({ formType: 'verify' });
-            } else {
-                this.setState({ showing: false });
-                this.callback && this.callback(signUpRes.user);
+                // this.setState({ formType: 'verify' });
             }
+            this.setState({ showing: false });
+            this.callback && this.callback(signUpRes.user);
         } catch (err) {
             let formErrorText: string | undefined;
             switch (err.code as FirebaseError) {
