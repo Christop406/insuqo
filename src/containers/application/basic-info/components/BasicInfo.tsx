@@ -162,6 +162,7 @@ const BasicInfo: React.FC<BasicInfoProps> = ({ application, chosenQuote, onSubmi
     );
 };
 
+// TODO: Check if nulls are getting passed here - may need to convert them to undefined for this to work correctly.
 const getDefaultValues = (applicationInfo: Application, userInfo: firebase.User | undefined): Application => {
     return {
         ...applicationInfo,

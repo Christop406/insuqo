@@ -22,10 +22,6 @@ export class ApplicationService extends ApiBaseService {
         return benRes.data || [];
     }
 
-    public async updateBasicInfo(applicationId: string, application: Application): Promise<Application | undefined> {
-        return (await this.authenticatedPut<Application>(`/applications/${applicationId}/basic-info`, application)).data;
-    }
-
     public async updateApplication(applicationId: string, application: Partial<Application>): Promise<Application | undefined> {
         const res = await this.authenticatedPut<Application>(`/applications/${applicationId}`, application);
         return res.data;
