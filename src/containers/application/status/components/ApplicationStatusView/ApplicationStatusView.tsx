@@ -3,10 +3,12 @@ import { ApplicationStatus, Application } from '@insuqo/shared';
 import 'react-step-progress-bar/styles.css';
 import { ProgressBar } from 'react-step-progress-bar';
 import s from './ApplicationStatusView.module.scss';
+import { ApplicationActivityLogItem } from '@insuqo/shared/types/logging';
 
 
 interface StatusViewProps {
     application: Application | undefined;
+    activityLog: ApplicationActivityLogItem[];
 }
 
 const statusInfo: Map<ApplicationStatus | undefined, { name: string; description: string; percent: number }> = new Map<ApplicationStatus, any>();
@@ -32,6 +34,7 @@ const getGradient = (status: ApplicationStatus | undefined): { start: string; en
 
 const ApplicationStatusView: React.FunctionComponent<StatusViewProps> = (props) => {
     const application = props.application;
+    const activity = props.activityLog;
     const info = statusInfo.get(application?.status) || { name: 'Not Found', percent: 0, description: 'You have entered an invalid application ID.' };
     const gradient = getGradient(application?.status);
     return (
@@ -48,6 +51,9 @@ const ApplicationStatusView: React.FunctionComponent<StatusViewProps> = (props) 
             </div>
             <div className={s.historyContainer}>
                 <h2>Change History</h2>
+                <ol>
+                    {activity.map((item, index) => <li key={index}>{item.action} ({item.data}), time: {item.time}, performed by: {item.initiator} </li>)}
+                </ol>
             </div>
         </div>
     );

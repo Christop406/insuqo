@@ -1,6 +1,7 @@
 import { Application, ApplicationStatus, Beneficiary, QuickTermQuoteResult, Quote } from '@insuqo/shared';
 import { ApiBaseService, RequestConfig } from './api-base.service';
 import { ZipCode } from '@insuqo/shared/types/zip-code';
+import { ApplicationActivityLogItem } from '@insuqo/shared/types/logging';
 
 export class ApplicationService extends ApiBaseService {
     public async getStatus(sk: string): Promise<ApplicationStatus | undefined> {
@@ -20,6 +21,11 @@ export class ApplicationService extends ApiBaseService {
     public async getBeneficiaries(applicationId: string): Promise<Beneficiary[]> {
         const benRes = await this.authenticatedGet<Beneficiary[]>(`/applications/${applicationId}/beneficiaries`);
         return benRes.data || [];
+    }
+
+    public async getActivityLog(applicationId: string): Promise<ApplicationActivityLogItem[]> {
+        const res = await this.authenticatedGet<ApplicationActivityLogItem[]>(['applications', applicationId, 'activity']);
+        return res.data || [];
     }
 
     public async updateApplication(applicationId: string, application: Partial<Application>): Promise<Application | undefined> {

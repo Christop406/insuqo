@@ -7,6 +7,7 @@ import { ZipCode } from '@insuqo/shared/types/zip-code';
 export class QuoteService extends ApiBaseService {
 
     public async getQuotesByKey(key: string): Promise<DynamoQuote[] | undefined> {
+        console.log(key);
         return [];
     }
 
