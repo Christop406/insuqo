@@ -41,7 +41,7 @@ class BeginContainer extends React.Component<BeginContainerProps, BeginContainer
     };
 
     private validateZipCode = (zipCode?: string) => {
-        return /^[0-9]{5}(-[0-9]{4})?$/.test(zipCode || '');
+        return /^[0-9]{5}$/.test(zipCode || '');
     }
 
     private submitZip = async () => {
@@ -68,7 +68,6 @@ class BeginContainer extends React.Component<BeginContainerProps, BeginContainer
                 throw new Error('There was an error creating the quote record.');
             }
         } catch (err) {
-            console.log(err);
             this.setState({ loading: false, zipInvalid: true });
         }
     }

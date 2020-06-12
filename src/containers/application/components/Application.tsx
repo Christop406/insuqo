@@ -118,7 +118,6 @@ class Application extends Component<ApplicationProps, ApplicationState> {
                             }
                             break;
                     }
-                    Logger.info(application);
 
                     this.setState({
                         application,

@@ -172,24 +172,31 @@ class Results extends Component<ResultsProps, ResultsState> {
                     </div>
                 </Optional>
                 <Optional condition={!loading}>
-                    <h1 className="text-primary">Here are your quotes</h1>
-                    <h3 className={s.quoteSubtitle}>Click on each for more info.</h3>
-                    <div className={s.paymentFrequencyContainer}>
-                        <h5 className={s.frequencyLabel}>Payment Frequency </h5>
-                        <select className="input select inline" value={paymentFrequency} onChange={this.updateFreq}>
-                            {frequencies.map((option, index) => <option value={option.val}
-                                key={index}>{option.name}</option>)}
-                        </select>
-                    </div>
                     <Optional condition={this.props.quotes.length > 0}>
+                        <h1 className="text-primary">Here are your quotes</h1>
+                        <h3 className={s.quoteSubtitle}>Click on each for more info.</h3>
+                        <div className={s.paymentFrequencyContainer}>
+                            <h5 className={s.frequencyLabel}>Payment Frequency </h5>
+                            <select className="input select inline" value={paymentFrequency} onChange={this.updateFreq}>
+                                {frequencies.map((option, index) => <option value={option.val}
+                                    key={index}>{option.name}</option>)}
+                            </select>
+                        </div>
                         <Accordion animate onActive={this.updateActiveIndex}
                             activeIndex={loading ? undefined : active}>
                             {this.formatQuotes(paymentFrequency)}
                         </Accordion>
                     </Optional>
                     <Optional condition={this.props.quotes.length === 0}>
-                        No Quotes Found
-                        <Button type="link" href={`/quote/${quote?.id}/personal`} primary label="Edit Quote Info"/>
+                        <div className={s.noQuotesMessage}>
+                            <h3>Well, this is awkward...</h3>
+                            <span>
+                                We couldn't find any quotes for the information you gave us.
+                                Try editing some of the information, like the term length,
+                                coverage amount, or rider.
+                            </span>
+                        </div>
+                        <Button type="link" href={`/quote/${quote?.id}/personal`} primary label="Edit Quote Info" />
                     </Optional>
                 </Optional>
             </>

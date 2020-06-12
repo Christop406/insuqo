@@ -84,7 +84,7 @@ export class ApiBaseService {
         if (Array.isArray(endpoint)) {
             endpoint = '/' + endpoint.join('/');
         }
-        console.log(apiUrl + endpoint);
+
         return apiUrl + endpoint;
     }
 

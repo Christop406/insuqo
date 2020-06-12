@@ -1,4 +1,4 @@
-import { createConnectedStore, Effects, Store, withLogger } from 'undux';
+import { createConnectedStore, Effects, Store } from 'undux';
 import { Application } from '@insuqo/shared/types/application';
 import { Beneficiary } from '../model/beneficiary';
 import { QuickTermQuoteResult, Quote } from '@insuqo/shared';
@@ -20,7 +20,7 @@ const initialState: IQStoreState = {
     beneficiaries: undefined,
 };
 
-export default createConnectedStore(initialState, withLogger);
+export default createConnectedStore(initialState);
 
 export interface IQStoreProps {
     store: Store<IQStoreState>;

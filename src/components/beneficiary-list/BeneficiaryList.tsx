@@ -45,7 +45,6 @@ class BeneficiaryList extends Component<IBeneficiaryListProps, IBeneficiaryListS
     };
 
     deleteBeneficiary = (index: number) => {
-        Logger.log('deleted');
         const oldBens = this.state.beneficiaries.map(value => value);
         oldBens.splice(index, 1);
         this.setState({ beneficiaries: oldBens }, this.updateParent.bind(this));

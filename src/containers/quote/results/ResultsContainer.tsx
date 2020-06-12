@@ -37,7 +37,7 @@ class ResultsContainer extends React.Component<ResultsContainerProps, ResultsCon
             const newQuotes = await this.getQuotes();
             this.setState({
                 loading: false,
-                quotes: newQuotes.data!.quotes,
+                quotes: newQuotes.data?.quotes || [],
                 quoteRecord: store.get('quote'),
             });
             // this.props.history.push({ search: qs.stringify({ id: newQuotes.data?.key }) });

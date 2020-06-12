@@ -39,10 +39,9 @@ class Begin extends Component<BeginProps> {
                         placeholder="Enter Here"
                         style={{ borderColor: zipInvalid ? '#f03434' : undefined }}
                         options={{
-                            blocks: [5, 4],
+                            blocks: [5],
                             stripLeadingZeroes: false,
                             numericOnly: true,
-                            delimiter: '-',
                             delimiterLazyShow: true,
                         }} onChange={(e) => updateZipCode(e.target.value)} onKeyPress={this.handleKeyPress} />
                     {zipInvalid ? <span className={s.errorText}>ZIP code invalid, please try again.</span> : ''}

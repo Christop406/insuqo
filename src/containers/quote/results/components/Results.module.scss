@@ -55,3 +55,10 @@
     }
   }
 }
+
+.noQuotesMessage {
+  padding: 15px 0;
+  @include tablet-max {
+    text-align: center;
+  }
+}

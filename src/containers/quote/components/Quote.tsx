@@ -29,7 +29,7 @@ const Quote: React.FC<QuoteProps> = (props) => {
             </div>
             <div className={cx(s.quoteHelpContainer, 'hideOnSmallScreens')}>
                 <Switch>
-                    <Route path="/quote" component={QuoteHelp} />
+                    <Route path="/quote/:id?" component={QuoteHelp} />
                 </Switch>
             </div>
         </div>
@@ -46,7 +46,6 @@ class ContinueQuoteImpl extends React.Component<RouteComponentProps & IQStorePro
     }
 
     componentDidMount(): void {
-        console.log(this.props);
         this.retrieveQuote();
     }
 

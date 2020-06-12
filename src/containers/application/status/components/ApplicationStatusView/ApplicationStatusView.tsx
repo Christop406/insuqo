@@ -4,6 +4,7 @@ import 'react-step-progress-bar/styles.css';
 import { ProgressBar } from 'react-step-progress-bar';
 import s from './ApplicationStatusView.module.scss';
 import { ApplicationActivityLogItem } from '@insuqo/shared/types/logging';
+import { ActivityLogItem } from 'components/application/ActivityLogItem/ActivityLogItem';
 
 
 interface StatusViewProps {
@@ -51,9 +52,7 @@ const ApplicationStatusView: React.FunctionComponent<StatusViewProps> = (props) 
             </div>
             <div className={s.historyContainer}>
                 <h2>Change History</h2>
-                <ol>
-                    {activity.map((item, index) => <li key={index}>{item.action} ({item.data}), time: {item.time}, performed by: {item.initiator} </li>)}
-                </ol>
+                {activity.map((item, index) => <ActivityLogItem key={index} item={item} />)}
             </div>
         </div>
     );
